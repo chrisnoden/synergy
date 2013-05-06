@@ -11,9 +11,6 @@
             "email": "chris.noden@gmail.com"
         }
     ],
-    "autoload": {
-        "classmap": ["libs/"]
-    },
     "require": {
         "php": ">=5.3.3"
     }
