@@ -3,6 +3,7 @@
     "description": "Synergy MVC framework for rapid web development",
     "version": "0.1.0-dev",
     "homepage": "https://github.com/chrisnoden/synergy",
+    "type": "library",
     "minimum-stability": "stable",
     "authors": [
         {
@@ -10,6 +11,9 @@
             "email": "chris.noden@gmail.com"
         }
     ],
+    "autoload": {
+        "classmap": ["libs/"]
+    },
     "require": {
         "php": ">=5.3.3"
     }
