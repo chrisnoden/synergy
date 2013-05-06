@@ -11,6 +11,9 @@
             "email": "chris.noden@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-0": { "libs\\": "" }
+    },
     "require": {
         "php": ">=5.3.3"
     }
