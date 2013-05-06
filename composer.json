@@ -1,0 +1,16 @@
+{
+    "name": "chrisnoden/synergy",
+    "description": "Synergy MVC framework for rapid web development",
+    "version": "0.1.0-dev",
+    "homepage": "https://github.com/chrisnoden/synergy",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Chris Noden",
+            "email": "chris.noden@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    }
+}
