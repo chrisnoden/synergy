@@ -8,7 +8,7 @@
 
 namespace Synergy;
 
-class SynergyTest 
+class Test 
 {
 
 }

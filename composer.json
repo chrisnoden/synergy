@@ -12,7 +12,7 @@
         }
     ],
     "autoload": {
-        "psr-0": { "libs\\": "" }
+        "psr-0": { "Synergy": "src/" }
     },
     "require": {
         "php": ">=5.3.3"
