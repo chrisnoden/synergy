@@ -104,22 +104,18 @@ class Request extends Object
      */
     protected function buildRequestData()
     {
-        Project::Logger()->log('Getting all the request data from $_SERVER', LogLevel::DEBUG);
+        Project::Logger()->log('Getting all the HTTP request data', LogLevel::DEBUG);
 
         $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-        var_dump($request);
-        exit;
 
         // store the site that was requested (eg www.mysite.com)
-        $this->_domain = $_SERVER["HTTP_HOST"];
-
-        if (isset($_SERVER['REDIRECT_STATUS'])) $this->_code = $_SERVER['REDIRECT_STATUS'];
+        $this->_domain = $request->server->get('HTTP_HOST');
 
         // What page did they want (eg index.html or page2 or myfolder/index)
-        if (isset($_SERVER['REDIRECT_URL'])) {
-            $this->_document = trim($_SERVER['REDIRECT_URL']);
+        if ($request->server->get('REDIRECT_URL')) {
+            $this->_document = $request->server->get('REDIRECT_URL');
         } else if (isset($_SERVER['SCRIPT_NAME'])) {
-            $this->_document = trim($_SERVER['SCRIPT_NAME']);
+            $this->_document = $request->server->get('SCRIPT_NAME');
         }
         // replace forward slash with backward slash
         $this->_document = str_replace('\\', '/', $this->_document);
@@ -131,37 +127,35 @@ class Request extends Object
         }
 
         // Is there a query_string
-        if (isset($_SERVER['REDIRECT_QUERY_STRING'])) {
-            $this->_queryString = $_SERVER['REDIRECT_QUERY_STRING'];
-        } else if (isset($_SERVER['QUERY_STRING'])) {
+        if ($request->server->get('REDIRECT_QUERY_STRING')) {
+            $this->_queryString = $request->server->get('REDIRECT_QUERY_STRING');
+        } else if ($request->server->get('QUERY_STRING')) {
             $this->_queryString = $_SERVER['QUERY_STRING'];
         }
 
-        if (isset($_SERVER['REQUEST_URI'])) {
-            $this->_uri = $_SERVER['REQUEST_URI'];
+        if ($request->server->get('REQUEST_URI')) {
+            $this->_uri = $request->server->get('REQUEST_URI');
             $this->_fullRequest = $this->_domain . $this->_uri;
         } else {
             $this->_fullRequest = $this->_domain . $this->_document;
             if (isset($this->_queryString)) $this->_fullRequest .= '?' . $this->_queryString;
         }
 
-        if (isset($_SERVER['SERVER_PROTOCOL'])) {
-            $this->_protocol = $_SERVER['SERVER_PROTOCOL'];
+        if ($request->server->get('SERVER_PROTOCOL')) {
+            $this->_protocol = $request->server->get('SERVER_PROTOCOL');
         }
 
         // Is this a GET or a POST request
-        if (isset($_SERVER['REDIRECT_REQUEST_METHOD'])) {
-            $this->_httpMethod = strtoupper($_SERVER['REDIRECT_REQUEST_METHOD']);
-        } else if (isset($_SERVER['REQUEST_METHOD'])) {
-            $this->_httpMethod = strtoupper($_SERVER['REQUEST_METHOD']);
+        if ($request->server->get('REDIRECT_REQUEST_METHOD')) {
+            $this->_httpMethod = strtoupper($request->server->get('REDIRECT_REQUEST_METHOD'));
+        } else if ($request->server->get('REQUEST_METHOD')) {
+            $this->_httpMethod = strtoupper($request->server->get('REQUEST_METHOD'));
         }
 
         if ($this->_document != '/') {
             $this->_documentExtension = $this->parseFileExtensionFromUrl($this->_document);
         }
 
-        var_dump($this);
-        exit;
     }
 
 
