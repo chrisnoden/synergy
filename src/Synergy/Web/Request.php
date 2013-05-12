@@ -10,7 +10,9 @@
 namespace Synergy\Web;
 
 
+use Psr\Log\LogLevel;
 use Synergy\Object;
+use Synergy\Project;
 
 class Request extends Object
 {
@@ -102,7 +104,11 @@ class Request extends Object
      */
     protected function buildRequestData()
     {
-        \NDN\SAL\Debug::log('Getting all the request data from $_SERVER', \NDN\SAL\Debug::DEBUG);
+        Project::Logger()->log('Getting all the request data from $_SERVER', LogLevel::DEBUG);
+
+        $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        var_dump($request);
+        exit;
 
         // store the site that was requested (eg www.mysite.com)
         $this->_domain = $_SERVER["HTTP_HOST"];
