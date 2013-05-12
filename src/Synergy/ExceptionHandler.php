@@ -198,6 +198,8 @@ class ExceptionHandler
             return true;
         }
 
+        $ref = new \ReflectionObject($e);
+
         self::$_errNum = $e->getCode();
         self::$_errMsg = $e->getMessage();
         self::$_fileName = $e->getFile();
@@ -205,7 +207,7 @@ class ExceptionHandler
         self::$_trace = $e->getTrace();
 
         // process the error
-        self::handler();
+        self::handler($ref->getName());
 
         // exit program execution if necessary
         if ( in_array(self::$_errNum, self::$_aStopCodes) ) {
@@ -241,7 +243,7 @@ class ExceptionHandler
      *
      * @static
      */
-    protected static function handler()
+    protected static function handler($type = null)
     {
         if (isset(self::$_errNum)) {
             if (isset(self::$_trace)) {
@@ -258,36 +260,40 @@ class ExceptionHandler
                 $text = sprintf("%s", self::$_errMsg);
             }
 
-            /**
-             * Convert the PHP error number to a Psr compatible LogLevel
-             */
-            switch (self::$_errNum)
-            {
-                case 2:
-                    $dbgLevel = LogLevel::INFO;
-                    break;
+            if ($text === null) {
+                /**
+                 * Convert the PHP error number to a Psr compatible LogLevel
+                 */
+                switch (self::$_errNum)
+                {
+                    case 2:
+                        $dbgLevel = LogLevel::INFO;
+                        break;
 
-                case 8:
-                case 1024:
-                    $dbgLevel = LogLevel::NOTICE;
-                    break;
+                    case 8:
+                    case 1024:
+                        $dbgLevel = LogLevel::NOTICE;
+                        break;
 
-                case 2048:
-                    $dbgLevel = LogLevel::WARNING;
-                    break;
+                    case 2048:
+                        $dbgLevel = LogLevel::WARNING;
+                        break;
 
-                case 16:
-                    $dbgLevel = LogLevel::CRITICAL;
-                    break;
+                    case 16:
+                        $dbgLevel = LogLevel::CRITICAL;
+                        break;
 
-                default:
-                    $dbgLevel = LogLevel::ERROR;
+                    default:
+                        $dbgLevel = LogLevel::ERROR;
+                }
+            } else {
+                $dbgLevel = $type;
             }
 
             // Log it through our Project Logger
             Project::Logger()->log(
-                $text,
                 $dbgLevel,
+                $text,
                 array('filename'=>self::$_fileName, 'linenum'=>self::$_lineNum, 'level'=>self::$_aErrorTypes[self::$_errNum])
             );
         }

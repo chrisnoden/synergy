@@ -25,6 +25,9 @@ class Logger extends AbstractLogger implements LoggerInterface
      */
     public function log($level, $message, array $context = array())
     {
+        echo "<pre>";
+        printf("%s\n%s\n", $level, $message);
+        echo "</pre>";
 
     }
 

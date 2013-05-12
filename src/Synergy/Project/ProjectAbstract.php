@@ -10,8 +10,10 @@
 namespace Synergy\Project;
 
 
-use Synergy\Debug\Debug;
+use Synergy\Exception\ProjectException;
+use Synergy\Exception\SynergyException;
 use Synergy\Object;
+use Synergy\Project;
 use Synergy\Tools\Tools;
 
 /**
@@ -43,13 +45,15 @@ abstract class ProjectAbstract extends Object
         $this->_timeStart = microtime(true);
 
         // Set our random logging ID using the log scope
-        Debug::setTag(Tools::randomString(6, '0123456789ABCDEF'));
-
-        if (Project::getProjectConfigFilename()) {
-            Config::loadConfig();
-        } else {
-            throw new SalException("You must set the Project Config filename");
+        if (method_exists(Project::Logger(), 'setTag')) {
+            Project::Logger()->setTag(Tools::randomString(6, '0123456789ABCDEF'));
         }
+
+//        if (Project::getProjectConfigFilename()) {
+//            Config::loadConfig();
+//        } else {
+//            throw new SynergyException("You must set the Project Config filename");
+//        }
     }
 
 
@@ -61,31 +65,31 @@ abstract class ProjectAbstract extends Object
         $sal_endTime = microtime(true);
         $sal_execTime = number_format($sal_endTime - $this->_timeStart, 4);
         if (Project::isDev()) {
-            Debug::log("Execution time=$sal_execTime seconds", Debug::INFO);
+            Project::Logger()->log("Execution time=$sal_execTime seconds", Project::Logger()->INFO);
         }
     }
 
 
     /**
-     * @return Debug|Singleton
+     * @return \Psr\Log\LoggerInterface
      */
     public function debugger()
     {
-        return Debug::getInstance();
+        return Project::Logger();
     }
 
 
     /**
-     * @throws SalException
+     * @throws \Synergy\Exception\ProjectException
      */
     public function prepare()
     {
         if (!Project::getProjectConfigFilename()) {
-            throw new SalException("Config XML filename not set");
+            throw new ProjectException("Config XML filename not set");
         }
         if (!Project::getProjectPath()) {
             Project::setProjectPath(dirname(SAL_PLATFORM_DIRECTORY));
-            Debug::log('Guessing projectPath of '.Project::getProjectPath(), Debug::NOTICE);
+            Project::Logger()->log('Guessing projectPath of '.Project::getProjectPath(), Project::Logger()->NOTICE);
         }
 
         /**

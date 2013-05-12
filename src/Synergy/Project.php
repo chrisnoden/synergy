@@ -10,6 +10,7 @@
 namespace Synergy;
 
 
+use Psr\Log\LoggerInterface;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\InvalidProjectTypeException;
 use Synergy\Logger\Logger;
@@ -80,16 +81,16 @@ class Project extends Singleton
 
 
     /**
-     * @param \Synergy\Logger\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public static function setLogger(\Synergy\Logger\Logger $logger)
+    public static function setLogger(LoggerInterface $logger)
     {
         self::$_logger = $logger;
     }
 
 
     /**
-     * @return \Synergy\Logger\Logger
+     * @return \Psr\Log\LoggerInterface
      */
     public static function Logger()
     {
