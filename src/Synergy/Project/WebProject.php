@@ -10,6 +10,9 @@
 namespace Synergy\Project;
 
 
+use Psr\Log\LogLevel;
+use Synergy\Exception\ProjectException;
+use Synergy\Logger\Logger;
 use Synergy\Project;
 use Synergy\Web\Request;
 use Synergy\Web\Router;
@@ -189,7 +192,7 @@ final class WebProject extends ProjectAbstract
          * Choose and load our Controller
          */
         $this->getController();
-        var_dump($this->_oController);
+        var_dump($this->_oController); // @todo remove this
     }
 
 
@@ -217,7 +220,7 @@ final class WebProject extends ProjectAbstract
         }
         catch (SalUnsupportedSiteException $ex)
         {
-            \NDN\SAL\Debug::log('Unsupported request for hostname: '.$this->_oRequest->getDomain(), \NDN\SAL\Debug::WARN);
+            Logger::log(LogLevel::WARNING, 'Unsupported request for hostname: '.$this->_oRequest->getDomain());
             $this->sendErrorHeaders();
             $this->sendErrorDocument('404 : Unsupported request');
             exit;
@@ -264,12 +267,11 @@ final class WebProject extends ProjectAbstract
     public function execute()
     {
         if (!$this->_bIsPrepared) {
-            throw new \NDN\SAL\SalException('Project needs to call prepare() method before execute()');
+            throw new ProjectException('Project needs to call prepare() method before execute()');
         }
 
         // If we have identified a resource file then deliver it and exit
         if ($this->_bResource) {
-            \NDN\SAL\Debug::setBlock(true);
             if (isset($this->_sResourceFilename) && file_exists($this->_sResourceFilename) && is_readable($this->_sResourceFilename) && ($this->_bResourceProtected === false || isset($_SESSION['clientAuth']) || (isset($_SERVER['HTTP_REFERER']) && stristr($_SERVER['HTTP_REFERER'], $this->_oRequest->getDomain())))) {
                 $this->sendResourceFile();
                 exit;
@@ -283,8 +285,7 @@ final class WebProject extends ProjectAbstract
                 $this->sendErrorDocument();
                 exit;
             } else if ($this->_bResourceProtected && !isset($this->_viewContents)) {
-                \NDN\SAL\Debug::setBlock(false);
-                \NDN\SAL\Debug::log("Resource Leach Blocked from: ".$_SERVER['REMOTE_ADDR']);
+                Logger::log(LogLevel::INFO, "Resource Leach Blocked from: ".$_SERVER['REMOTE_ADDR']);
                 $this->sendAntiLeachResponse();
                 exit;
             } else if (!isset($this->_viewContents)) {
@@ -292,7 +293,6 @@ final class WebProject extends ProjectAbstract
                 $this->sendErrorDocument();
                 exit;
             }
-            \NDN\SAL\Debug::setBlock(false);
         }
 
         // Parse out the user agent
@@ -355,7 +355,7 @@ final class WebProject extends ProjectAbstract
         }
 
         if ($this->_sessionPolicy == 'disabled') {
-            \NDN\SAL\Debug::log("Cookie Policy disabled", \NDN\SAL\Debug::DEBUG);
+            Logger::log(LogLevel::DEBUG, "Cookie Policy disabled");
             return;
         } else if ($this->_sessionPolicy == 'quiet') {
             $this->setOptInCookie(1);
@@ -365,11 +365,11 @@ final class WebProject extends ProjectAbstract
         // Have cookies been accepted by the user
         if (isset($_COOKIE[$this->_optInCookieName])) {
             $this->_bCookiesOK = true;
-            \NDN\SAL\Debug::log("Use of cookies permitted", \NDN\SAL\Debug::DEBUG);
+            Logger::log(LogLevel::DEBUG, "Use of cookies permitted");
             ini_set('session.use_cookies', '1');
         } else {
             // Start our session handling using file based sessions
-            \NDN\SAL\Debug::log("Using file based sessions", \NDN\SAL\Debug::DEBUG);
+            Logger::log(LogLevel::DEBUG, "Using file based sessions");
             ini_set('session.use_cookies','0');
             // Are we using automatic URL rewriting?
             $this->_bSessionUrlRewriting = ini_get('session.use_trans_sid') == '1' ? false : true;
@@ -403,7 +403,7 @@ final class WebProject extends ProjectAbstract
                 $this->_sessionID = session_id();
             }
 
-            \NDN\SAL\Debug::log("SessionID = ".$this->_sessionID, \NDN\SAL\Debug::DEBUG);
+            Logger::debug("SessionID = ".$this->_sessionID);
         }
     }
 
@@ -437,7 +437,7 @@ final class WebProject extends ProjectAbstract
 
             if ($cookie == 'accept') {
                 $this->setOptInCookie();
-                \NDN\SAL\Debug::log("Use of cookies accepted. Sending browser to their original request", \NDN\SAL\Debug::DEBUG);
+                Logger::debug("Use of cookies accepted. Sending browser to their original request");
                 if ($this->_bSessionsOK && isset($_SESSION['origRequest'])) {
                     header("Location: " . $_SESSION['origRequest']);
                 } else {
@@ -457,7 +457,7 @@ final class WebProject extends ProjectAbstract
             }
 
             if (isset($optinPage)) {
-                \NDN\SAL\Debug::log("Showing cookie policy opt-in page: $optinPage", \NDN\SAL\Debug::DEBUG);
+                Logger::debug("Showing cookie policy opt-in page: $optinPage");
                 if (file_exists($optinPage) && is_readable($optinPage)) {
                     // What page did they want (eg index.html or page2 or myfolder/index)
                     if ($this->_bSessionsOK && isset($_SERVER['REDIRECT_URL'])) {
@@ -468,7 +468,7 @@ final class WebProject extends ProjectAbstract
 
                     $this->_templateFileName = $optinPage;
                 } else {
-                    throw new SalException('Optin page missing or unreadable: ' . $optinPage);
+                    throw new ProjectException('Optin page missing or unreadable: ' . $optinPage);
                 }
             }
 
@@ -489,12 +489,12 @@ final class WebProject extends ProjectAbstract
         if (isset($_COOKIE[$this->_optInCookieName])) {
             $cookieVal = $_COOKIE[$this->_optInCookieName];
             if (is_int($cookieVal)) {
-                setcookie($this->_optInCookieName, $cookieVal, \NDN\SAL\Project::isDev() ? 0 : time()+(60*60*24*$numDays), '/', isset($this->_optInCookieDomain) ? $this->_optInCookieDomain : '');
+                setcookie($this->_optInCookieName, $cookieVal, Project::isDev() ? 0 : time()+(60*60*24*$numDays), '/', isset($this->_optInCookieDomain) ? $this->_optInCookieDomain : '');
                 return;
             }
         }
-        setcookie($this->_optInCookieName, date('U'), \NDN\SAL\Project::isDev() ? 0 : time()+(60*60*24*90), '/', isset($this->_optInCookieDomain) ? $this->_optInCookieDomain : '');
-        \NDN\SAL\Debug::log("Cookie Policy Opt-in saved to cookie", \NDN\SAL\Debug::DEBUG);
+        setcookie($this->_optInCookieName, date('U'), Project::isDev() ? 0 : time()+(60*60*24*90), '/', isset($this->_optInCookieDomain) ? $this->_optInCookieDomain : '');
+        Logger::debug("Cookie Policy Opt-in saved to cookie");
     }
 
 
@@ -510,15 +510,15 @@ final class WebProject extends ProjectAbstract
                 if ($_SESSION['device']) {
                     $this->_oDevice = unserialize($_SESSION['device']);
                     if (is_a($this->_oDevice, '\Mobile_Detect')) {
-                        \NDN\SAL\Debug::log("Device info taken from session storage", \NDN\SAL\Debug::DEBUG);
+                        Logger::debug("Device info taken from session storage");
                         return;
                     } else {
-                        \NDN\SAL\Debug::log("Session claims to have device info, but failed to extract it", \NDN\SAL\Debug::NOTICE);
+                        Logger::debug("Session claims to have device info, but failed to extract it");
                     }
                 }
             }
             $this->_oDevice = new \Mobile_Detect;
-            \NDN\SAL\Debug::log("Device info gleaned", \NDN\SAL\Debug::DEBUG);
+            Logger::debug("Device info gleaned");
             if ($this->_bSessionsOK) {
                 $_SESSION['device'] = serialize($this->_oDevice);
             }
@@ -630,7 +630,7 @@ final class WebProject extends ProjectAbstract
             $request = substr($request, $pos);
             $this->_sResourceFilename = $aResourceAlias['path'] . DIRECTORY_SEPARATOR . $request;
             if ($aResourceAlias['protected']) $this->_bResourceProtected = true;
-            \NDN\SAL\Debug::log("Request identified as a resource request", \NDN\SAL\Debug::DEBUG);
+            Logger::debug("Request identified as a resource request");
         } else {
             // Assume a resource file if the file extension doesn't match one of our handled extensions
             $extension = $this->parseFileExtensionFromUrl($request);
@@ -639,18 +639,18 @@ final class WebProject extends ProjectAbstract
                 $this->_bResource = true;
                 if ($this->_bSessionsOK && isset($_SESSION['sal_templatePath'])) {
                     $srchFileName = $_SESSION['sal_templatePath'] . $request;
-                    \NDN\SAL\Debug::log("Looking for resource at: $srchFileName", \NDN\SAL\Debug::DEBUG);
+                    Logger::debug("Looking for resource at: $srchFileName");
                     if (file_exists($srchFileName) && is_readable($srchFileName)) {
                         $this->_sResourceFilename = $srchFileName;
-                        \NDN\SAL\Debug::log("Request identified as a resource request", \NDN\SAL\Debug::DEBUG);
+                        Logger::debug("Request identified as a resource request");
                     }
                 }
                 if (isset($this->_templatePath)) {
                     $srchFileName = $this->_templatePath . $request;
-                    \NDN\SAL\Debug::log("Looking for resource at: $srchFileName", \NDN\SAL\Debug::DEBUG);
+                    Logger::debug("Looking for resource at: $srchFileName");
                     if (file_exists($srchFileName) && is_readable($srchFileName)) {
                         $this->_sResourceFilename = $srchFileName;
-                        \NDN\SAL\Debug::log("Request identified as a resource request", \NDN\SAL\Debug::DEBUG);
+                        Logger::debug("Request identified as a resource request");
                     }
                 }
             }
@@ -699,7 +699,7 @@ final class WebProject extends ProjectAbstract
                 foreach ($aResource AS $key => $val) {
                     $arr[$key] = $val;
                 }
-                \NDN\SAL\Debug::log("Request is for a resource alias", \NDN\SAL\Debug::DEBUG);
+                Logger::debug("Request is for a resource alias");
                 return $arr;
             }
         }
@@ -711,7 +711,7 @@ final class WebProject extends ProjectAbstract
      */
     private function sendAntiLeachResponse()
     {
-        \NDN\SAL\Debug::log('Leach request for protected resource: ' . $this->_oRequest->getDocument(), \NDN\SAL\Debug::NOTICE);
+        Logger::debug('Leach request for protected resource: ' . $this->_oRequest->getDocument());
         $this->sendErrorHeaders();
         $this->sendErrorDocument();
     }
@@ -792,7 +792,7 @@ final class WebProject extends ProjectAbstract
         }
 
         if ($ctype) {
-            \NDN\SAL\Debug::log("HTTP Content-Type chosen as: ".$ctype, \NDN\SAL\Debug::DEBUG);
+            Logger::debug("HTTP Content-Type chosen as: ".$ctype);
             $this->_aHttp200Headers['Content-Type'] = $ctype;
         }
     }
@@ -819,15 +819,14 @@ final class WebProject extends ProjectAbstract
         $this->_aHttp200Headers['Content-Length'] = $filesize;
         $this->_aHttp200Headers['Last-Modified'] = date('r', filectime($this->_sResourceFilename));
 
-        if (!\NDN\SAL\Project::isDev()) {
+        if (!Project::isDev()) {
             // production servers - resources expire in 1 month
             $this->_aHttp200Headers['Expires'] = date('r', strtotime('+1 month'));
             $this->_aHttp200Headers['Cache-Control'] =  'public, max-age=2592000, must-revalidate';
             $this->_aHttp200Headers['Pragma'] = 'public';
             $this->_aHttp200Headers['ETag'] = md5(filectime($this->_sResourceFilename));
         }
-        \NDN\SAL\Debug::log("Sending resource file to browser", \NDN\SAL\Debug::DEBUG);
-        \NDN\SAL\Debug::setBlock(true);
+        Logger::debug("Sending resource file to browser");
         $this->sendSuccessHeaders();
         ob_clean();
         flush();
@@ -845,7 +844,7 @@ final class WebProject extends ProjectAbstract
             header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
             header('Status: 404 Not Found');
         } else {
-            \NDN\SAL\Debug::log('Unable to send error headers (headers_sent() == true)', \NDN\SAL\Debug::ERROR);
+            Logger::debug('Unable to send error headers (headers_sent() == true)');
         }
     }
 
@@ -869,7 +868,7 @@ final class WebProject extends ProjectAbstract
             }
         }
 
-        \NDN\SAL\Debug::log("Sending error document", \NDN\SAL\Debug::DEBUG);
+        Logger::debug("Sending error document");
 
         $this->sendErrorHeaders();
         if (is_string($message)) {
@@ -889,11 +888,11 @@ final class WebProject extends ProjectAbstract
     private function sendSuccessHeaders()
     {
         if (!headers_sent()) {
-            \NDN\SAL\Debug::log("Sending 200 response and other HTTP headers", \NDN\SAL\Debug::DEBUG);
+            Logger::debug("Sending 200 response and other HTTP headers");
             // 200 OK response
             header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
             header('Status: 200 OK');
-            if (\NDN\SAL\Project::isDev()) {
+            if (Project::isDev()) {
                 $aHeaders = array(
                     'Expires' => date('r', strtotime('Yesterday')),
                     'Cache-Control' => 'no-store, no-cache, max-age=0, must-revalidate',
@@ -926,7 +925,7 @@ final class WebProject extends ProjectAbstract
             }
 
         } else {
-            \NDN\SAL\Debug::log('Unable to send headers (already sent)', \NDN\SAL\Debug::ERROR);
+            Logger::debug('Unable to send headers (already sent)');
         }
     }
 
@@ -938,7 +937,7 @@ final class WebProject extends ProjectAbstract
      */
     private function initSmarty()
     {
-        \NDN\SAL\Debug::log("Instantiating Smarty object", \NDN\SAL\Debug::DEBUG);
+        Logger::debug("Instantiating Smarty object");
 
         $oSmarty = new \Smarty();
         $oSmarty->muteExpectedErrors();
@@ -968,12 +967,12 @@ final class WebProject extends ProjectAbstract
             $templatePath = $this->checkProjectDir($this->_oSiteConfig->path, true);
             $this->_templatePath = $templatePath;
         } else {
-            \NDN\SAL\Debug::log("path missing from Config - defaulting to html", \NDN\SAL\Debug::WARN);
+            Logger::warning("path missing from Config - defaulting to html");
             // Check the template path - raise an Exception if any problems found
             $templatePath = $this->checkProjectDir('html', true);
             $this->_templatePath = $templatePath;
         }
-        \NDN\SAL\Debug::log("TemplatePath selected as: $templatePath", \NDN\SAL\Debug::DEBUG);
+        Logger::debug("TemplatePath selected as: $templatePath");
     }
 
 
@@ -1018,14 +1017,14 @@ final class WebProject extends ProjectAbstract
         }
         // If we still don't have a documentRoot then we can't continue
         if (!$documentRoot) {
-            throw new \NDN\SAL\SalException('Unable to create a working temp directory');
+            throw new ProjectException('Unable to create a working temp directory');
         }
 
         // create a template cache
         if (isset($this->_oSiteConfig->alias)) {
             $documentRoot = $this->initProjectDir($documentRoot . DIRECTORY_SEPARATOR . (string)$this->_oSiteConfig->alias);
         } else {
-            throw new \NDN\SAL\SalException('Missing &lt;alias&gt;&lt;/alias&gt; element from Web_Project block in project.xml');
+            throw new ProjectException('Missing &lt;alias&gt;&lt;/alias&gt; element from Web_Project block in project.xml');
         }
 
         // compiled templates dir
@@ -1080,7 +1079,7 @@ final class WebProject extends ProjectAbstract
         $oWebBlock = simplexml_load_string($oBlock->asXML());
 
         if (is_a($oWebBlock, '\SimpleXMLElement')) {
-            \NDN\SAL\Debug::log("Main Web Block of project XML loaded", \NDN\SAL\Debug::DEBUG);
+            Logger::debug("Main Web Block of project XML loaded");
             $this->_oWebConfig = $oWebBlock;
             // Save the Web_Project block as it's own Config item for use later
             \NDN\SAL\Config::saveStaticData('ProjectBlock', $oWebBlock);
@@ -1088,7 +1087,7 @@ final class WebProject extends ProjectAbstract
             /**
              * Can we load the config block from APC
              */
-            if (\NDN\SAL\Project::isDev() != true && ini_get('apc.enabled') == '1' && apc_exists('Config_'.$this->_oRequest->getDomain())) {
+            if (Project::isDev() != true && ini_get('apc.enabled') == '1' && apc_exists('Config_'.$this->_oRequest->getDomain())) {
                 $this->saveSiteConfig(simplexml_load_string(apc_fetch('Config_'.$this->_oRequest->getDomain())), false);
                 return true;
             } else {
@@ -1118,9 +1117,9 @@ final class WebProject extends ProjectAbstract
                 return true;
             }
 
-            throw new SalUnsupportedSiteException('No suitable Web_Project site in ' . \NDN\SAL\Config::getFileName());
+            throw new ProjectException('No suitable Web_Project site in ' . \NDN\SAL\Config::getFileName());
         } else {
-            throw new \NDN\SAL\SalException('Missing Web_Project block in ' . \NDN\SAL\Config::getFileName());
+            throw new ProjectException('Missing Web_Project block in ' . \NDN\SAL\Config::getFileName());
         }
     }
 
@@ -1190,7 +1189,7 @@ final class WebProject extends ProjectAbstract
 
             // is the request within our project defined admin space
             if (isset($admin->uri) && substr($this->_oRequest->getDocument(), 0, strlen((string)$admin->uri)) ==  $admin->uri) {
-                \NDN\SAL\Debug::log("Admin resource request");
+                Logger::debug("Admin resource request");
 
                 // rewrite the requested doc relative to the admin stub
                 $relativeReq = str_replace((string)$admin->uri, '', $this->_oRequest->getDocument());
@@ -1419,13 +1418,13 @@ final class WebProject extends ProjectAbstract
     private function loadTemplate($templateFileName)
     {
         if ($templateFileName && file_exists($templateFileName) && is_readable($templateFileName)) {
-            \NDN\SAL\Debug::log("Loading template: $templateFileName", \NDN\SAL\Debug::INFO);
+            Logger::info("Loading template: $templateFileName");
             // prepare Smarty
             $oSmarty = $this->initSmarty();
             $this->assignTemplateVariables($oSmarty);
             $this->_viewContents = $oSmarty->fetch($templateFileName);
             if ($this->_bSessionUrlRewriting) {
-                \NDN\SAL\Debug::log("Rewriting URLs in template: " . $templateFileName, \NDN\SAL\Debug::NOTICE);
+                Logger::notice("Rewriting URLs in template: " . $templateFileName);
                 $regexp = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
                 $this->_viewContents = preg_replace_callback("/$regexp/siU", '\NDN\SAL\Web\Project::rewriteUrls', $this->_viewContents);
                 $regexp = "<form\s[^>]*action=(\"??)([^\" >]*?)\\1[^>]*>";
@@ -1518,7 +1517,7 @@ final class WebProject extends ProjectAbstract
         }
 
         // Is this a dev server
-        if (\NDN\SAL\Project::isDev()) {
+        if (Project::isDev()) {
             $oSmarty->assign('dev', true);
             $oSmarty->assign('isDev', true);
         }
@@ -1546,7 +1545,7 @@ final class WebProject extends ProjectAbstract
     {
         if (isset($this->_viewContents) && is_string($this->_viewContents)) {
             if ($this->_bSessionsOK) {
-                \NDN\SAL\Debug::log("Saving template path: ".$this->_templatePath);
+                Logger::debug("Saving template path: ".$this->_templatePath);
                 $_SESSION['sal_templatePath'] = $this->_templatePath;
             }
             if ($this->_bSessionsOK && !isset($_SESSION['clientAuth'])) {
@@ -1556,7 +1555,7 @@ final class WebProject extends ProjectAbstract
                 );
                 $_SESSION['clientAuth'] = $arr;
             }
-            \NDN\SAL\Debug::log('HTTP 200 - '.$this->_oRequest->getMethod().': '.$this->_oRequest->getDocument(), \NDN\SAL\Debug::INFO);
+            Logger::info('HTTP 200 - '.$this->_oRequest->getMethod().': '.$this->_oRequest->getDocument());
 
             // set and send the HTTP headers
             $this->setDocTypeHeaders();
@@ -1565,7 +1564,7 @@ final class WebProject extends ProjectAbstract
             // output the compiled template to the browser
             echo $this->_viewContents;
         } else {
-            \NDN\SAL\Debug::log('HTTP 404 - '.$this->_oRequest->getMethod().': '.$this->_oRequest->getDocument(), \NDN\SAL\Debug::INFO);
+            Logger::info('HTTP 404 - '.$this->_oRequest->getMethod().': '.$this->_oRequest->getDocument());
             $this->sendErrorHeaders();
             $this->sendErrorDocument();
         }

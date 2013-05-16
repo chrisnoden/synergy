@@ -291,7 +291,7 @@ class ExceptionHandler
             }
 
             // Log it through our Project Logger
-            Project::Logger()->log(
+            Project::getLogger()->log(
                 $dbgLevel,
                 $text,
                 array('filename'=>self::$_fileName, 'linenum'=>self::$_lineNum, 'level'=>self::$_aErrorTypes[self::$_errNum])

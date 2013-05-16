@@ -46,8 +46,8 @@ abstract class ProjectAbstract extends Object
         $this->_timeStart = microtime(true);
 
         // Set our random logging ID using the log scope
-        if (method_exists(Project::Logger(), 'setTag')) {
-            Project::Logger()->setTag(Tools::randomString(6, '0123456789ABCDEF'));
+        if (method_exists(Project::getLogger(), 'setTag')) {
+            Project::getLogger()->setTag(Tools::randomString(6, '0123456789ABCDEF'));
         }
 
 //        if (Project::getProjectConfigFilename()) {
@@ -66,7 +66,7 @@ abstract class ProjectAbstract extends Object
         $synergy_endTime = microtime(true);
         $synergy_execTime = number_format($synergy_endTime - $this->_timeStart, 4);
         if (Project::isDev()) {
-            Project::Logger()->log(LogLevel::INFO, "Execution time=$synergy_execTime seconds");
+            Project::getLogger()->log(LogLevel::INFO, "Execution time=$synergy_execTime seconds");
         }
     }
 
@@ -76,7 +76,7 @@ abstract class ProjectAbstract extends Object
      */
     public function debugger()
     {
-        return Project::Logger();
+        return Project::getLogger();
     }
 
 
@@ -90,7 +90,7 @@ abstract class ProjectAbstract extends Object
         }
         if (!Project::getProjectPath()) {
             Project::setProjectPath(dirname(SAL_PLATFORM_DIRECTORY));
-            Project::Logger()->log('Guessing projectPath of '.Project::getProjectPath(), Project::Logger()->NOTICE);
+            Project::getLogger()->log('Guessing projectPath of '.Project::getProjectPath(), Project::getLogger()->NOTICE);
         }
 
         /**

@@ -104,7 +104,7 @@ class Request extends Object
      */
     protected function buildRequestData()
     {
-        Project::Logger()->log('Getting all the HTTP request data', LogLevel::DEBUG);
+        Project::getLogger()->log('Getting all the HTTP request data', LogLevel::DEBUG);
 
         $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 

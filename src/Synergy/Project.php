@@ -82,24 +82,24 @@ class Project extends Singleton
 
 
     /**
+     * An alias for Synergy\Logger\Logger::setLogger()
+     *
      * @param \Psr\Log\LoggerInterface $logger
      */
     public static function setLogger(LoggerInterface $logger)
     {
-        self::$_logger = $logger;
+        Logger::setLogger($logger);
     }
 
 
     /**
+     * An alias for Synergy\Logger\getLogger()
+     *
      * @return \Psr\Log\LoggerInterface
      */
-    public static function Logger()
+    public static function getLogger()
     {
-        if (!self::$_logger instanceof LoggerInterface) {
-            self::$_logger = new FileLogger('/tmp/synergy.log'); // @todo replace with sensible default log filename
-        }
-
-        return self::$_logger;
+        return Logger::getLogger();
     }
 
 
