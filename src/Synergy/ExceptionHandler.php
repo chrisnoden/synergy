@@ -9,6 +9,7 @@
 namespace Synergy;
 
 use Psr\Log\LogLevel;
+use Synergy\Logger\Logger;
 
 
 /**
@@ -207,7 +208,7 @@ class ExceptionHandler
         self::$_trace = $e->getTrace();
 
         // process the error
-        self::handler($ref->getName());
+        self::handler(LogLevel::CRITICAL);
 
         // exit program execution if necessary
         if ( in_array(self::$_errNum, self::$_aStopCodes) ) {
@@ -260,7 +261,7 @@ class ExceptionHandler
                 $text = sprintf("%s", self::$_errMsg);
             }
 
-            if ($text === null) {
+            if ($type === null) {
                 /**
                  * Convert the PHP error number to a Psr compatible LogLevel
                  */
@@ -291,7 +292,7 @@ class ExceptionHandler
             }
 
             // Log it through our Project Logger
-            Project::getLogger()->log(
+            Logger::log(
                 $dbgLevel,
                 $text,
                 array('filename'=>self::$_fileName, 'linenum'=>self::$_lineNum, 'level'=>self::$_aErrorTypes[self::$_errNum])

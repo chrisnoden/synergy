@@ -19,5 +19,9 @@
         "psr/log": "1.0.0",
         "symfony/http-foundation": "v2.2.1",
         "symfony/routing": "v2.2.1"
+    },
+    "suggest": {
+        "chrisnoden/talkback": "dev-master"
     }
+
 }

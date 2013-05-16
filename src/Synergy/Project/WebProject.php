@@ -13,8 +13,11 @@ use Synergy\Exception\ProjectException;
 use Synergy\Logger\Logger;
 use Synergy\Project;
 use Symfony\Component\HttpFoundation\Request;
-use Synergy\Web\Router;
 use Synergy\Project\ProjectAbstract;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Route;
 
 /**
  * Handle web template calls
@@ -201,8 +204,25 @@ final class WebProject extends ProjectAbstract
      */
     public function getController()
     {
-        $router = new Router();
-        $this->_oController = $router->chooseController($this->_oRequest->getRequestUri());
+//        $router = new Router();
+//        $this->_oController = $router->chooseController($this->_oRequest->getRequestUri());
+
+
+        $routes = new RouteCollection();
+        $routes->add('testr', new Route('/hello', array('controller' => 'foo')));
+
+        $context = new RequestContext();
+
+        // this is optional and can be done without a Request instance
+        $context->fromRequest(Request::createFromGlobals());
+
+        $matcher = new UrlMatcher($routes, $context);
+
+        $parameters = $matcher->match($this->_oRequest->getRequestUri());
+
+        var_dump($parameters);
+        exit;
+
     }
 
 
