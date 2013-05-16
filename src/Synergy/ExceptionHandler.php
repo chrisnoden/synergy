@@ -244,7 +244,7 @@ class ExceptionHandler
      *
      * @static
      */
-    protected static function handler($type = null)
+    protected static function handler($LogLevel = null)
     {
         if (isset(self::$_errNum)) {
             if (isset(self::$_trace)) {
@@ -261,7 +261,7 @@ class ExceptionHandler
                 $text = sprintf("%s", self::$_errMsg);
             }
 
-            if ($type === null) {
+            if ($LogLevel === null) {
                 /**
                  * Convert the PHP error number to a Psr compatible LogLevel
                  */
@@ -288,7 +288,7 @@ class ExceptionHandler
                         $dbgLevel = LogLevel::ERROR;
                 }
             } else {
-                $dbgLevel = $type;
+                $dbgLevel = $LogLevel;
             }
 
             // Log it through our Project Logger

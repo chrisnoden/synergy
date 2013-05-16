@@ -9,7 +9,9 @@
 namespace Synergy\Project;
 
 use Psr\Log\LogLevel;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Synergy\Exception\ProjectException;
+use Synergy\Exception\UnsupportedSiteException;
 use Synergy\Logger\Logger;
 use Synergy\Project;
 use Symfony\Component\HttpFoundation\Request;
@@ -195,33 +197,40 @@ final class WebProject extends ProjectAbstract
          * Choose and load our Controller
          */
         $this->getController();
-//        var_dump($this->_oController); // @todo remove this
+        var_dump($this->_oController); // @todo remove this
     }
 
 
     /**
      * Choose the Controller for the web request
      */
-    public function getController()
+    protected function getController()
     {
-//        $router = new Router();
-//        $this->_oController = $router->chooseController($this->_oRequest->getRequestUri());
-
 
         $routes = new RouteCollection();
         $routes->add('testr', new Route('/hello', array('controller' => 'foo')));
+        // @todo load Routes from file
+        // @link http://symfony.com/doc/current/components/routing/introduction.html#load-routes-from-a-file
 
         $context = new RequestContext();
 
         // this is optional and can be done without a Request instance
-        $context->fromRequest(Request::createFromGlobals());
+        $context->fromRequest($this->_oRequest);
 
         $matcher = new UrlMatcher($routes, $context);
 
-        $parameters = $matcher->match($this->_oRequest->getRequestUri());
+        try {
+            $parameters = $matcher->match($this->_oRequest->getPathInfo());
+        }
+        catch (ResourceNotFoundException $ex)
+        {
+            $parameters = array(
+                'controller' => 'DefaultController',
+                '_route'     => 'SynergyDefault'
+            );
+        }
 
-        var_dump($parameters);
-        exit;
+        $this->_oController = $parameters;
 
     }
 
@@ -238,7 +247,7 @@ final class WebProject extends ProjectAbstract
         try {
             $this->loadConfig();
         }
-        catch (SalUnsupportedSiteException $ex)
+        catch (UnsupportedSiteException $ex)
         {
             Logger::log(LogLevel::WARNING, 'Unsupported request for hostname: '.$this->_oRequest->getDomain());
             $this->sendErrorHeaders();
