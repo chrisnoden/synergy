@@ -202,7 +202,7 @@ final class WebProject extends ProjectAbstract
     public function getController()
     {
         $router = new Router();
-        $this->_oController = $router->chooseController($this->_oRequest->getFullRequest());
+        $this->_oController = $router->chooseController($this->_oRequest->getRequestUri());
     }
 
 
