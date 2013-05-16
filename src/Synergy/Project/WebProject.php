@@ -6,15 +6,13 @@
  * @copyright (c) 2009 to 2013 Chris Noden
  */
 
-
 namespace Synergy\Project;
-
 
 use Psr\Log\LogLevel;
 use Synergy\Exception\ProjectException;
 use Synergy\Logger\Logger;
 use Synergy\Project;
-use Synergy\Web\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Synergy\Web\Router;
 use Synergy\Project\ProjectAbstract;
 
@@ -140,7 +138,7 @@ final class WebProject extends ProjectAbstract
      */
     private $_viewDocType = 'html';
     /**
-     * @var Request
+     * @var \Symfony\Component\HttpFoundation\Request
      */
     private $_oRequest;
     /**
@@ -161,10 +159,12 @@ final class WebProject extends ProjectAbstract
         parent::__construct();
 
         /**
-         * configure our array of handled extensions - file extensions that we will serve a smarty HTML page for
-         * this is an array of extensions which are not resources (ie not images, zips, downloads, etc)
-         * similar to the project configurable extensions which define what the template extensions might be rather than
-         * the incoming (controller) side of things which these address
+         * configure our array of handled extensions - file extensions that we
+         * will serve a (view) HTML page. This is an array of extensions which
+         * are not resources (ie not images, zips, downloads, etc) similar to
+         * the project configurable extensions which define what the template
+         * extensions might be rather than the incoming (controller) side of
+         * things which these address
          */
         $this->_aHandledExtensions = array(
             'html', 'htm', 'php'
@@ -182,17 +182,17 @@ final class WebProject extends ProjectAbstract
     }
 
 
+    /**
+     * Our main method : let's go and run our web project
+     */
     public function launch()
     {
-        /**
-         * @var Request
-         */
-        $this->_oRequest = Request::build();
+        $this->_oRequest = Request::createFromGlobals();
         /**
          * Choose and load our Controller
          */
         $this->getController();
-        var_dump($this->_oController); // @todo remove this
+//        var_dump($this->_oController); // @todo remove this
     }
 
 

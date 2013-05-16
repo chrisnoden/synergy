@@ -6,9 +6,7 @@
  * @copyright (c) 2009 to 2013 Chris Noden
  */
 
-
 namespace Synergy;
-
 
 use Psr\Log\LoggerInterface;
 use Synergy\Exception\InvalidArgumentException;
@@ -19,6 +17,7 @@ use Synergy\Project\WebProject;
 
 class Project extends Singleton
 {
+
     const WEB = 'Web';
     const CLI = 'CLI';
     const DAEMON = 'Daemon';
@@ -47,10 +46,6 @@ class Project extends Singleton
      * @var \Synergy\Project\ProjectAbstract
      */
     private static $_projectInstance;
-    /**
-     * @var \Synergy\Logger\Logger
-     */
-    private static $_logger;
 
 
     /**
@@ -61,22 +56,21 @@ class Project extends Singleton
      */
     public static function launch($projectType)
     {
-        switch ($projectType)
-        {
+        switch ($projectType) {
             case self::WEB:
                 self::$_projectInstance = new WebProject();
                 break;
 
             case self::CLI:
             case self::DAEMON:
-                // good project type
+                // good project type - just not implemented yet
                 break;
 
             default:
                 throw new InvalidProjectTypeException('Invalid project type, should be one of Synergy\Project::WEB ::CLI or ::DAEMON');
         }
 
-        // the new way
+        // launch the project
         self::$_projectInstance->launch();
     }
 
@@ -93,7 +87,7 @@ class Project extends Singleton
 
 
     /**
-     * An alias for Synergy\Logger\getLogger()
+     * An alias for Synergy\Logger\Logger::getLogger()
      *
      * @return \Psr\Log\LoggerInterface
      */
@@ -183,7 +177,7 @@ class Project extends Singleton
         } else if (!is_dir($path)) {
             throw new InvalidArgumentException("projectPath must be the path to your project directory");
         } else if (!is_readable($path)) {
-            throw new InvalidArgumentException("projectPath must have read permissions by user:".get_current_user());
+            throw new InvalidArgumentException("projectPath must have read permissions by user:" . get_current_user());
         }
 
         self::$_projectPath = $path;
@@ -203,6 +197,7 @@ class Project extends Singleton
 
     /**
      * Set the absolute filename of your project config xml
+     *
      * @param $filename
      * @throws \Synergy\Exception\InvalidArgumentException
      */
