@@ -8,7 +8,6 @@
 
 namespace Synergy\Logger;
 
-
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 

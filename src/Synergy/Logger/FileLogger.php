@@ -8,187 +8,169 @@
 
 namespace Synergy\Logger;
 
-
+use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
+use Synergy\Exception\InvalidArgumentException;
 
 /**
  * Provides a Psr-3 compliant File logger
+ * This is a simple logger for Synergy - ideally you would use
+ * a more advanced logger (like apache/log4php or chrisnoden/talkback)
+ * and attach to your Project using \Synergy\Project::setLogger($logger);
  */
-class FileLogger extends Logger implements LoggerInterface
+class FileLogger extends AbstractLogger implements LoggerInterface
 {
+
+    /**
+     * @var array
+     */
+    protected $_aValidLogLevels = array();
+    /**
+     * @var string
+     */
+    protected $_filename;
+    /**
+     * @var resource
+     */
+    protected $_fh;
 
 
     /**
-     * Logs with an arbitrary level.
-     *
-     * @param mixed $level
-     * @param string $message
-     * @param array $context
-     * @return null
-     * @throw \Psr\Log\InvalidArgumentException
+     * @param null $filename optional filename (path + filename)
      */
-    public function log($level, $message, array $context = array())
+    public function __construct($filename = null)
     {
-        switch (strtolower($level))
-        {
-            case 'emergency':
-                $this->emergency($message, $context);
-                break;
-            case 'alert':
-                $this->alert($message, $context);
-                break;
-            case 'critical':
-                $this->critical($message, $context);
-                break;
-            case 'error':
-                $this->error($message, $context);
-                break;
-            case 'warning':
-                $this->warning($message, $context);
-                break;
-            case 'notice':
-                $this->notice($message, $context);
-                break;
-            case 'info':
-                $this->info($message, $context);
-                break;
-            case 'debug':
-                $this->debug($message, $context);
-                break;
+        /**
+         * Populate our valid log levels by Reflecting on the
+         * constants exposed in the Psr\Log\LogLevel class
+         */
+        $t = new LogLevel();
+        $r = new \ReflectionObject($t);
+        $this->_aValidLogLevels = $r->getConstants();
 
-            default:
-                throw new \Psr\Log\InvalidArgumentException('Invalid log $level, must be one of debug, info, notice, warning, error, critical, alert, emergency');
+        // Set our filename
+        if (!is_null($filename)) {
+            if (file_exists($filename) && !is_writable($filename)) {
+                $processUser = posix_getpwuid(posix_geteuid());
+                throw new InvalidArgumentException('logfile must be writeable by user: '.$processUser['name']);
+            }
+
+            $this->_filename = $filename;
         }
     }
 
 
     /**
-     * System is unusable.
+     * Logs to the File
+     * @todo do something sensible with the log context
+     * @todo filter the logs by level
      *
+     * @param mixed  $level
      * @param string $message
-     * @param array $context
+     * @param array  $context
      * @return null
+     * @throw \Psr\Log\InvalidArgumentException
      */
-    public function emergency($message, array $context = array())
+    public function log($level, $message, array $context = array())
     {
-        $this->setLevel('fatal');
-        $this->setFieldValues($context);
-        $this->write($message);
+        $level = strtolower($level);
+        if ($this->isValidLogLevel($level)) {
+            $this->write($message);
+        }
     }
 
 
     /**
-     * Action must be taken immediately.
+     * Tests the $level to ensure it's accepted under the Psr3 standard
      *
-     * Example: Entire website down, database unavailable, etc. This should
-     * trigger the SMS alerts and wake you up.
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
+     * @param $level
+     * @return bool
+     * @throws \Psr\Log\InvalidArgumentException
      */
-    public function alert($message, array $context = array())
+    protected function isValidLogLevel($level)
     {
-        $this->setLevel('error');
-        $this->setFieldValues($context);
-        $this->write($message);
+        if (!in_array($level, $this->_aValidLogLevels)) {
+            $logLevels = implode(', \\Psr\\Log\\LogLevel::', $this->_aValidLogLevels);
+            throw new \Psr\Log\InvalidArgumentException('Invalid LogLevel ('.$level.', must be one of \Psr\Log\LogLevel::' . $logLevels);
+        }
+
+        return true;
     }
 
 
     /**
-     * Critical conditions.
+     * Opens the file handler for append
      *
-     * Example: Application component unavailable, unexpected exception.
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
+     * @throws InvalidArgumentException
      */
-    public function critical($message, array $context = array())
+    protected function openFH()
     {
-        $this->setLevel('fatal');
-        $this->setFieldValues($context);
-        $this->write($message);
+        if (!is_resource($this->_fh)) {
+            if (isset($this->_filename)) {
+                $fh = @fopen($this->_filename, 'a');
+                if (is_resource($fh)) {
+                    $this->_fh = $fh;
+                } else {
+                    throw new InvalidArgumentException(sprintf("Invalid filename, unable to open for append (%s)", $this->_filename));
+                }
+            } else {
+                throw new InvalidArgumentException(sprintf("Invalid filename: %s", $this->_filename));
+            }
+        }
     }
 
 
     /**
-     * Runtime errors that do not require immediate action but should typically
-     * be logged and monitored.
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
+     * Closes the file handler
      */
-    public function error($message, array $context = array())
+    protected function closeFH()
     {
-        $this->setLevel('error');
-        $this->setFieldValues($context);
-        $this->write($message);
+        if (is_resource($this->_fh)) {
+            @fclose($this->_fh);
+            $this->_fh = null;
+        }
     }
 
 
     /**
-     * Exceptional occurrences that are not errors.
+     * @param $filename
      *
-     * Example: Use of deprecated APIs, poor use of an API, undesirable things
-     * that are not necessarily wrong.
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
+     * @throws InvalidArgumentException
      */
-    public function warning($message, array $context = array())
+    public function setFilename($filename)
     {
-        $this->setLevel('warn');
-        $this->setFieldValues($context);
-        $this->write($message);
+        // close any open file resource before changing the filename
+        $this->closeFH();
+
+        // check the filename is valid before setting
+        if (is_string($filename) && substr($filename, 0, 1) == DIRECTORY_SEPARATOR && is_dir(dirname($filename)) && is_writable(dirname($filename))) {
+            $filename = trim($filename);
+
+            // split out the parts of the filename
+            $parts = pathinfo($filename);
+
+            // clean the filename
+            $filename = $parts['dirname'] . DIRECTORY_SEPARATOR . preg_replace("/[^A-Za-z0-9+]/", '_', $parts['filename']);
+            if (isset($parts['extension']) && strlen($parts['extension']) > 0) {
+                $filename .= '.' . $parts['extension'];
+            }
+
+            $this->_filename = $filename;
+        } else {
+            throw new InvalidArgumentException("filename must be an absolute filename in a writeable directory");
+        }
     }
 
 
     /**
-     * Normal but significant events.
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
+     * @param $msg string string to add to the file
      */
-    public function notice($message, array $context = array())
+    public function write($msg)
     {
-        $this->setLevel('notice');
-        $this->setFieldValues($context);
-        $this->write($message);
+        $this->openFH();
+        $msg .= "\n";
+        fputs($this->_fh, $msg, strlen($msg));
     }
 
-
-    /**
-     * Interesting events.
-     *
-     * Example: User logs in, SQL logs.
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function info($message, array $context = array())
-    {
-        $this->setLevel('info');
-        $this->setFieldValues($context);
-        $this->write($message);
-    }
-
-
-    /**
-     * Detailed debug information.
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function debug($message, array $context = array())
-    {
-        $this->setLevel('debug');
-        $this->setFieldValues($context);
-        $this->write($message);
-    }
 }

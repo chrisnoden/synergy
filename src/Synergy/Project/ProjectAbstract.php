@@ -10,6 +10,7 @@
 namespace Synergy\Project;
 
 
+use Psr\Log\LogLevel;
 use Synergy\Exception\ProjectException;
 use Synergy\Exception\SynergyException;
 use Synergy\Object;
@@ -62,10 +63,10 @@ abstract class ProjectAbstract extends Object
      */
     public function __destruct()
     {
-        $sal_endTime = microtime(true);
-        $sal_execTime = number_format($sal_endTime - $this->_timeStart, 4);
+        $synergy_endTime = microtime(true);
+        $synergy_execTime = number_format($synergy_endTime - $this->_timeStart, 4);
         if (Project::isDev()) {
-            Project::Logger()->log("Execution time=$sal_execTime seconds", Project::Logger()->INFO);
+            Project::Logger()->log(LogLevel::INFO, "Execution time=$synergy_execTime seconds");
         }
     }
 

@@ -13,6 +13,7 @@ namespace Synergy;
 use Psr\Log\LoggerInterface;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\InvalidProjectTypeException;
+use Synergy\Logger\FileLogger;
 use Synergy\Logger\Logger;
 use Synergy\Project\WebProject;
 
@@ -94,8 +95,8 @@ class Project extends Singleton
      */
     public static function Logger()
     {
-        if (!self::$_logger instanceof Logger) {
-            self::$_logger = new Logger();
+        if (!self::$_logger instanceof LoggerInterface) {
+            self::$_logger = new FileLogger('/tmp/synergy.log'); // @todo replace with sensible default log filename
         }
 
         return self::$_logger;

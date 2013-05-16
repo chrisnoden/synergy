@@ -10,6 +10,7 @@
 namespace Synergy\Project;
 
 
+use Synergy\Project;
 use Synergy\Web\Request;
 use Synergy\Web\Router;
 use Synergy\Project\ProjectAbstract;
@@ -165,6 +166,7 @@ final class WebProject extends ProjectAbstract
         $this->_aHandledExtensions = array(
             'html', 'htm', 'php'
         );
+
     }
 
 
@@ -244,14 +246,9 @@ final class WebProject extends ProjectAbstract
 
         // Are we possibly looking for a resource file
         $this->isResourceRequest($this->_oRequest->getDocument());
-        // If we have identified a resource file then disable normal logging
-        if ($this->_bResource) {
-            \NDN\SAL\Debug::setBlock(true);
-        }
 
         // do we need to use any controllers
         $this->findControllers();
-        \NDN\SAL\Debug::setBlock(false);
 
         // pre-launch execution of any controllers
         $this->prepControllers();
