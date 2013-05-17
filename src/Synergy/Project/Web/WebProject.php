@@ -6,7 +6,7 @@
  * @copyright (c) 2009 to 2013 Chris Noden
  */
 
-namespace Synergy\Project;
+namespace Synergy\Project\Web;
 
 use Psr\Log\LogLevel;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -186,6 +186,12 @@ final class WebProject extends ProjectAbstract
     public function __destruct()
     {
         parent::__destruct();
+    }
+
+
+    public function __toString()
+    {
+        return Project::getName();
     }
 
 

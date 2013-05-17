@@ -12,7 +12,6 @@ namespace Synergy\Project;
 
 use Psr\Log\LogLevel;
 use Synergy\Exception\ProjectException;
-use Synergy\Exception\SynergyException;
 use Synergy\Object;
 use Synergy\Project;
 use Synergy\Tools\Tools;
@@ -181,7 +180,7 @@ abstract class ProjectAbstract extends Object
             return;
         }
         // The preferred temp folder location failed - try a fallback
-        $documentRoot = $this->initProjectDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . escapeshellarg(Project::getProjectName()));
+        $documentRoot = $this->initProjectDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . escapeshellarg(Project::getName()));
         if ($documentRoot) {
             $this->_tempFolderPath = $documentRoot;
             return;

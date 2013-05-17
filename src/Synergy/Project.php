@@ -9,17 +9,15 @@
 namespace Synergy;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\InvalidProjectTypeException;
 use Synergy\Logger\Logger;
-use Synergy\Project\WebProject;
+use Synergy\Project\ProjectAbstract;
+use Synergy\Project\ProjectType;
 
-class Project extends Singleton
+final class Project extends Singleton
 {
-
-    const WEB = 'web';
-    const CLI = 'cli';
-    const DAEMON = 'daemon';
 
     /**
      * @var Singleton
@@ -45,32 +43,50 @@ class Project extends Singleton
      * @var \Synergy\Project\ProjectAbstract
      */
     private static $_projectInstance;
+    /**
+     * @var string
+     */
+    private static $_projectType;
+    /**
+     * @var array
+     */
+    private static $_options = array();
+
+
+    public static function init()
+    {
+        if (!defined('SYNERGY_LIBRARY_PATH')) {
+            define('SYNERGY_LIBRARY_PATH', dirname(__FILE__));
+        }
+        if (!defined('SYNERGY_WEB_ROOT')) {
+            Project::getLogger()->error('Should define SYNERGY_WEB_ROOT with your web host path');
+            define('SYNERGY_WEB_ROOT', dirname(dirname(dirname(__FILE__))));
+        }
+    }
 
 
     /**
-     * Launch a new Project
-     *
-     * @param $projectType
-     * @throws \Synergy\Exception\InvalidProjectTypeException
+     * @param ProjectAbstract $object
      */
-    public static function launch($projectType)
+    public static function setObject(ProjectAbstract $object)
     {
-        switch ($projectType) {
-            case self::WEB:
-                self::$_projectInstance = new WebProject();
-                break;
+        self::$_projectInstance = $object;
+    }
 
-            case self::CLI:
-            case self::DAEMON:
-                // good project type - just not implemented yet
-                break;
 
-            default:
-                throw new InvalidProjectTypeException('Invalid project type, should be one of Synergy\Project::WEB ::CLI or ::DAEMON');
+    /**
+     * @return ProjectAbstract
+     */
+    public static function getObject()
+    {
+        if (!self::$_projectInstance instanceof ProjectAbstract) {
+            if (isset(self::$_projectType)) {
+                $classname = "Synergy\\Project\\" . self::$_projectType . "\\" . self::$_projectType . 'Project'; // eg Synergy\Project\Web\WebProject
+                self::$_projectInstance = new $classname();
+            }
         }
 
-        // launch the project
-        self::$_projectInstance->launch();
+        return self::$_projectInstance;
     }
 
 
@@ -102,7 +118,7 @@ class Project extends Singleton
      * @param $projectName
      * @throws \Synergy\Exception\InvalidArgumentException
      */
-    public static function setProjectName($projectName)
+    public static function setName($projectName)
     {
         if (is_string($projectName) && mb_strlen(trim($projectName), 'utf-8') < 30) {
             self::$_projectName = trim($projectName);
@@ -115,11 +131,38 @@ class Project extends Singleton
     /**
      * @return $projectName Name of our project (30 char limit)
      */
-    public static function getProjectName()
+    public static function getName()
     {
         if (isset(self::$_projectName)) {
             return self::$_projectName;
         }
+    }
+
+
+    /**
+     * @param $projectType string one of the Project\ProjectType class constants
+     * @throws \Synergy\Exception\InvalidProjectTypeException
+     */
+    public static function setType($projectType)
+    {
+        $t = ProjectType::getInstance();
+        $r = new \ReflectionObject($t);
+        $aConstants = $r->getConstants();
+
+        if (!in_array($projectType, $aConstants)) {
+            throw new InvalidProjectTypeException('projectType must be one of ' . implode(', ', $aConstants));
+        }
+
+        self::$_projectType = $projectType;
+    }
+
+
+    /**
+     * @return string
+     */
+    public static function getType()
+    {
+        return self::$_projectType;
     }
 
 
@@ -225,6 +268,26 @@ class Project extends Singleton
         if (isset(self::$_configFile)) {
             return self::$_configFile;
         }
+    }
+
+
+    /**
+     * @param array $options
+     */
+    public static function setOptions(array $options)
+    {
+        if (is_array($options)) {
+            self::$_options = $options;
+        }
+    }
+
+
+    /**
+     * @return array
+     */
+    public static function getOptions()
+    {
+        return self::$_options;
     }
 
 }
