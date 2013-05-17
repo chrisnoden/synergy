@@ -2,15 +2,17 @@
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
  *
- * @author Chris Noden, @chrisnoden
- * @copyright (c) 2009 to 2013 Chris Noden
+ * PHP version 5
  *
- * A collection of static tools that are useful when working with the platform
+ * @category  Project:Synergy
+ * @package   Synergy
+ * @author    Chris Noden, @chrisnoden
+ * @copyright (c) 2009 to 2013 Chris Noden
+ * @link      http://chrisnoden.com
+ * @license   http://opensource.org/licenses/LGPL-3.0
  */
 
-
 namespace Synergy\Tools;
-
 
 /**
  * seed the random number generator
