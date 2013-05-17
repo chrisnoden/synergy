@@ -16,6 +16,12 @@ use Synergy\Logger\Logger;
 use Synergy\Project\ProjectAbstract;
 use Synergy\Project\ProjectType;
 
+/**
+ * Class Project
+ * Holds central config data used by your ProjectAbstract child object
+ *
+ * @package Synergy
+ */
 final class Project extends Singleton
 {
 
