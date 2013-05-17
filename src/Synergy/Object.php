@@ -10,8 +10,6 @@ namespace Synergy;
 
 /**
  * Synergy classes will typically extend this
- *
- * @package       SAL
  */
 class Object {
 
@@ -25,7 +23,7 @@ class Object {
      *
      * @return string name of this class
      */
-    public function toString() {
+    public function __toString() {
         $class = get_class($this);
         return $class;
     }

@@ -221,6 +221,7 @@ final class WebProject extends ProjectAbstract
         }
         catch (ResourceNotFoundException $ex)
         {
+            // @todo Replace/refactor with something user-definable
             // Use our DefaultController
             $parameters = array(
                 '_controller' => 'DefaultController',
@@ -229,7 +230,6 @@ final class WebProject extends ProjectAbstract
         }
 
         $this->_oController = $parameters;
-
     }
 
 

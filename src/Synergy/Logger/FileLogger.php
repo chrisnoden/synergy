@@ -8,9 +8,8 @@
 
 namespace Synergy\Logger;
 
-use Psr\Log\AbstractLogger;
+use Synergy\Logger\LoggerAbstract;
 use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
 use Synergy\Exception\InvalidArgumentException;
 
 /**
@@ -19,13 +18,9 @@ use Synergy\Exception\InvalidArgumentException;
  * a more advanced logger (like apache/log4php or chrisnoden/talkback)
  * and attach to your Project using \Synergy\Project::setLogger($logger);
  */
-class FileLogger extends AbstractLogger implements LoggerInterface
+class FileLogger extends LoggerAbstract implements LoggerInterface
 {
 
-    /**
-     * @var array
-     */
-    protected $_aValidLogLevels = array();
     /**
      * @var string
      */
@@ -37,32 +32,8 @@ class FileLogger extends AbstractLogger implements LoggerInterface
 
 
     /**
-     * @param null $filename optional filename (path + filename)
-     */
-    public function __construct($filename = null)
-    {
-        /**
-         * Populate our valid log levels by Reflecting on the
-         * constants exposed in the Psr\Log\LogLevel class
-         */
-        $t = new LogLevel();
-        $r = new \ReflectionObject($t);
-        $this->_aValidLogLevels = $r->getConstants();
-
-        // Set our filename
-        if (!is_null($filename)) {
-            if (file_exists($filename) && !is_writable($filename)) {
-                $processUser = posix_getpwuid(posix_geteuid());
-                throw new InvalidArgumentException('logfile must be writeable by user: '.$processUser['name']);
-            }
-
-            $this->_filename = $filename;
-        }
-    }
-
-
-    /**
      * Logs to the File
+     *
      * @todo do something sensible with the log context
      * @todo filter the logs by level
      *
@@ -78,24 +49,6 @@ class FileLogger extends AbstractLogger implements LoggerInterface
         if ($this->isValidLogLevel($level)) {
             $this->write($message);
         }
-    }
-
-
-    /**
-     * Tests the $level to ensure it's accepted under the Psr3 standard
-     *
-     * @param $level
-     * @return bool
-     * @throws \Psr\Log\InvalidArgumentException
-     */
-    protected function isValidLogLevel($level)
-    {
-        if (!in_array($level, $this->_aValidLogLevels)) {
-            $logLevels = implode(', \\Psr\\Log\\LogLevel::', $this->_aValidLogLevels);
-            throw new \Psr\Log\InvalidArgumentException('Invalid LogLevel ('.$level.', must be one of \Psr\Log\LogLevel::' . $logLevels);
-        }
-
-        return true;
     }
 
 

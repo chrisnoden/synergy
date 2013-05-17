@@ -11,16 +11,15 @@ namespace Synergy;
 use Psr\Log\LoggerInterface;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\InvalidProjectTypeException;
-use Synergy\Logger\FileLogger;
 use Synergy\Logger\Logger;
 use Synergy\Project\WebProject;
 
 class Project extends Singleton
 {
 
-    const WEB = 'Web';
-    const CLI = 'CLI';
-    const DAEMON = 'Daemon';
+    const WEB = 'web';
+    const CLI = 'cli';
+    const DAEMON = 'daemon';
 
     /**
      * @var Singleton
