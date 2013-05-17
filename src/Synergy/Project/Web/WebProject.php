@@ -189,12 +189,6 @@ final class WebProject extends ProjectAbstract
     }
 
 
-    public function __toString()
-    {
-        return Project::getName();
-    }
-
-
     /**
      * Our main method : let's go and run our web project
      */
@@ -205,7 +199,14 @@ final class WebProject extends ProjectAbstract
          * Choose and load our Controller
          */
         $this->getController();
-        var_dump($this->_oController); // @todo remove this
+        $testClass = 'Synergy\\Controller\\'.$this->_oController['_controller'];
+        if (class_exists($testClass)) {
+            /**
+             * @var $controller \Synergy\Controller\ControllerAbstract
+             */
+            $controller = new $testClass();
+            $controller->defaultAction();
+        }
     }
 
 

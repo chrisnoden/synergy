@@ -6,9 +6,7 @@
  * @copyright (c) 2009 to 2013 Chris Noden
  */
 
-
 namespace Synergy\Project;
-
 
 use Psr\Log\LogLevel;
 use Synergy\Exception\ProjectException;
@@ -21,6 +19,7 @@ use Synergy\Tools\Tools;
  */
 abstract class ProjectAbstract extends Object
 {
+
     /**
      * @var int utime of when the project object was instantiated
      */
@@ -33,7 +32,6 @@ abstract class ProjectAbstract extends Object
      * @var @string path where our working temp folder (read-writable) exists
      */
     protected $_tempFolderPath;
-
 
 
     /**
@@ -71,100 +69,20 @@ abstract class ProjectAbstract extends Object
 
 
     /**
-     * @return \Psr\Log\LoggerInterface
+     * @return string
      */
-    public function debugger()
+    public function __toString()
     {
-        return Project::getLogger();
+        return Project::getName();
     }
 
 
     /**
-     * @throws \Synergy\Exception\ProjectException
+     * Launch your main project code
+     *
+     * @return void
      */
-    public function prepare()
-    {
-        if (!Project::getProjectConfigFilename()) {
-            throw new ProjectException("Config XML filename not set");
-        }
-        if (!Project::getProjectPath()) {
-            Project::setProjectPath(dirname(SAL_PLATFORM_DIRECTORY));
-            Project::getLogger()->log('Guessing projectPath of '.Project::getProjectPath(), Project::getLogger()->NOTICE);
-        }
-
-        /**
-         * Set our Project autoloader
-         */
-        spl_autoload_register(array($this, 'autoload'));
-    }
-
-
-    /**
-     * @param $path
-     * @param bool $throwExceptions
-     * @return bool|string false if path not valid|absolute path if the dir is valid
-     * @throws Exception
-     */
-    protected function checkPlatformDir($path, $throwExceptions = false)
-    {
-        if (!file_exists($path) && substr($path, 0, 1) != DIRECTORY_SEPARATOR) {
-            $path = SAL_PLATFORM_DIRECTORY . DIRECTORY_SEPARATOR . $path;
-        }
-
-        if ($this->checkDir($path, $throwExceptions)) {
-            return $path;
-        }
-    }
-
-
-    /**
-     * @param $path
-     * @param $throwExceptions
-     * @return bool
-     * @throws SalException
-     */
-    protected function checkDir($path, $throwExceptions)
-    {
-        if (file_exists($path) && is_dir($path) && is_readable($path)) {
-            return true;
-        } else if (!file_exists($path)) {
-            if ($throwExceptions) {
-                throw new SalException('Path ('.$path.') must be an absolute path and must exist');
-            } else {
-                return false;
-            }
-        } else if (!is_dir($path)) {
-            if ($throwExceptions) {
-                throw new SalException($path . ' must be a directory');
-            } else {
-                return false;
-            }
-        } else if (!is_readable($path)) {
-            if ($throwExceptions) {
-                throw new SalException($path . ' is not readable by user: ' . get_current_user());
-            } else {
-                return false;
-            }
-        }
-    }
-
-
-    /**
-     * @param $path
-     * @param bool $throwExceptions
-     * @return bool|string false if path not valid|absolute path if the dir is valid
-     * @throws SalException
-     */
-    protected function checkProjectDir($path, $throwExceptions = false)
-    {
-        if (!file_exists($path) && substr($path, 0, 1) != DIRECTORY_SEPARATOR && Project::getProjectPath()) {
-            $path = Project::getProjectPath() . DIRECTORY_SEPARATOR . $path;
-        }
-
-        if ($this->checkDir($path, $throwExceptions)) {
-            return $path;
-        }
-    }
+    abstract public function launch();
 
 
     /**
@@ -187,32 +105,6 @@ abstract class ProjectAbstract extends Object
         }
     }
 
-    /**
-     * Creates and tests a folder that is required by the project
-     *
-     * @param $path
-     * @return $path full path
-     * @throws Exception
-     */
-    protected function initProjectDir($path, $throwExceptions = true)
-    {
-        // Is this path relative to our project path
-        if (!file_exists($path) && substr($path, 0, 1) != DIRECTORY_SEPARATOR && Project::getProjectPath()) {
-            $path = Project::getProjectPath() . DIRECTORY_SEPARATOR . $path;
-        }
-
-        if (!$this->mkdir($path)) {
-            if ($throwExceptions) {
-                if (!file_exists($path)) throw new SalException('Project Path must be an absolute path and must exist');
-                if (!is_writable($path)) throw new SalException($path . ' folder is not writeable');
-                if (!is_dir($path)) throw new SalException($path . ' must be a directory');
-                if (!is_readable($path)) throw new SalException($path . ' is not readable by user: ' . get_current_user());
-            }
-            return false;
-        }
-        return $path;
-    }
-
 
     /**
      * Creates a folder if it doesn't exist (plus the parent folders)
@@ -222,7 +114,7 @@ abstract class ProjectAbstract extends Object
      * @param $test bool default=true test the folder for write permissions
      * @return bool true if created/exists and is read/writeable
      */
-    protected function mkdir($path, $test=true)
+    protected function mkdir($path, $test = true)
     {
         if (!file_exists($path) || !is_dir($path)) {
             @mkdir($path, 0770, true);
@@ -236,57 +128,6 @@ abstract class ProjectAbstract extends Object
                 return true;
             }
         }
-    }
-
-
-    /**
-     * Autoloader for Project classes
-     *
-     * @param $className
-     */
-    protected function autoload($className)
-    {
-        /**
-         * @var $xml \SimpleXMLElement
-         */
-        $xml = Config::getBlock('classes');
-        if (is_a($xml, 'SimpleXMLElement')) {
-            /**
-             * Are we in a namespace
-             */
-            $aParts = explode('\\', $className);
-
-            // Look for the full namespace in the class name
-            $aFound = $xml->xpath("//class[@name='".$className."']");
-
-            if (count($aFound) == 0 && count($aParts) == 2) {
-                // We can deal with single namespace definitions for now
-                $namespace = $aParts[0];
-                $className = $aParts[1];
-
-                // Search for a block of xml in the <$namespace> zone
-                $aFound = $xml->$namespace->xpath("//class[@name='".$className."']");
-            }
-
-            if (count($aFound) > 0) {
-                foreach ($aFound AS $element)
-                {
-                    if (is_a($element, 'SimpleXMLElement')) {
-                        $path = $this->checkProjectDir($element->path, true);
-                        if ($path) {
-                            $testFile = $path . DIRECTORY_SEPARATOR . $element->file;
-                            if (file_exists($testFile) && is_readable($testFile)) {
-                                require_once $testFile;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-            }
-        }
-        $xml = null;
-        unset($xml);
     }
 
 

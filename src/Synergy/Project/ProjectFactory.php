@@ -9,7 +9,6 @@
 namespace Synergy\Project;
 
 use Synergy\Project;
-use Synergy\Exception\InvalidProjectTypeException;
 
 /**
  * Class ProjectFactory
@@ -27,7 +26,7 @@ final class ProjectFactory
      * @param                          $projectType
      * @param \Psr\Log\LoggerInterface $Logger
      * @param array                    $options
-     * @return WebProject
+     * @return \Synergy\Project\ProjectAbstract
      * @throws \Synergy\Exception\InvalidProjectTypeException
      */
     public static function build(

@@ -62,6 +62,10 @@ final class Project extends Singleton
             Project::getLogger()->error('Should define SYNERGY_WEB_ROOT with your web host path');
             define('SYNERGY_WEB_ROOT', dirname(dirname(dirname(__FILE__))));
         }
+
+        self::$_projectInstance = null;
+        self::$_projectType = null;
+        self::$_options = array();
     }
 
 
@@ -81,7 +85,7 @@ final class Project extends Singleton
     {
         if (!self::$_projectInstance instanceof ProjectAbstract) {
             if (isset(self::$_projectType)) {
-                $classname = "Synergy\\Project\\" . self::$_projectType . "\\" . self::$_projectType . 'Project'; // eg Synergy\Project\Web\WebProject
+                $classname = "Synergy\\Project\\" . ucfirst(self::$_projectType) . "\\" . ucfirst(self::$_projectType) . 'Project'; // eg Synergy\Project\Web\WebProject
                 self::$_projectInstance = new $classname();
             }
         }
