@@ -4,7 +4,7 @@
     "version": "0.1.0-dev",
     "homepage": "https://github.com/chrisnoden/synergy",
     "type": "library",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Chris Noden",
@@ -19,8 +19,8 @@
         "psr/log": "1.0.*",
         "symfony/http-foundation": "v2.2.*",
         "symfony/routing": "v2.2.*",
-        "symfony/config": "2.2.*",
-        "symfony/yaml": "2.2.*"
+        "symfony/config": "v2.2.*",
+        "symfony/yaml": "v2.2.*"
     },
     "suggest": {
         "chrisnoden/talkback": "dev-master"
