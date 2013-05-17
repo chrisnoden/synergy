@@ -159,7 +159,7 @@ final class WebProject extends ProjectAbstract
     {
         // turn off automatic session starting (if enabled)
         ini_set('session.auto_start', '0');
-        // @todo check disabling auto_start actually stops the session before it's been created
+        // @todo check this actually stops the session before it's been created
 
         parent::__construct();
 
@@ -208,7 +208,8 @@ final class WebProject extends ProjectAbstract
     {
 
         $routes = new RouteCollection();
-        $routes->add('testr', new Route('/hello', array('controller' => 'foo')));
+        $routes->add('hello', new Route('/hello', array('controller' => 'foo')));
+        $routes->add('testr', new Route('/testr', array('controller' => 'test')));
         // @todo load Routes from file
         // @link http://symfony.com/doc/current/components/routing/introduction.html#load-routes-from-a-file
 
