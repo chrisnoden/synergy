@@ -1,9 +1,15 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- * 
- * @author Chris Noden, @chrisnoden
+ *
+ * PHP version 5
+ *
+ * @category  Project:Synergy
+ * @package   Synergy
+ * @author    Chris Noden, @chrisnoden
  * @copyright (c) 2009 to 2013 Chris Noden
+ * @link      http://chrisnoden.com
+ * @license   http://opensource.org/licenses/LGPL-3.0
  */
 
 namespace Synergy\Logger;
@@ -38,7 +44,9 @@ abstract class LoggerAbstract extends AbstractLogger
         if (!is_null($filename)) {
             if (file_exists($filename) && !is_writable($filename)) {
                 $processUser = posix_getpwuid(posix_geteuid());
-                throw new InvalidArgumentException('logfile must be writeable by user: '.$processUser['name']);
+                throw new InvalidArgumentException(
+                    'logfile must be writeable by user: '.$processUser['name']
+                );
             }
 
             $this->_filename = $filename;
@@ -56,8 +64,12 @@ abstract class LoggerAbstract extends AbstractLogger
     protected function isValidLogLevel($level)
     {
         if (!in_array($level, $this->_aValidLogLevels)) {
-            $logLevels = implode(', \\Psr\\Log\\LogLevel::', $this->_aValidLogLevels);
-            throw new \Psr\Log\InvalidArgumentException('Invalid LogLevel ('.$level.', must be one of \Psr\Log\LogLevel::' . $logLevels);
+            $logLevels = implode(
+                ', \\Psr\\Log\\LogLevel::',
+                $this->_aValidLogLevels
+            );
+            throw new \Psr\Log\InvalidArgumentException(
+                'Invalid LogLevel ('.$level.', must be one of \Psr\Log\LogLevel::' . $logLevels);
         }
 
         return true;

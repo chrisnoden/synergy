@@ -2,8 +2,14 @@
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
  *
- * @author Chris Noden, @chrisnoden
+ * PHP version 5
+ *
+ * @category  Project:Synergy
+ * @package   Synergy
+ * @author    Chris Noden, @chrisnoden
  * @copyright (c) 2009 to 2013 Chris Noden
+ * @link      http://chrisnoden.com
+ * @license   http://opensource.org/licenses/LGPL-3.0
  */
 
 namespace Synergy\Logger;
@@ -65,10 +71,14 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
                 if (is_resource($fh)) {
                     $this->_fh = $fh;
                 } else {
-                    throw new InvalidArgumentException(sprintf("Invalid filename, unable to open for append (%s)", $this->_filename));
+                    throw new InvalidArgumentException(
+                        sprintf("Invalid filename, unable to open for append (%s)", $this->_filename)
+                    );
                 }
             } else {
-                throw new InvalidArgumentException(sprintf("Invalid filename: %s", $this->_filename));
+                throw new InvalidArgumentException(
+                    sprintf("Invalid filename: %s", $this->_filename)
+                );
             }
         }
     }
@@ -119,7 +129,7 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
     /**
      * @param $msg string string to add to the file
      */
-    public function write($msg)
+    private function write($msg)
     {
         $this->openFH();
         $msg .= "\n";
