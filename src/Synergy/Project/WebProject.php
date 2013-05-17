@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Routing\Loader\YamlFileLoader;
 
 /**
  * Handle web template calls
@@ -206,27 +208,22 @@ final class WebProject extends ProjectAbstract
      */
     protected function getController()
     {
-
-        $routes = new RouteCollection();
-        $routes->add('hello', new Route('/hello', array('controller' => 'foo')));
-        $routes->add('testr', new Route('/testr', array('controller' => 'test')));
-        // @todo load Routes from file
-        // @link http://symfony.com/doc/current/components/routing/introduction.html#load-routes-from-a-file
+        // look inside *this* directory
+        $locator = new FileLocator(dirname(SYNERGY_WEB_ROOT) . DIRECTORY_SEPARATOR . 'app/config/');
+        $loader = new YamlFileLoader($locator);
+        $collection = $loader->load('routes.yml');
 
         $context = new RequestContext();
-
-        // this is optional and can be done without a Request instance
         $context->fromRequest($this->_oRequest);
-
-        $matcher = new UrlMatcher($routes, $context);
-
+        $matcher = new UrlMatcher($collection, $context);
         try {
             $parameters = $matcher->match($this->_oRequest->getPathInfo());
         }
         catch (ResourceNotFoundException $ex)
         {
+            // Use our DefaultController
             $parameters = array(
-                'controller' => 'DefaultController',
+                '_controller' => 'DefaultController',
                 '_route'     => 'SynergyDefault'
             );
         }
