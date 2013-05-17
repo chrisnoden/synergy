@@ -6,11 +6,6 @@
  * @copyright (c) 2009 to 2013 Chris Noden
  */
 
-namespace Synergy\Controller;
+namespace Synergy\Exception;
 
-abstract class ControllerAbstract
-{
-
-    abstract public function defaultAction();
-
-}
+class InvalidControllerException extends SynergyException {}
