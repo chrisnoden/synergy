@@ -16,11 +16,11 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "psr/log": "1.0.*",
-        "symfony/http-foundation": "v2.2.*",
-        "symfony/routing": "v2.2.*",
-        "symfony/config": "v2.2.*",
-        "symfony/yaml": "v2.2.*"
+        "psr/log": "1.0.0",
+        "symfony/http-foundation": "v2.2.1",
+        "symfony/routing": "v2.2.1",
+        "symfony/config": "2.2.*",
+        "symfony/yaml": "2.2.*"
     },
     "suggest": {
         "chrisnoden/talkback": "dev-master"
