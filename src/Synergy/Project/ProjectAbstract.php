@@ -9,7 +9,6 @@
 namespace Synergy\Project;
 
 use Psr\Log\LogLevel;
-use Synergy\Exception\ProjectException;
 use Synergy\Object;
 use Synergy\Project;
 use Synergy\Tools\Tools;

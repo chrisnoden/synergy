@@ -8,7 +8,6 @@
 
 namespace Synergy\Tests;
 
-use Synergy\Logger\FileLogger;
 use Synergy\Project;
 use Synergy\Project\ProjectType;
 
@@ -37,7 +36,7 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
         $aConstants = $r->getConstants();
 
         if (count($aConstants) != 3) {
-            throw new \Exception("Should be 3 Project constants in Synergy\\Project");
+            throw new \Exception("Should only be 3 Project constants in Synergy\\Project");
         }
         if (!isset($aConstants['WEB']) || $aConstants['WEB'] != 'web') {
             throw new \Exception("Missing WEB project (const) type in Synergy\\Project");
@@ -51,5 +50,26 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
     }
 
 
+    /**
+     * Test that Project::Init() resets the stored parameters
+     */
+    public function testProjectInit()
+    {
+        Project::init();
+        Project::setName('Test Project');
+        Project::setType(ProjectType::WEB);
+        Project::setOptions(array(1 => true, 2 => false, 3 => 'no'));
+
+        $this->assertEquals('Test Project', Project::getName());
+        $this->assertEquals(ProjectType::WEB, Project::getType());
+        $this->assertArrayHasKey(1, Project::getOptions());
+        $this->assertArrayHasKey(2, Project::getOptions());
+        $this->assertArrayHasKey(3, Project::getOptions());
+
+        Project::init();
+        $this->assertNull(Project::getName());
+        $this->assertNull(Project::getType());
+        $this->assertEmpty(Project::getOptions());
+    }
 
 }

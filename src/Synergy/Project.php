@@ -32,7 +32,7 @@ final class Project extends Singleton
     /**
      * @var string Name of our project
      */
-    private static $_projectName = 'Synergy';
+    private static $_projectName;
     /**
      * @var bool is this a Dev project
      */
@@ -69,6 +69,7 @@ final class Project extends Singleton
             define('SYNERGY_WEB_ROOT', dirname(dirname(dirname(__FILE__))));
         }
 
+        self::$_projectName = null;
         self::$_projectInstance = null;
         self::$_projectType = null;
         self::$_options = array();
@@ -225,11 +226,18 @@ final class Project extends Singleton
     public static function setProjectPath($path)
     {
         if (!is_string($path)) {
-            throw new InvalidArgumentException("projectPath must be a string to the directory path");
+            throw new InvalidArgumentException(
+                "projectPath must be a string to the directory path"
+            );
         } else if (!is_dir($path)) {
-            throw new InvalidArgumentException("projectPath must be the path to your project directory");
+            throw new InvalidArgumentException(
+                "projectPath must be the path to your project directory"
+            );
         } else if (!is_readable($path)) {
-            throw new InvalidArgumentException("projectPath must have read permissions by user:" . get_current_user());
+            throw new InvalidArgumentException(
+                "projectPath must have read permissions by user:" .
+                get_current_user()
+            );
         }
 
         self::$_projectPath = $path;
