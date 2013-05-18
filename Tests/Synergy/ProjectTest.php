@@ -11,6 +11,7 @@
  * @link      http://chrisnoden.com
  * @license   http://opensource.org/licenses/LGPL-3.0
  */
+
 namespace Synergy\Tests;
 
 use Synergy\Project;

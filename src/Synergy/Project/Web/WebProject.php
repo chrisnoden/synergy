@@ -87,6 +87,8 @@ final class WebProject extends ProjectAbstract
          * What controller
          */
         $this->findController();
+
+        var_dump($this->_aRouteData);
     }
 
 
@@ -119,6 +121,8 @@ final class WebProject extends ProjectAbstract
             // Use our DefaultController
             $parameters = $this->getDefaultControllerParameters();
         }
+        Logger::info("Route selected: " . $parameters['_route']);
+        Logger::info("Controller selected: " . $parameters['_controller']);
         $this->_aRouteData = $parameters;
     }
 
@@ -138,23 +142,34 @@ final class WebProject extends ProjectAbstract
         return $parameters;
     }
 
+
+    /**
+     * @throws \Synergy\Exception\InvalidControllerException
+     */
     private function findController()
     {
         $testClass = $this->_aRouteData['_controller'];
         if (!$this->testAndSetController($testClass)) {
-            throw new InvalidControllerException('Controller '.$testClass.' not found');
+            throw new InvalidControllerException(
+                'Controller ' . $testClass . ' not found'
+            );
         }
     }
 
+
+    /**
+     * Tests if the class exists, setting our controller
+     *
+     * @param $className string
+     * @return bool
+     */
     private function testAndSetController($className)
     {
         if (class_exists($className)) {
             /**
              * @var $controller \Synergy\Controller\ControllerAbstract
              */
-            $controller = new $className();
-            $controller->defaultAction();
-
+            $this->_oController = new $className();
             return true;
         }
     }
