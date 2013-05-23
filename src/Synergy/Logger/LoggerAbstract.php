@@ -29,6 +29,7 @@ abstract class LoggerAbstract extends AbstractLogger
 
     /**
      * @param null $filename optional filename (path + filename)
+     * @throws \Synergy\Exception\InvalidArgumentException
      */
     public function __construct($filename = null)
     {

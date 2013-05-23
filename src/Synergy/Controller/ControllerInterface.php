@@ -1,10 +1,10 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * 
  * PHP version 5
  *
- * @category  Project:Synergy
+ * @category  Synergy:Synergy\Controller
  * @package   Synergy
  * @author    Chris Noden, @chrisnoden
  * @copyright (c) 2009 to 2013 Chris Noden
@@ -14,19 +14,14 @@
 
 namespace Synergy\Controller;
 
-use Synergy\Object;
-
 /**
- * Class ControllerAbstract
+ * Class ControllerInterface
  *
  * @package Synergy\Controller
  */
-abstract class ControllerAbstract extends Object
+interface ControllerInterface
 {
 
-    /**
-     * @return void
-     */
-    abstract public function defaultAction();
+    public function defaultAction();
 
 }
