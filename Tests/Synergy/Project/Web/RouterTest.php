@@ -45,7 +45,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testBasicGetMethodRoute()
     {
         $obj = new Router();
-        $route = new Route('/test1', array('controller' => 'MyController'));
+        $route = new Route('/test1', array('controller' => 'MyController:test'));
         $routes = new RouteCollection();
         $routes->add('route_name', $route);
         // Pass our route collection to our Router object
@@ -61,6 +61,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         // Match the request to the route
         $obj->match($request);
         $this->assertEquals('MyController', $obj->getControllerName());
+        $this->assertEquals('testAction', $obj->getMethodName());
     }
 
 
@@ -195,6 +196,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $obj->match($request);
         $this->assertEquals('SynergyTest\TestController', $obj->getControllerName());
         $this->assertEquals('route1', $obj->getRouteName());
+        $this->assertEquals('fooAction', $obj->getMethodName());
     }
 
 
