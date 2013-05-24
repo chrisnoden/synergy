@@ -139,7 +139,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testHttpMethodRoute()
+    public function testHttpPostMethodRoute()
     {
         $obj = new Router();
         $route = new Route('/test1', array('controller' => 'MyController'));
@@ -164,6 +164,53 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $request = Request::create(
             '/test1',
             'GET',
+            array('name' => 'Chris Noden')
+        );
+        $request->overrideGlobals();
+
+        // Test for the exception
+        $this->setExpectedException(
+            'Symfony\Component\Routing\Exception\MethodNotAllowedException', ''
+        );
+        $obj->match($request);
+    }
+
+
+    /**
+     * Load the RouteCollection from a test yml file
+     */
+    public function testYamlRouteFile()
+    {
+        $obj = new Router();
+        $obj->setRouteCollectionFromFile(SYNERGY_TEST_FILES_DIR . DIRECTORY_SEPARATOR . 'test_routes.yml');
+
+        $request = Request::create(
+            '/foo',
+            'GET',
+            array('name' => 'Chris Noden')
+        );
+        $request->overrideGlobals();
+
+        // Match the request to the route
+        $obj->match($request);
+        $this->assertEquals('SynergyTest\TestController', $obj->getControllerName());
+        $this->assertEquals('route1', $obj->getRouteName());
+    }
+
+
+    /**
+     * Load the RouteCollection from a test yml file and try a valid
+     * route but with an invalid HTTP method
+     */
+    public function testYamlMethodFails()
+    {
+        $obj = new Router();
+        $obj->setRouteCollectionFromFile(SYNERGY_TEST_FILES_DIR . DIRECTORY_SEPARATOR . 'test_routes.yml');
+
+        // A POST request to a defined path should fail
+        $request = Request::create(
+            '/foo',
+            'POST',
             array('name' => 'Chris Noden')
         );
         $request->overrideGlobals();

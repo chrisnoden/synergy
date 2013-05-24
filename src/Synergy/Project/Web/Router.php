@@ -56,21 +56,6 @@ class Router extends RouterAbstract
     private $_parameters;
 
 
-    /**
-     * Looks for a Route that matches the request
-     *
-     * @param Request $request
-     *
-     * @return array
-     */
-    private function getRequestRoute(Request $request)
-    {
-
-
-        return $parameters;
-    }
-
-
     private function _run(Request $request)
     {
         $context = new RequestContext();
@@ -96,6 +81,17 @@ class Router extends RouterAbstract
     public function setRouteCollection(RouteCollection $collection)
     {
         $this->_routeCollection = $collection;
+    }
+
+
+    /**
+     * The RouteCollection that is being used to match against
+     *
+     * @return RouteCollection
+     */
+    public function getRouteCollection()
+    {
+        return $this->_routeCollection;
     }
 
 
@@ -250,7 +246,7 @@ class Router extends RouterAbstract
      */
     public function getControllerFromRequest(Request $request)
     {
-        $aRouteData = $this->getRequestRoute($request);
+        $this->match($request);
         if ($this->validController()) {
             $controller = new $this->_controller();
             return $controller;

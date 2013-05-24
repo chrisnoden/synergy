@@ -36,3 +36,4 @@ if (is_file($autoloadFile)) {
     throw new \LogicException('Run "composer install --dev" to create autoloader.');
 }
 
+define('SYNERGY_TEST_FILES_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files');
