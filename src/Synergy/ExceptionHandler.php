@@ -168,6 +168,8 @@ class ExceptionHandler
         if ( in_array($aNeedle, self::$_aIgnoreCombos) ) {
             return true;
         }
+
+        return false;
     }
 
 

@@ -45,6 +45,11 @@ final class WebProject extends ProjectAbstract
 {
 
     /**
+     * @var string name of the chosen controller class
+     */
+    private $_controllerClassName;
+
+    /**
      * Instantiate a new Web_Handler object
      */
     public function __construct()
@@ -79,9 +84,20 @@ final class WebProject extends ProjectAbstract
     {
         $Router = new Router();
         $controller = $Router->getControllerFromGlobals();
+        $this->_controllerClassName = $controller->__toString();
         $method = $Router->getMethodName();
         $controller->$method();
     }
 
+
+    /**
+     * Name of the chosen controller class
+     *
+     * @return string
+     */
+    public function getControllerName()
+    {
+        return $this->_controllerClassName;
+    }
 
 }

@@ -27,7 +27,16 @@
 namespace Synergy\Exception;
 
 /**
- * The website hostname/domain is not support by this project
+ * Class UnsupportedSiteException
+ *
+ * @category Synergy\Exception
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
-class UnsupportedSiteException extends SynergyException {}
+class UnsupportedSiteException extends SynergyException
+{
+
+}
 

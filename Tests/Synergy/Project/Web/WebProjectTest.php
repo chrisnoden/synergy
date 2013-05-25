@@ -62,4 +62,13 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('0', ini_get('session.auto_start'));
     }
 
+
+    public function testDefaultWebResponse()
+    {
+        $obj = new WebProject();
+        $this->hasOutput();
+        $obj->launch();
+        $this->assertEquals('Synergy\Controller\DefaultController', $obj->getControllerName());
+    }
+
 }

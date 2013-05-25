@@ -76,12 +76,17 @@ class Router extends RouterAbstract
     {
         $context = new RequestContext();
         $context->fromRequest($request);
-        $matcher = new UrlMatcher($this->_routeCollection, $context);
-        try {
-            $parameters = $matcher->match($request->getPathInfo());
-        } catch (ResourceNotFoundException $ex) {
-            // @todo Replace/refactor with something user-definable
-            // Use our DefaultController
+        if (isset($this->_routeCollection)) {
+            $matcher = new UrlMatcher($this->_routeCollection, $context);
+            try {
+                $parameters = $matcher->match($request->getPathInfo());
+            } catch (ResourceNotFoundException $ex) {
+                // @todo Replace/refactor with something user-definable
+                // Use our DefaultController
+            }
+        }
+
+        if (!isset($parameters)) {
             $parameters = $this->_getDefaultControllerParameters();
         }
 
@@ -244,8 +249,13 @@ class Router extends RouterAbstract
     {
         $request  = Request::createFromGlobals();
         $filename = dirname(SYNERGY_WEB_ROOT) . '/app/config/routes.yml';
-        var_dump($filename);
-        $this->setRouteCollectionFromFile($filename);
+        try {
+            $this->setRouteCollectionFromFile($filename);
+        }
+        catch (\InvalidArgumentException $ex)
+        {
+            // hmm
+        }
         $controller = $this->getControllerFromRequest($request);
 
         return $controller;
@@ -262,7 +272,7 @@ class Router extends RouterAbstract
      */
     public function getControllerFromRequest(Request $request)
     {
-        $this->match($request);
+        $this->_run($request);
         if ($this->validController()) {
             $controller = new $this->_controller();
             return $controller;

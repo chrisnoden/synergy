@@ -26,9 +26,25 @@
 
 namespace Synergy\Controller;
 
+/**
+ * Class DefaultController
+ *
+ * @category Synergy\Controller
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
+ */
 class DefaultController extends Controller
 {
 
+    /**
+     * Just a test action for now
+     *
+     * @todo put in some helpful Response
+     *
+     * @return void
+     */
     public function defaultAction()
     {
         echo "Hello";

@@ -26,6 +26,8 @@
 
 namespace Synergy\Controller;
 
+use Synergy\Object;
+
 /**
  * Class ${NAME}
  *
@@ -35,7 +37,7 @@ namespace Synergy\Controller;
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class Controller implements ControllerInterface
+class Controller extends Object implements ControllerInterface
 {
 
     /**

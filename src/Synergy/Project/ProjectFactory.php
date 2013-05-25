@@ -26,6 +26,7 @@
 
 namespace Synergy\Project;
 
+use Psr\Log\LoggerInterface;
 use Synergy\Project;
 
 /**
@@ -38,19 +39,19 @@ final class ProjectFactory
 {
 
     /**
-     * Create a new Synergy Project
+     * Create and return our Project object
      *
-     * @param                          $projectName
-     * @param                          $projectType
-     * @param \Synergy\Logger\LoggerInterface $Logger
-     * @param array                    $options
-     * @return \Synergy\Project\ProjectAbstract
-     * @throws \Synergy\Exception\InvalidProjectTypeException
+     * @param                 $projectName
+     * @param                 $projectType
+     * @param LoggerInterface $Logger
+     * @param array           $options
+     *
+     * @return ProjectAbstract
      */
     public static function build(
             $projectName,
             $projectType,
-            \Synergy\Logger\LoggerInterface $Logger,
+            LoggerInterface $Logger,
             array $options = array()
         )
     {

@@ -145,6 +145,8 @@ abstract class ProjectAbstract extends Object
                 return true;
             }
         }
+
+        return false;
     }
 
 

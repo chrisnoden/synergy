@@ -29,11 +29,20 @@ namespace Synergy\Controller;
 /**
  * Class ControllerInterface
  *
- * @package Synergy\Controller
+ * @category Synergy\Controller
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
 interface ControllerInterface
 {
 
+    /**
+     * Every controller needs a defaultAction
+     *
+     * @return mixed
+     */
     public function defaultAction();
 
 }

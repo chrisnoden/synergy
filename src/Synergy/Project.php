@@ -157,13 +157,11 @@ final class Project extends Singleton
 
 
     /**
-     * @return $projectName Name of our project (30 char limit)
+     * @return string name of our Project
      */
     public static function getName()
     {
-        if (isset(self::$_projectName)) {
-            return self::$_projectName;
-        }
+        return self::$_projectName;
     }
 
 
@@ -262,20 +260,20 @@ final class Project extends Singleton
 
 
     /**
-     * @return string
+     * @return string path of our Project code
      */
     public static function getProjectPath()
     {
-        if (isset(self::$_projectPath)) {
-            return self::$_projectPath;
-        }
+        return self::$_projectPath;
     }
 
 
     /**
      * Set the absolute filename of your project config xml
      *
-     * @param $filename
+     * @param string $filename location of our config file
+     *
+     * @return void
      * @throws \Synergy\Exception\InvalidArgumentException
      */
     public static function setProjectConfigFilename($filename)
@@ -311,6 +309,8 @@ final class Project extends Singleton
         if (isset(self::$_configFile)) {
             return self::$_configFile;
         }
+
+        return null;
     }
 
 
