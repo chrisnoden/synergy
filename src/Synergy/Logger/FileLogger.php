@@ -4,18 +4,30 @@
  *
  * PHP version 5
  *
- * @category  Project:Synergy
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @category  File
  * @package   Synergy
- * @author    Chris Noden, @chrisnoden
- * @copyright (c) 2009 to 2013 Chris Noden
- * @link      http://chrisnoden.com
- * @license   http://opensource.org/licenses/LGPL-3.0
+ * @author    Chris Noden <chris.noden@gmail.com>
+ * @copyright 2009-2013 Chris Noden
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link      https://github.com/chrisnoden
  */
 
 namespace Synergy\Logger;
 
 use Synergy\Logger\LoggerAbstract;
-use Psr\Log\LoggerInterface;
+use Synergy\Logger\LoggerInterface;
 use Synergy\Exception\InvalidArgumentException;
 
 /**
@@ -47,13 +59,13 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
      * @param string $message
      * @param array  $context
      * @return null
-     * @throw \Psr\Log\InvalidArgumentException
+     * @throw InvalidArgumentException
      */
     public function log($level, $message, array $context = array())
     {
         $level = strtolower($level);
         if ($this->isValidLogLevel($level)) {
-            $this->write($message);
+            $this->_write($message);
         }
     }
 
@@ -129,7 +141,7 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
     /**
      * @param $msg string string to add to the file
      */
-    private function write($msg)
+    private function _write($msg)
     {
         $this->openFH();
         $msg .= "\n";

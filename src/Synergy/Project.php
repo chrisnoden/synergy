@@ -4,17 +4,29 @@
  *
  * PHP version 5
  *
- * @category  Project:Synergy
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @category  File
  * @package   Synergy
- * @author    Chris Noden, @chrisnoden
- * @copyright (c) 2009 to 2013 Chris Noden
- * @link      http://chrisnoden.com
- * @license   http://opensource.org/licenses/LGPL-3.0
+ * @author    Chris Noden <chris.noden@gmail.com>
+ * @copyright 2009-2013 Chris Noden
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link      https://github.com/chrisnoden
  */
+
 namespace Synergy;
 
-use Psr\Log\LoggerInterface;
-use Symfony\Component\Config\Definition\Exception\Exception;
+use Synergy\Logger\LoggerInterface;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\InvalidProjectTypeException;
 use Synergy\Logger\Logger;
@@ -109,7 +121,7 @@ final class Project extends Singleton
     /**
      * An alias for Synergy\Logger\Logger::setLogger()
      *
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger object must implement the Psr-3 standard
      */
     public static function setLogger(LoggerInterface $logger)
     {
@@ -120,7 +132,7 @@ final class Project extends Singleton
     /**
      * An alias for Synergy\Logger\Logger::getLogger()
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      */
     public static function getLogger()
     {
@@ -269,11 +281,19 @@ final class Project extends Singleton
     public static function setProjectConfigFilename($filename)
     {
         // check the filename is valid before setting
-        if (is_string($filename) && substr($filename, 0, 1) == DIRECTORY_SEPARATOR && is_dir(dirname($filename)) && file_exists($filename) && is_readable($filename)) {
+        if (is_string($filename)
+            && substr($filename, 0, 1) == DIRECTORY_SEPARATOR
+            && is_dir(dirname($filename))
+            && file_exists($filename)
+            && is_readable($filename)
+        ) {
             self::$_configFile = $filename;
         } else if (is_string($filename) && isset(self::$_projectPath)) {
             $testFilename = self::$_projectPath . DIRECTORY_SEPARATOR . $filename;
-            if (is_dir(dirname($testFilename)) && file_exists($testFilename) && is_readable($testFilename)) {
+            if (is_dir(dirname($testFilename))
+                && file_exists($testFilename)
+                && is_readable($testFilename)
+            ) {
                 self::$_configFile = $testFilename;
             }
         }

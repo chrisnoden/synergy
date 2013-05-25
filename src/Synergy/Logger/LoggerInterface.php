@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * 
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,10 +24,9 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Exception;
+namespace Synergy\Logger;
 
-/**
- * The website hostname/domain is not support by this project
- */
-class UnsupportedSiteException extends SynergyException {}
+interface LoggerInterface extends \Psr\Log\LoggerInterface
+{
 
+}

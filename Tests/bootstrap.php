@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @category  File
+ * @category  Test Bootstrap
  * @package   Synergy
- * @author    Chris Noden, @chrisnoden
+ * @author    Chris Noden <chris.noden@gmail.com>
  * @copyright 2009-2013 Chris Noden
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link      https://github.com/chrisnoden

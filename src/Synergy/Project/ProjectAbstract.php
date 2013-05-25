@@ -4,12 +4,24 @@
  *
  * PHP version 5
  *
- * @category  Project:Synergy
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @category  File
  * @package   Synergy
- * @author    Chris Noden, @chrisnoden
- * @copyright (c) 2009 to 2013 Chris Noden
- * @link      http://chrisnoden.com
- * @license   http://opensource.org/licenses/LGPL-3.0
+ * @author    Chris Noden <chris.noden@gmail.com>
+ * @copyright 2009-2013 Chris Noden
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link      https://github.com/chrisnoden
  */
 
 namespace Synergy\Project;
@@ -28,15 +40,15 @@ abstract class ProjectAbstract extends Object
     /**
      * @var int utime of when the project object was instantiated
      */
-    protected $_timeStart;
+    protected $timeStart;
     /**
      * @var string the path to the SAL platform directory
      */
-    protected $_platformPath;
+    protected $platformPath;
     /**
      * @var @string path where our working temp folder (read-writable) exists
      */
-    protected $_tempFolderPath;
+    protected $tempFolderPath;
 
 
     /**
@@ -45,7 +57,7 @@ abstract class ProjectAbstract extends Object
      */
     public function __construct()
     {
-        $this->_timeStart = microtime(true);
+        $this->timeStart = microtime(true);
 
         // Set our random logging ID using the log scope
         if (method_exists(Project::getLogger(), 'setTag')) {
@@ -66,7 +78,7 @@ abstract class ProjectAbstract extends Object
     public function __destruct()
     {
         $synergy_endTime = microtime(true);
-        $synergy_execTime = number_format($synergy_endTime - $this->_timeStart, 4);
+        $synergy_execTime = number_format($synergy_endTime - $this->timeStart, 4);
         if (Project::isDev()) {
             Project::getLogger()->log(LogLevel::INFO, "Execution time=$synergy_execTime seconds");
         }
@@ -99,13 +111,13 @@ abstract class ProjectAbstract extends Object
     {
         $documentRoot = $this->initProjectDir($path);
         if ($documentRoot) {
-            $this->_tempFolderPath = $documentRoot;
+            $this->tempFolderPath = $documentRoot;
             return;
         }
         // The preferred temp folder location failed - try a fallback
         $documentRoot = $this->initProjectDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . escapeshellarg(Project::getName()));
         if ($documentRoot) {
-            $this->_tempFolderPath = $documentRoot;
+            $this->tempFolderPath = $documentRoot;
             return;
         }
     }

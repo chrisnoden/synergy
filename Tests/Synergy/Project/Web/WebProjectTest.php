@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * 
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,25 +24,42 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Controller;
+namespace Synergy\Tests\Project\Web;
+
+use Synergy\Project\Web\WebProject;
 
 /**
- * Class ${NAME}
+ * Class WebProjectTest
  *
- * @category Synergy\Controller
+ * @category Synergy\Tests\Project\Web
  * @package  Synergy
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class Controller implements ControllerInterface
+class WebProjectTest extends \PHPUnit_Framework_TestCase
 {
 
-    /**
-     * Default action to be inherited by your own controller code
-     */
-    public function defaultAction()
+    public static function setUpBeforeClass()
     {
+        \Synergy\Project::setName('TestProject');
+    }
+
+
+    public function testBaseObject()
+    {
+        $obj = new WebProject();
+        $this->assertInstanceOf('Synergy\Project\Web\WebProject', $obj);
+        $this->assertInstanceOf('Synergy\Project\ProjectAbstract', $obj);
+        $this->assertInstanceOf('Synergy\Object', $obj);
+        $this->assertEquals('TestProject', $obj->__toString());
+    }
+
+
+    public function testSessionAutoStartIsDisabled()
+    {
+        $obj = new WebProject();
+        $this->assertEquals('0', ini_get('session.auto_start'));
     }
 
 }

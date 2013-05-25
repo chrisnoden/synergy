@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * 
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,10 +24,18 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Exception;
+namespace Synergy\Logger;
 
 /**
- * The website hostname/domain is not support by this project
+ * Class LogLevel
+ *
+ * @category Synergy\Logger
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
-class UnsupportedSiteException extends SynergyException {}
+class LogLevel extends \Psr\Log\LogLevel
+{
 
+}
