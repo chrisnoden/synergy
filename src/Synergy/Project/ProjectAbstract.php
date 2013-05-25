@@ -32,7 +32,13 @@ use Synergy\Project;
 use Synergy\Tools\Tools;
 
 /**
- * All Project classes must inherit this class
+ * Class ProjectAbstract
+ *
+ * @category Synergy\Project
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
 abstract class ProjectAbstract extends Object
 {
@@ -61,6 +67,7 @@ abstract class ProjectAbstract extends Object
 
         // Set our random logging ID using the log scope
         if (method_exists(Project::getLogger(), 'setTag')) {
+            /** @noinspection PhpUndefinedMethodInspection */
             Project::getLogger()->setTag(Tools::randomString(6, '0123456789ABCDEF'));
         }
 
@@ -109,12 +116,14 @@ abstract class ProjectAbstract extends Object
      */
     protected function initTempFolder($path)
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         $documentRoot = $this->initProjectDir($path);
         if ($documentRoot) {
             $this->tempFolderPath = $documentRoot;
             return;
         }
         // The preferred temp folder location failed - try a fallback
+        /** @noinspection PhpUndefinedMethodInspection */
         $documentRoot = $this->initProjectDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . escapeshellarg(Project::getName()));
         if ($documentRoot) {
             $this->tempFolderPath = $documentRoot;
@@ -137,7 +146,7 @@ abstract class ProjectAbstract extends Object
             @mkdir($path, 0770, true);
         }
         // Test the folder for suitability
-        if (file_exists($path) && is_readable($path) && is_dir($path)) {
+        if ($test && file_exists($path) && is_readable($path) && is_dir($path)) {
             // Try to save something in the path
             @touch($path . DIRECTORY_SEPARATOR . 'testfile');
             if (file_exists($path . DIRECTORY_SEPARATOR . 'testfile')) {

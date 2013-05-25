@@ -29,10 +29,18 @@ namespace Synergy\Tools;
 /**
  * seed the random number generator
  */
-list($usec, $sec) = explode(" ", microtime());
+list($usec, ) = explode(" ", microtime());
 srand((int)($usec*10));
 
-
+/**
+ * Class Tools
+ *
+ * @category Synergy\Tools
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
+ */
 class Tools
 {
 

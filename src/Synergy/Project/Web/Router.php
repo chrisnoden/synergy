@@ -40,7 +40,11 @@ use Synergy\Project\RouterAbstract;
 /**
  * Class Router
  *
- * @package Synergy\Project\Web
+ * @category Synergy\Project\Web
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
 class Router extends RouterAbstract
 {
@@ -70,7 +74,9 @@ class Router extends RouterAbstract
     /**
      * Attempt to match the request against the routecollection
      *
-     * @param Request $request
+     * @param Request $request a Request object
+     *
+     * @return void
      */
     private function _run(Request $request)
     {

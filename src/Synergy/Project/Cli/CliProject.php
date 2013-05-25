@@ -28,10 +28,23 @@ namespace Synergy\Project\Cli;
 
 use Synergy\Project\ProjectAbstract;
 
+/**
+ * Class CliProject
+ *
+ * @category Synergy\Project\Cli
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
+ */
 class CliProject extends ProjectAbstract
 {
 
-
+    /**
+     * Run our CLI Project
+     *
+     * @return void
+     */
     public function launch()
     {
 

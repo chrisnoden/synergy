@@ -31,10 +31,18 @@ use Synergy\Logger\LoggerInterface;
 use Synergy\Exception\InvalidArgumentException;
 
 /**
+ * Class FileLogger
+ *
  * Provides a Psr-3 compliant File logger
  * This is a simple logger for Synergy - ideally you would use
  * a more advanced logger (like apache/log4php or chrisnoden/talkback)
  * and attach to your Project using \Synergy\Project::setLogger($logger);
+ *
+ * @category Synergy\Logger
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
 class FileLogger extends LoggerAbstract implements LoggerInterface
 {

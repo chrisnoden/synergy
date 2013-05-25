@@ -31,7 +31,11 @@ use Synergy\Object;
 /**
  * Class RouterAbstract
  *
- * @package Synergy\Project
+ * @category Synergy\Project
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
 abstract class RouterAbstract extends Object
 {

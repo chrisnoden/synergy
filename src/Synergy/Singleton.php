@@ -27,14 +27,28 @@
 namespace Synergy;
 
 /**
- * If you extend from this then you need a
- * protected static $instance
- * line
+ * Class Singleton
+ *
+ * @category File
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
 abstract class Singleton
 {
+
+    /**
+     * @var null Singleton object instance
+     */
     protected static $instance = null;
 
+
+    /**
+     * Get the instance
+     *
+     * @return null|static the Singleton object instance
+     */
     public static function getInstance()
     {
         return isset(static::$instance)
@@ -42,9 +56,17 @@ abstract class Singleton
             : static::$instance = new static;
     }
 
-    final private function __construct() {}
 
-    final private function __clone() {}
+    final private function __construct()
+    {
+
+    }
+
+
+    final private function __clone()
+    {
+
+    }
 
 }
 

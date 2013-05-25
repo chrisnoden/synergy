@@ -32,17 +32,22 @@ use Synergy\Logger\LogLevel;
 
 /**
  * Class Logger
+ *
  * A simple way to use the main Project logger
  * This is where we keep tabs on the defined logger and expose
  * easy static methods for logging
  *
- * @package Synergy\Logger
+ * @category Synergy\Logger
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
 class Logger extends Singleton
 {
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private static $_logger;
 
@@ -107,8 +112,9 @@ class Logger extends Singleton
      * Example: Entire website down, database unavailable, etc. This should
      * trigger the SMS alerts and wake you up.
      *
-     * @param string $message
-     * @param array  $context
+     * @param string $message error message
+     * @param array  $context any extra parameters for the error
+     *
      * @return null
      */
     public static function alert($message, array $context = array())
@@ -122,8 +128,9 @@ class Logger extends Singleton
      *
      * Example: Application component unavailable, unexpected exception.
      *
-     * @param string $message
-     * @param array  $context
+     * @param string $message error message
+     * @param array  $context any extra parameters for the error
+     *
      * @return null
      */
     public static function critical($message, array $context = array())
@@ -136,8 +143,9 @@ class Logger extends Singleton
      * Runtime errors that do not require immediate action but should typically
      * be logged and monitored.
      *
-     * @param string $message
-     * @param array  $context
+     * @param string $message error message
+     * @param array  $context any extra parameters for the error
+     *
      * @return null
      */
     public static function error($message, array $context = array())
@@ -152,8 +160,9 @@ class Logger extends Singleton
      * Example: Use of deprecated APIs, poor use of an API, undesirable things
      * that are not necessarily wrong.
      *
-     * @param string $message
-     * @param array  $context
+     * @param string $message error message
+     * @param array  $context any extra parameters for the error
+     *
      * @return null
      */
     public static function warning($message, array $context = array())
@@ -165,8 +174,9 @@ class Logger extends Singleton
     /**
      * Normal but significant events.
      *
-     * @param string $message
-     * @param array  $context
+     * @param string $message error message
+     * @param array  $context any extra parameters for the error
+     *
      * @return null
      */
     public static function notice($message, array $context = array())
@@ -180,8 +190,9 @@ class Logger extends Singleton
      *
      * Example: User logs in, SQL logs.
      *
-     * @param string $message
-     * @param array  $context
+     * @param string $message error message
+     * @param array  $context any extra parameters for the error
+     *
      * @return null
      */
     public static function info($message, array $context = array())
@@ -193,8 +204,9 @@ class Logger extends Singleton
     /**
      * Detailed debug information.
      *
-     * @param string $message
-     * @param array  $context
+     * @param string $message error message
+     * @param array  $context any extra parameters for the error
+     *
      * @return null
      */
     public static function debug($message, array $context = array())

@@ -35,9 +35,14 @@ use Synergy\Project\ProjectType;
 
 /**
  * Class Project
+ *
  * Holds central config data used by your ProjectAbstract child object
  *
- * @package Synergy
+ * @category Synergy
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
 final class Project extends Singleton
 {

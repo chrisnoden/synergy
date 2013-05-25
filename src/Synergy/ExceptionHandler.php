@@ -29,14 +29,23 @@ namespace Synergy;
 use Psr\Log\LogLevel;
 use Synergy\Logger\Logger;
 
-
 /**
+ * Class ExceptionHandler
+ *
  * handles all our debugging and logging
  * Uses the Debug static class to output any logging or error messages
- * which in turn uses Comms channels (objects) so you can send to Syslog, a File, Growl and more
+ * which in turn uses Comms channels (objects) so you can send to Syslog,
+ * a File, Growl and more
+ *
+ * @category Synergy
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
 class ExceptionHandler
 {
+
     /**
      * The PHP error number
      *
@@ -76,21 +85,21 @@ class ExceptionHandler
      * @var array
      */
     private static $_aErrorTypes = array(
-        0 => "info",
-        1 => "error",
-        2 => "warning",
-        4 => "parsing error",
-        8 => "notice",
-        16 => "core error",
-        32 => "core warning",
-        64 => "compile error",
-        128 => "compile warning",
-        256 => "fatal error",
-        512 => "big error",
-        1024 => "user notice",
-        2048 => "strict",
-        4096 => 'recoverable error',
-        8192 => 'deprecated code',
+        0     => "info",
+        1     => "error",
+        2     => "warning",
+        4     => "parsing error",
+        8     => "notice",
+        16    => "core error",
+        32    => "core warning",
+        64    => "compile error",
+        128   => "compile warning",
+        256   => "fatal error",
+        512   => "big error",
+        1024  => "user notice",
+        2048  => "strict",
+        4096  => 'recoverable error',
+        8192  => 'deprecated code',
         16384 => 'platform deprecated code'
     );
     /**
@@ -107,12 +116,12 @@ class ExceptionHandler
     private static $_aStopCodes = array(1, 2, 4, 16, 32, 64, 128, 256, 512);
     /**
      * Array of codes and files that are ignored
-     * Add to this list with a call to SAL_ExceptionHandler::addIgnoreCombo($code, $file);
+     * Add to this list with a call to
+     * ExceptionHandler::addIgnoreCombo($code, $file);
      *
      * @var array
      */
     private static $_aIgnoreCombos = array();
-
 
 
     /**
@@ -123,7 +132,7 @@ class ExceptionHandler
      */
     public static function setDevServer()
     {
-        self::$_bDevServer = true;
+        self::$_bDevServer   = true;
         self::$_aIgnoreCodes = array();
     }
 
@@ -132,15 +141,16 @@ class ExceptionHandler
      * Add an ignore combo of error number and filename
      * If the error is thrown in the file then it will be ignored
      *
+     * @param int    $errNum   PHP error number value
+     * @param string $fileName the basename filename (no path)
+     *
      * @static
-     * @param $errNum int PHP error number value
-     * @param $fileName string the basename filename (no path)
      * @return void
      */
     public static function addIgnoreCombo($errNum, $fileName)
     {
         $aNeedle = array(
-            'errNum' => $errNum,
+            'errNum'   => $errNum,
             'fileName' => strtolower($fileName)
         );
         if (!in_array($aNeedle, self::$_aIgnoreCombos)) {
@@ -151,21 +161,23 @@ class ExceptionHandler
 
     /**
      * @static
+     *
      * @param $errNum
      * @param $fileName
+     *
      * @return bool
      */
     private static function canIgnore($errNum, $fileName)
     {
-        if ( in_array($errNum, self::$_aIgnoreCodes) ) {
+        if (in_array($errNum, self::$_aIgnoreCodes)) {
             return true;
         }
 
         $aNeedle = array(
-            'errNum' => $errNum,
+            'errNum'   => $errNum,
             'fileName' => strtolower(basename($fileName))
         );
-        if ( in_array($aNeedle, self::$_aIgnoreCombos) ) {
+        if (in_array($aNeedle, self::$_aIgnoreCombos)) {
             return true;
         }
 
@@ -174,31 +186,34 @@ class ExceptionHandler
 
 
     /**
-     * @param $errNum int
-     * @param $errMsg string
-     * @param $fileName string
-     * @param $lineNum int
-     * @param $misc mixed
+     * @param int    $errNum
+     * @param string $errMsg
+     * @param string $fileName
+     * @param int    $lineNum
+     * @param mixed  $misc
+     *
      * @static
      * @return bool
      */
-    public static function ErrorHandler($errNum, $errMsg, $fileName, $lineNum, $misc) {
+    public static function ErrorHandler($errNum, $errMsg, $fileName, $lineNum, /** @noinspection PhpUnusedParameterInspection */
+                                        $misc)
+    {
         // can we safely ignore this error
-        if ( self::canIgnore($errNum, $fileName) ) {
+        if (self::canIgnore($errNum, $fileName)) {
             return true;
         }
 
-        self::$_errNum = $errNum;
-        self::$_errMsg = $errMsg;
+        self::$_errNum   = $errNum;
+        self::$_errMsg   = $errMsg;
         self::$_fileName = $fileName;
-        self::$_lineNum = $lineNum;
-        self::$_trace = null;
+        self::$_lineNum  = $lineNum;
+        self::$_trace    = null;
 
         // process the error
         self::handler();
 
         // exit program execution if necessary
-        if ( in_array($errNum, self::$_aStopCodes) ) {
+        if (in_array($errNum, self::$_aStopCodes)) {
             exit;
         }
 
@@ -210,28 +225,31 @@ class ExceptionHandler
      * Catch any thrown Exceptions and route them
      *
      * @static
+     *
      * @param \Exception $e
+     *
      * @return bool
      */
-    public static function ExceptionHandler(\Exception $e) {
+    public static function ExceptionHandler(\Exception $e)
+    {
         // can we safely ignore this error
-        if ( self::canIgnore($e->getCode(), $e->getFile()) ) {
+        if (self::canIgnore($e->getCode(), $e->getFile())) {
             return true;
         }
 
-        $ref = new \ReflectionObject($e);
+//        $ref = new \ReflectionObject($e);
 
-        self::$_errNum = $e->getCode();
-        self::$_errMsg = $e->getMessage();
+        self::$_errNum   = $e->getCode();
+        self::$_errMsg   = $e->getMessage();
         self::$_fileName = $e->getFile();
-        self::$_lineNum = $e->getLine();
-        self::$_trace = $e->getTrace();
+        self::$_lineNum  = $e->getLine();
+        self::$_trace    = $e->getTrace();
 
         // process the error
         self::handler(LogLevel::CRITICAL);
 
         // exit program execution if necessary
-        if ( in_array(self::$_errNum, self::$_aStopCodes) ) {
+        if (in_array(self::$_errNum, self::$_aStopCodes)) {
             exit;
         }
 
@@ -248,12 +266,12 @@ class ExceptionHandler
     public static function ShutdownHandler()
     {
         $last_error = error_get_last();
-        if ( $last_error['type'] === E_ERROR ) {
-            self::$_errMsg = $last_error['message'];
-            self::$_errNum = $last_error['type'];
+        if ($last_error['type'] === E_ERROR) {
+            self::$_errMsg   = $last_error['message'];
+            self::$_errNum   = $last_error['type'];
             self::$_fileName = $last_error['file'];
-            self::$_lineNum = $last_error['line'];
-            self::$_trace = null;
+            self::$_lineNum  = $last_error['line'];
+            self::$_trace    = null;
             self::handler();
         }
     }
@@ -269,10 +287,8 @@ class ExceptionHandler
         if (isset(self::$_errNum)) {
             if (isset(self::$_trace)) {
                 $text = sprintf("%s\n\nTrace:\n\n", self::$_errMsg);
-                foreach (self::$_trace AS $traceItem)
-                {
-                    foreach ($traceItem AS $key=>$val)
-                    {
+                foreach (self::$_trace AS $traceItem) {
+                    foreach ($traceItem AS $key => $val) {
                         $text .= sprintf("\t[%s] => %s\n", $key, $val);
                     }
                     $text .= "\n";
@@ -285,8 +301,7 @@ class ExceptionHandler
                 /**
                  * Convert the PHP error number to a Psr compatible LogLevel
                  */
-                switch (self::$_errNum)
-                {
+                switch (self::$_errNum) {
                     case 2:
                         $dbgLevel = LogLevel::INFO;
                         break;
@@ -315,11 +330,10 @@ class ExceptionHandler
             Logger::log(
                 $dbgLevel,
                 $text,
-                array('filename'=>self::$_fileName, 'linenum'=>self::$_lineNum, 'level'=>self::$_aErrorTypes[self::$_errNum])
+                array('filename' => self::$_fileName, 'linenum' => self::$_lineNum, 'level' => self::$_aErrorTypes[self::$_errNum])
             );
         }
     }
-
 
 
 }
