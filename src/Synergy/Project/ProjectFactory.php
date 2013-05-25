@@ -26,14 +26,19 @@
 
 namespace Synergy\Project;
 
-use Psr\Log\LoggerInterface;
+use Synergy\Logger\LoggerInterface;
 use Synergy\Project;
 
 /**
  * Class ProjectFactory
+ *
  * Instantiate and return the relevant ProjectType
  *
- * @package Synergy\Project
+ * @category Synergy\Project
+ * @package  Synergy
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
 final class ProjectFactory
 {
@@ -41,20 +46,19 @@ final class ProjectFactory
     /**
      * Create and return our Project object
      *
-     * @param                 $projectName
-     * @param                 $projectType
-     * @param LoggerInterface $Logger
-     * @param array           $options
+     * @param string          $projectName name of our new Project
+     * @param string          $projectType ProjectType to create
+     * @param LoggerInterface $Logger      our Logger object
+     * @param array           $options     any additional Project options
      *
      * @return ProjectAbstract
      */
     public static function build(
-            $projectName,
-            $projectType,
-            LoggerInterface $Logger,
-            array $options = array()
-        )
-    {
+        $projectName,
+        $projectType,
+        LoggerInterface $Logger,
+        array $options = array()
+    ) {
         Project::init();
         Project::setLogger($Logger);
         Project::setName($projectName);
