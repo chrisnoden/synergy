@@ -27,6 +27,7 @@
 namespace Synergy\Tests\Project\Web;
 
 use Synergy\Project\Web\WebProject;
+use Synergy\Project;
 
 /**
  * Class WebProjectTest
@@ -42,7 +43,7 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        \Synergy\Project::setName('TestProject');
+        Project::setName('TestProject');
     }
 
 
@@ -68,7 +69,10 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
         $obj = new WebProject();
         $this->hasOutput();
         $obj->launch();
-        $this->assertEquals('Synergy\Controller\DefaultController', $obj->getControllerName());
+        $this->assertEquals(
+            'Synergy\Controller\DefaultController',
+            $obj->getControllerName()
+        );
     }
 
 }

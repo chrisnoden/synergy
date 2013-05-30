@@ -58,7 +58,7 @@ class Logger extends Singleton
      * @param string $level   LogLevel
      * @param string $message Message to log
      * @param array  $context optional additional log data
-     * 
+     *
      * @return void
      */
     public static function log($level, $message, array $context = array())
