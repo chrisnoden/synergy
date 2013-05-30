@@ -130,15 +130,29 @@ class RouteMatcher extends UrlMatcher
                  */
                 if ($routeOS = $route->getOption('os')) {
                     $routeOS = strtolower($routeOS);
-                    /** @noinspection PhpUndefinedMethodInspection */
-                    if ($device->isIOS() && $routeOS != 'ios') {
+                    if (substr($routeOS, -2) != 'os') {
+                        $routeOS .= 'os';
+                    }
+
+                    // manipulate the possible operating systems
+                    // to create an associative array we can search against
+                    $aTempOs = array_keys($device->getOperatingSystems());
+                    array_walk($aTempOs, function(&$n) {
+                        $n = strtolower($n);
+                    });
+                    $aOperatingSystems = array_combine($aTempOs, array_keys($device->getOperatingSystems()));
+                    /**
+                     * end up with an array like
+                     * 'androidos' => 'AndroidOS',
+                     * 'blackberryos' => 'BlackBerryOS',
+                     * etc
+                     */
+
+
+                    if (!isset($aOperatingSystems[$routeOS]) || !$device->is($aOperatingSystems[$routeOS])) {
                         continue;
-                    } else /** @noinspection PhpUndefinedMethodInspection */
-                    if ($device->isAndroidOS() && $routeOS != 'android') {
-                        continue;
-                    } else /** @noinspection PhpUndefinedMethodInspection */
-                    if ($device->isBlackBerry() && $routeOS != 'blackberry') {
-                        continue;
+                    } else {
+                        Logger::info("Matched RouteOS: ".$aOperatingSystems[$routeOS]);
                     }
                 }
             }
