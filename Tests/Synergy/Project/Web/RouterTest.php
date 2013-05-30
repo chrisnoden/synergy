@@ -305,11 +305,11 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $obj = new Router();
         // Create a route and routecollection
         $route0  = new Route('/mobiletest', array('controller' => 'MobileController:android'), array(), array('device' => 'mobile', 'os' => 'android'));
-        $route1  = new Route('/mobiletest', array('controller' => 'MobileController:ios'), array(), array('device' => 'mobile', 'os' => 'iOS'));
+        $route1  = new Route('/mobiletest', array('controller' => 'MobileController:ios'), array(), array('device' => 'mobile', 'os' => 'iOS', 'type' => 'iPhone'));
         $route2  = new Route('/mobiletest', array('controller' => 'MobileController:default'), array(), array('device' => 'mobile'));
-        $route3  = new Route('/mobiletest', array('controller' => 'GenericController:android'), array(), array('os' => 'Android'));
+        $route3  = new Route('/mobiletest', array('controller' => 'GenericController:android'), array(), array('device' => 'tablet', 'os' => 'Android', 'type' => 'SonyTablet'));
         $routes = new RouteCollection();
-        $routes->add('route0', $route1);
+        $routes->add('route0', $route0);
         $routes->add('route1', $route1);
         $routes->add('route2', $route2);
         $routes->add('route3', $route3);

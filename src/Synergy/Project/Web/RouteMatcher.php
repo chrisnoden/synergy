@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- * 
+ *
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,6 +46,7 @@ use Synergy\Logger\Logger;
  */
 class RouteMatcher extends UrlMatcher
 {
+
     /**
      * @var WebRequestContext
      */
@@ -114,7 +115,7 @@ class RouteMatcher extends UrlMatcher
                 /**
                  * @var $device \Mobile_Detect
                  */
-                $device = $this->context->getDevice();
+                $device     = $this->context->getDevice();
                 $deviceType = ($device->isMobile()
                     ? ($device->isTablet() ? 'tablet' : 'mobile')
                     : 'computer');
@@ -131,7 +132,27 @@ class RouteMatcher extends UrlMatcher
                 if ($routeOS = $route->getOption('os')) {
                     $deviceOS = $this->matchDeviceOS($routeOS, $device);
                     if ($deviceOS) {
-                        Logger::info("Matched RouteOS: ".$deviceOS);
+                        Logger::info("Matched RouteOS: " . $deviceOS);
+                    } else {
+                        continue;
+                    }
+                }
+
+                /**
+                 * Test for a specific mobile/tablet type (brand)
+                 * eg iPhone, BlackBerry, HTC, Dell, etc
+                 */
+                if ($device->isMobile() && !$device->isTablet() && $routeType = $route->getOption('type')) {
+                    $phoneType = $this->matchPhoneType($routeType, $device);
+                    if ($phoneType) {
+                        Logger::info("Matched RouteType: " . $phoneType);
+                    } else {
+                        continue;
+                    }
+                } else if ($device->isTablet() && $routeType = $route->getOption('type')) {
+                    $tabletType = $this->matchTabletType($routeType, $device);
+                    if ($tabletType) {
+                        Logger::info("Matched RouteType: " . $tabletType);
                     } else {
                         continue;
                     }
@@ -157,6 +178,14 @@ class RouteMatcher extends UrlMatcher
     }
 
 
+    /**
+     * Can we match the OS in the route to the device
+     *
+     * @param string         $routeOS os option in the route
+     * @param \Mobile_Detect $device  device object from the WebRequest
+     *
+     * @return bool|string matched OS
+     */
     protected function matchDeviceOS($routeOS, \Mobile_Detect $device)
     {
         $routeOS = strtolower($routeOS);
@@ -172,6 +201,54 @@ class RouteMatcher extends UrlMatcher
             return false;
         }
         return $aOperatingSystems[$routeOS];
+    }
+
+
+    /**
+     * Can we match the Mobile Device Type in the route to the device
+     *
+     * @param string         $routeValue type option in the route
+     * @param \Mobile_Detect $device     device object from the WebRequest
+     *
+     * @return bool|string matched OS
+     */
+    protected function matchPhoneType($routeValue, \Mobile_Detect $device)
+    {
+        $routeValue = strtolower($routeValue);
+
+        $aParameters
+            = $this->rejiggerMobileParameterArray($device->getPhoneDevices());
+        if (isset($aParameters[$routeValue])) {
+            $isType = 'is' . $aParameters[$routeValue];
+            if ($device->$isType()) {
+                return $aParameters[$routeValue];
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Can we match the Tablet Device Type in the route to the device
+     *
+     * @param string         $routeValue type option in the route
+     * @param \Mobile_Detect $device     device object from the WebRequest
+     *
+     * @return bool|string matched OS
+     */
+    protected function matchTabletType($routeValue, \Mobile_Detect $device)
+    {
+        $routeValue = strtolower($routeValue);
+
+        $aParameters
+            = $this->rejiggerMobileParameterArray($device->getTabletDevices());
+        if (isset($aParameters[$routeValue])) {
+            $isType = 'is' . $aParameters[$routeValue];
+            if ($device->$isType()) {
+                return $aParameters[$routeValue];
+            }
+        }
+        return false;
     }
 
 
