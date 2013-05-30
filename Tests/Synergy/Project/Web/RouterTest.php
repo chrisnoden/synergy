@@ -260,6 +260,92 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
 
     /**
+     * Creates two mobile specific routes for the same path and checks
+     * that a mobile is indeed assigned the correct controller and method
+     */
+    public function testDeviceRoutingFallThru()
+    {
+        $obj = new Router();
+        // Create a route and routecollection
+        $route1  = new Route('/mobiletest', array('controller' => 'TabletController:tablet'), array(), array('device' => 'tablet'));
+        $route2  = new Route('/mobiletest', array('controller' => 'MobileController:mobile'), array(), array('device' => 'mobile'));
+        $routes = new RouteCollection();
+        $routes->add('route1', $route1);
+        $routes->add('route2', $route2);
+        // Pass our route collection to our Router object
+        $obj->setRouteCollection($routes);
+
+        // Our test request
+        $request = WebRequest::create(
+            '/mobiletest',
+            'GET',
+            array('name' => 'Chris Noden')
+        );
+        $request->overrideGlobals();
+
+        // Build our fake iPhone test device object
+        $device = new \Mobile_Detect();
+        $device->setUserAgent('Mozilla/5.0 (iPhone; U; CPU iPhone OS 6_0 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/10A5355d Safari/7534.48.3');
+        // Pass it to our WebRequest so it thinks the request came from an iPhone
+        $request->setDevice($device);
+
+        // Match the request to the route
+        $obj->match($request);
+        $this->assertEquals('MobileController', $obj->getControllerName());
+        $this->assertEquals('mobileAction', $obj->getMethodName());
+    }
+
+
+    /**
+     * Creating a route for a specific mobile operating system
+     * The router should return that controller & method
+     */
+    public function testDeviceOsRouting()
+    {
+        $obj = new Router();
+        // Create a route and routecollection
+        $route1  = new Route('/mobiletest', array('controller' => 'MobileController:ios'), array(), array('device' => 'mobile', 'os' => 'iOS'));
+        $route2  = new Route('/mobiletest', array('controller' => 'MobileController:ios'), array(), array('device' => 'mobile'));
+        $route3  = new Route('/mobiletest', array('controller' => 'MobileController:android'), array(), array('os' => 'Android'));
+        $routes = new RouteCollection();
+        $routes->add('route1', $route1);
+        $routes->add('route2', $route2);
+        $routes->add('route3', $route3);
+        // Pass our route collection to our Router object
+        $obj->setRouteCollection($routes);
+
+        // Our test request
+        $request = WebRequest::create(
+            '/mobiletest',
+            'GET',
+            array('name' => 'Chris Noden')
+        );
+        $request->overrideGlobals();
+
+        // Build our fake iPhone test device object
+        $device = new \Mobile_Detect();
+        $device->setUserAgent('Mozilla/5.0 (iPhone; U; CPU iPhone OS 6_0 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/10A5355d Safari/7534.48.3');
+        // Pass it to our WebRequest so it thinks the request came from an iPhone
+        $request->setDevice($device);
+
+        // Match the request to the route
+        $obj->match($request);
+        $this->assertEquals('MobileController', $obj->getControllerName());
+        $this->assertEquals('iosAction', $obj->getMethodName());
+
+        // Test using an Android Tablet
+        $device->setUserAgent('Mozilla/5.0 (Linux; U; Android 4.0.3; ja-jp; Sony Tablet P Build/TISU0085) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30');
+        $request->setDevice($device);
+
+        // Match the request to the route
+        $obj->match($request);
+        $this->assertEquals('MobileController', $obj->getControllerName());
+        $this->assertEquals('androidAction', $obj->getMethodName());
+
+    }
+
+
+    /**
      * Load the RouteCollection from a test yml file
      */
     public function testYamlRouteFile()

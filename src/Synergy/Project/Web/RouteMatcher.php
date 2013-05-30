@@ -125,17 +125,22 @@ class RouteMatcher extends UrlMatcher
                     continue;
                 }
 
-//            if ($this->_device->isIOS()) {
-//                $context->setParameter('os', 'iOS');
-//            } else /** @noinspection PhpUndefinedMethodInspection */
-//            if ($this->_device->isAndroidOS()) {
-//                /** @noinspection PhpUndefinedMethodInspection */
-//                $context->setParameter('os', 'Android');
-//            } else /** @noinspection PhpUndefinedMethodInspection */
-//            if ($this->_device->isBlackBerry()) {
-//                /** @noinspection PhpUndefinedMethodInspection */
-//                $context->setParameter('os', 'BlackBerry');
-//            }
+                /**
+                 * Test for a specific mobile OS
+                 */
+                if ($routeOS = $route->getOption('os')) {
+                    $routeOS = strtolower($routeOS);
+                    /** @noinspection PhpUndefinedMethodInspection */
+                    if ($device->isIOS() && $routeOS != 'ios') {
+                        continue;
+                    } else /** @noinspection PhpUndefinedMethodInspection */
+                    if ($device->isAndroidOS() && $routeOS != 'android') {
+                        continue;
+                    } else /** @noinspection PhpUndefinedMethodInspection */
+                    if ($device->isBlackBerry() && $routeOS != 'blackberry') {
+                        continue;
+                    }
+                }
             }
 
             $status = $this->handleRouteRequirements($pathinfo, $name, $route);
