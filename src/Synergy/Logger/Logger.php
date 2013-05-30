@@ -55,14 +55,17 @@ class Logger extends Singleton
     /**
      * Log using our assigned logger
      *
-     * @param       $level
-     * @param       $message
-     * @param array $context
+     * @param string $level   LogLevel
+     * @param string $message Message to log
+     * @param array  $context optional additional log data
+     * 
+     * @return void
      */
     public static function log($level, $message, array $context = array())
     {
         if (is_null(self::$_logger)) {
-            self::$_logger = new FileLogger('/tmp/synergy.log'); // @todo replace with sensible default log filename
+            self::$_logger = new FileLogger('/tmp/synergy.log');
+            // @todo replace with sensible default log filename
         }
 
         self::$_logger->log($level, $message, $context);
