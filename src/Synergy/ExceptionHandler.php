@@ -51,29 +51,29 @@ class ExceptionHandler
      *
      * @var int
      */
-    protected static $_errNum;
+    protected static $errNum;
     /**
      * The PHP error message
      *
      * @var string
      */
-    protected static $_errMsg;
+    protected static $errMsg;
     /**
      * Filename that the error was raised in
      *
      * @var string
      */
-    protected static $_fileName;
+    protected static $fileName;
     /**
      * The line number the error was raised in
      *
      * @var int
      */
-    protected static $_lineNum;
+    protected static $lineNum;
     /**
      * @var array
      */
-    protected static $_trace = array();
+    protected static $trace = array();
     /**
      * @var bool
      */
@@ -160,14 +160,15 @@ class ExceptionHandler
 
 
     /**
+     * Can we ignore this error
+     *
+     * @param int    $errNum   PHP error number
+     * @param string $fileName file that raised the error
+     *
      * @static
-     *
-     * @param $errNum
-     * @param $fileName
-     *
      * @return bool
      */
-    private static function canIgnore($errNum, $fileName)
+    private static function _canIgnore($errNum, $fileName)
     {
         if (in_array($errNum, self::$_aIgnoreCodes)) {
             return true;
@@ -186,11 +187,13 @@ class ExceptionHandler
 
 
     /**
-     * @param int    $errNum
-     * @param string $errMsg
-     * @param string $fileName
-     * @param int    $lineNum
-     * @param mixed  $misc
+     * Define an ErrorHandler
+     *
+     * @param int    $errNum   PHP error number
+     * @param string $errMsg   error message
+     * @param string $fileName file that raised the error
+     * @param int    $lineNum  line that raised the error
+     * @param mixed  $misc     context
      *
      * @static
      * @return bool
@@ -199,15 +202,15 @@ class ExceptionHandler
                                         $misc)
     {
         // can we safely ignore this error
-        if (self::canIgnore($errNum, $fileName)) {
+        if (self::_canIgnore($errNum, $fileName)) {
             return true;
         }
 
-        self::$_errNum   = $errNum;
-        self::$_errMsg   = $errMsg;
-        self::$_fileName = $fileName;
-        self::$_lineNum  = $lineNum;
-        self::$_trace    = null;
+        self::$errNum   = $errNum;
+        self::$errMsg   = $errMsg;
+        self::$fileName = $fileName;
+        self::$lineNum  = $lineNum;
+        self::$trace    = null;
 
         // process the error
         self::handler();
@@ -224,32 +227,31 @@ class ExceptionHandler
     /**
      * Catch any thrown Exceptions and route them
      *
+     * @param \Exception $e uncaught exception
+     *
      * @static
-     *
-     * @param \Exception $e
-     *
      * @return bool
      */
     public static function ExceptionHandler(\Exception $e)
     {
         // can we safely ignore this error
-        if (self::canIgnore($e->getCode(), $e->getFile())) {
+        if (self::_canIgnore($e->getCode(), $e->getFile())) {
             return true;
         }
 
 //        $ref = new \ReflectionObject($e);
 
-        self::$_errNum   = $e->getCode();
-        self::$_errMsg   = $e->getMessage();
-        self::$_fileName = $e->getFile();
-        self::$_lineNum  = $e->getLine();
-        self::$_trace    = $e->getTrace();
+        self::$errNum   = $e->getCode();
+        self::$errMsg   = $e->getMessage();
+        self::$fileName = $e->getFile();
+        self::$lineNum  = $e->getLine();
+        self::$trace    = $e->getTrace();
 
         // process the error
         self::handler(LogLevel::CRITICAL);
 
         // exit program execution if necessary
-        if (in_array(self::$_errNum, self::$_aStopCodes)) {
+        if (in_array(self::$errNum, self::$_aStopCodes)) {
             exit;
         }
 
@@ -267,11 +269,11 @@ class ExceptionHandler
     {
         $last_error = error_get_last();
         if ($last_error['type'] === E_ERROR) {
-            self::$_errMsg   = $last_error['message'];
-            self::$_errNum   = $last_error['type'];
-            self::$_fileName = $last_error['file'];
-            self::$_lineNum  = $last_error['line'];
-            self::$_trace    = null;
+            self::$errMsg   = $last_error['message'];
+            self::$errNum   = $last_error['type'];
+            self::$fileName = $last_error['file'];
+            self::$lineNum  = $last_error['line'];
+            self::$trace    = null;
             self::handler();
         }
     }
@@ -284,24 +286,24 @@ class ExceptionHandler
      */
     protected static function handler($LogLevel = null)
     {
-        if (isset(self::$_errNum)) {
-            if (isset(self::$_trace)) {
-                $text = sprintf("%s\n\nTrace:\n\n", self::$_errMsg);
-                foreach (self::$_trace AS $traceItem) {
+        if (isset(self::$errNum)) {
+            if (isset(self::$trace)) {
+                $text = sprintf("%s\n\nTrace:\n\n", self::$errMsg);
+                foreach (self::$trace AS $traceItem) {
                     foreach ($traceItem AS $key => $val) {
                         $text .= sprintf("\t[%s] => %s\n", $key, $val);
                     }
                     $text .= "\n";
                 }
             } else {
-                $text = sprintf("%s", self::$_errMsg);
+                $text = sprintf("%s", self::$errMsg);
             }
 
             if ($LogLevel === null) {
                 /**
                  * Convert the PHP error number to a Psr compatible LogLevel
                  */
-                switch (self::$_errNum) {
+                switch (self::$errNum) {
                     case 2:
                         $dbgLevel = LogLevel::INFO;
                         break;
@@ -330,7 +332,7 @@ class ExceptionHandler
             Logger::log(
                 $dbgLevel,
                 $text,
-                array('filename' => self::$_fileName, 'linenum' => self::$_lineNum, 'level' => self::$_aErrorTypes[self::$_errNum])
+                array('filename' => self::$fileName, 'linenum' => self::$lineNum, 'level' => self::$_aErrorTypes[self::$errNum])
             );
         }
     }

@@ -26,6 +26,8 @@
 
 namespace Synergy\Project\Web;
 
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\Route;
@@ -52,8 +54,9 @@ class RouteMatcher extends UrlMatcher
      * @return array An array of parameters
      *
      * @throws ResourceNotFoundException If the resource could not be found
-     * @throws MethodNotAllowedException If the resource was found but the request method is not allowed
+     * @throws MethodNotAllowedException method is not allowed
      */
+    /** @noinspection PhpInconsistentReturnPointsInspection */
     protected function matchCollection($pathinfo, RouteCollection $routes)
     {
         $context_params = $this->context->getParameters();
@@ -64,8 +67,11 @@ class RouteMatcher extends UrlMatcher
         foreach ($routes as $name => $route) {
             $compiledRoute = $route->compile();
 
-            // check the static prefix of the URL first. Only use the more expensive preg_match when it matches
-            if ('' !== $compiledRoute->getStaticPrefix() && 0 !== strpos($pathinfo, $compiledRoute->getStaticPrefix())) {
+            // check the static prefix of the URL first.
+            // Only use the more expensive preg_match when it matches
+            if ('' !== $compiledRoute->getStaticPrefix()
+                && 0 !== strpos($pathinfo, $compiledRoute->getStaticPrefix())
+            ) {
                 continue;
             }
 
@@ -74,7 +80,13 @@ class RouteMatcher extends UrlMatcher
             }
 
             $hostMatches = array();
-            if ($compiledRoute->getHostRegex() && !preg_match($compiledRoute->getHostRegex(), $this->context->getHost(), $hostMatches)) {
+            if ($compiledRoute->getHostRegex()
+                && !preg_match(
+                    $compiledRoute->getHostRegex(),
+                    $this->context->getHost(),
+                    $hostMatches
+                )
+            ) {
                 continue;
             }
 
@@ -96,8 +108,8 @@ class RouteMatcher extends UrlMatcher
             if (is_array($context_params)) {
                 foreach ($context_params AS $paramName=>$paramValue)
                 {
-                    if ($route->getOption($paramName) && $route->getOption($paramName) != $paramValue) {
-                        Logger::info('testing route option '.$paramName . ':'.$route->getOption($paramName) . ' against '. $paramValue);
+                    if ($route->getOption($paramName)
+                        && $route->getOption($paramName) != $paramValue) {
                         continue(2);
                     }
                 }

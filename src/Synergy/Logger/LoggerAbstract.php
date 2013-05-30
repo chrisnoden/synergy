@@ -49,7 +49,10 @@ abstract class LoggerAbstract extends AbstractLogger
 
 
     /**
+     * Create a new LoggerAbstract object
+     *
      * @param null $filename optional filename (path + filename)
+     *
      * @throws \Synergy\Exception\InvalidArgumentException
      */
     public function __construct($filename = null)
@@ -71,7 +74,7 @@ abstract class LoggerAbstract extends AbstractLogger
                 );
             }
 
-            $this->_filename = $filename;
+            $this->filename = $filename;
         }
     }
 

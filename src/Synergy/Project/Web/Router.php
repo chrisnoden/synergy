@@ -91,11 +91,14 @@ class Router extends RouterAbstract
         if (isset($this->_device)) {
             $deviceType = ($this->_device->isMobile() ? ($this->_device->isTablet() ? 'tablet' : 'phone') : 'computer');
             $context->setParameter('device', $deviceType);
+            /** @noinspection PhpUndefinedMethodInspection */
             if ($this->_device->isIOS()) {
                 $context->setParameter('os', 'iOS');
-            } else if ($this->_device->isAndroidOS()) {
+            } else /** @noinspection PhpUndefinedMethodInspection */
+            if ($this->_device->isAndroidOS()) {
                 $context->setParameter('os', 'Android');
-            } else if ($this->_device->isBlackBerry()) {
+            } else /** @noinspection PhpUndefinedMethodInspection */
+            if ($this->_device->isBlackBerry()) {
                 $context->setParameter('os', 'BlackBerry');
             }
         }

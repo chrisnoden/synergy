@@ -48,10 +48,6 @@ final class WebProject extends ProjectAbstract
      * @var string name of the chosen controller class
      */
     private $_controllerClassName;
-    /**
-     * @var \Mobile_Detect
-     */
-    private $_detect;
 
     /**
      * Instantiate a new Web_Handler object

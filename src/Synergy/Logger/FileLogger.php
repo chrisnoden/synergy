@@ -50,11 +50,11 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
     /**
      * @var string
      */
-    protected $_filename;
+    protected $filename;
     /**
      * @var resource
      */
-    protected $_fh;
+    protected $fh;
 
 
     /**
@@ -85,19 +85,19 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
      */
     protected function openFH()
     {
-        if (!is_resource($this->_fh)) {
-            if (isset($this->_filename)) {
-                $fh = @fopen($this->_filename, 'a');
+        if (!is_resource($this->fh)) {
+            if (isset($this->filename)) {
+                $fh = @fopen($this->filename, 'a');
                 if (is_resource($fh)) {
-                    $this->_fh = $fh;
+                    $this->fh = $fh;
                 } else {
                     throw new InvalidArgumentException(
-                        sprintf("Invalid filename, unable to open for append (%s)", $this->_filename)
+                        sprintf("Invalid filename, unable to open for append (%s)", $this->filename)
                     );
                 }
             } else {
                 throw new InvalidArgumentException(
-                    sprintf("Invalid filename: %s", $this->_filename)
+                    sprintf("Invalid filename: %s", $this->filename)
                 );
             }
         }
@@ -109,9 +109,9 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
      */
     protected function closeFH()
     {
-        if (is_resource($this->_fh)) {
-            @fclose($this->_fh);
-            $this->_fh = null;
+        if (is_resource($this->fh)) {
+            @fclose($this->fh);
+            $this->fh = null;
         }
     }
 
@@ -139,7 +139,7 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
                 $filename .= '.' . $parts['extension'];
             }
 
-            $this->_filename = $filename;
+            $this->filename = $filename;
         } else {
             throw new InvalidArgumentException("filename must be an absolute filename in a writeable directory");
         }
@@ -153,7 +153,7 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
     {
         $this->openFH();
         $msg .= "\n";
-        fputs($this->_fh, $msg, strlen($msg));
+        fputs($this->fh, $msg, strlen($msg));
     }
 
 }

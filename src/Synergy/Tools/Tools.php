@@ -47,17 +47,20 @@ class Tools
     /**
      * Generates a random string of length $length
      *
+     * @param string $length how many characters do you want in your string
+     * @param string $chars  seed of characters used to feed the output
+     *
      * @static
-     * @param $length
-     * @param string $chars optional string of the characters that will be used to feed the output
      * @return string
      */
-    public static function randomString($length, $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-    {
-        $size = strlen( $chars );
+    public static function randomString(
+        $length,
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    ) {
+        $size = strlen($chars);
         $str = '';
-        for( $i = 0; $i < $length; $i++ ) {
-            $str .= $chars[ rand( 0, $size - 1 ) ];
+        for ($i = 0; $i < $length; $i++) {
+            $str .= $chars[ rand(0, $size - 1) ];
         }
 
         return "$str";
