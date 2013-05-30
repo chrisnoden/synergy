@@ -29,7 +29,6 @@ namespace Synergy\Project\Web;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Synergy\Exception\InvalidControllerException;
 use Synergy\Logger\Logger;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Config\FileLocator;
@@ -69,6 +68,11 @@ class Router extends RouterAbstract
      * @var array parameters to pass to the method
      */
     private $_parameters;
+    /**
+     * @var \Mobile_Detect mobile device type
+     */
+    private $_device;
+
 
 
     /**
@@ -82,8 +86,19 @@ class Router extends RouterAbstract
     {
         $context = new RequestContext();
         $context->fromRequest($request);
+        if (isset($this->_device)) {
+            $deviceType = ($this->_device->isMobile() ? ($this->_device->isTablet() ? 'tablet' : 'phone') : 'computer');
+            $context->setParameter('device', $deviceType);
+            if ($this->_device->isIOS()) {
+                $context->setParameter('os', 'iOS');
+            } else if ($this->_device->isAndroidOS()) {
+                $context->setParameter('os', 'Android');
+            } else if ($this->_device->isBlackBerry()) {
+                $context->setParameter('os', 'BlackBerry');
+            }
+        }
         if (isset($this->_routeCollection)) {
-            $matcher = new UrlMatcher($this->_routeCollection, $context);
+            $matcher = new RouteMatcher($this->_routeCollection, $context);
             try {
                 $parameters = $matcher->match($request->getPathInfo());
             } catch (ResourceNotFoundException $ex) {
@@ -329,6 +344,17 @@ class Router extends RouterAbstract
     public function getRouteName()
     {
         return $this->_route;
+    }
+
+
+    /**
+     * Mobile Device info from the mobiledetect\Mobile_Detect library
+     *
+     * @param \Mobile_Detect $device
+     */
+    public function setDevice(\Mobile_Detect $device)
+    {
+        $this->_device = $device;
     }
 
 }
