@@ -46,6 +46,11 @@ use Synergy\Logger\Logger;
  */
 class RouteMatcher extends UrlMatcher
 {
+    /**
+     * @var WebRequestContext
+     */
+    protected $context;
+
 
     /**
      * Tries to match a URL with a set of routes.
@@ -61,8 +66,6 @@ class RouteMatcher extends UrlMatcher
      */
     protected function matchCollection($pathinfo, RouteCollection $routes)
     {
-        $context_params = $this->context->getParameters();
-
         /**
          * @var $route \Symfony\Component\Routing\Route
          */
@@ -106,16 +109,33 @@ class RouteMatcher extends UrlMatcher
                 }
             }
 
-            // check context parameters
-            if (is_array($context_params)) {
-                foreach ($context_params AS $paramName=>$paramValue) {
-                    if ($route->getOption($paramName)
-                        && $route->getOption($paramName) != $paramValue
-                    ) {
-                        // This route is not a match
-                        continue(2);
-                    }
+            // check device
+            if (class_exists('\Mobile_Detect') && $this->context->getDevice() instanceof \Mobile_Detect) {
+                /**
+                 * @var $device \Mobile_Detect
+                 */
+                $device = $this->context->getDevice();
+                $deviceType = ($device->isMobile()
+                    ? ($device->isTablet() ? 'tablet' : 'mobile')
+                    : 'computer');
+
+                if ($route->getOption('device')
+                    && $route->getOption('device') != $deviceType
+                ) {
+                    continue;
                 }
+
+//            if ($this->_device->isIOS()) {
+//                $context->setParameter('os', 'iOS');
+//            } else /** @noinspection PhpUndefinedMethodInspection */
+//            if ($this->_device->isAndroidOS()) {
+//                /** @noinspection PhpUndefinedMethodInspection */
+//                $context->setParameter('os', 'Android');
+//            } else /** @noinspection PhpUndefinedMethodInspection */
+//            if ($this->_device->isBlackBerry()) {
+//                /** @noinspection PhpUndefinedMethodInspection */
+//                $context->setParameter('os', 'BlackBerry');
+//            }
             }
 
             $status = $this->handleRouteRequirements($pathinfo, $name, $route);

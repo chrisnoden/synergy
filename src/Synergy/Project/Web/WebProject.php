@@ -60,11 +60,6 @@ final class WebProject extends ProjectAbstract
         // @todo remove the below hack
         $request = WebRequest::createFromGlobals();
         if ($request->getPathInfo() == '/favicon.ico') exit;
-        $device = $request->getDevice();
-        if (!$device->isMobile()) {
-            die("Hello PC");
-        }
-
 
         parent::__construct();
     }

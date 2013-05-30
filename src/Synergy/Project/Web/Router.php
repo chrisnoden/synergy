@@ -29,7 +29,6 @@ namespace Synergy\Project\Web;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Synergy\Exception\InvalidControllerException;
 use Synergy\Logger\Logger;
-use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
@@ -82,29 +81,9 @@ class Router extends RouterAbstract
      */
     private function _run(WebRequest $request)
     {
-        $context = new RequestContext();
-        $context->fromRequest($request);
-        if (!isset($this->_device)) {
-            $this->_detectMobileBrowser();
-        }
-        if (isset($this->_device)) {
-            $deviceType = ($this->_device->isMobile()
-                ? ($this->_device->isTablet() ? 'tablet' : 'mobile')
-                : 'computer');
-            $context->setParameter('device', $deviceType);
-            /** @noinspection PhpUndefinedMethodInspection */
-            if ($this->_device->isIOS()) {
-                $context->setParameter('os', 'iOS');
-            } else /** @noinspection PhpUndefinedMethodInspection */
-            if ($this->_device->isAndroidOS()) {
-                /** @noinspection PhpUndefinedMethodInspection */
-                $context->setParameter('os', 'Android');
-            } else /** @noinspection PhpUndefinedMethodInspection */
-            if ($this->_device->isBlackBerry()) {
-                /** @noinspection PhpUndefinedMethodInspection */
-                $context->setParameter('os', 'BlackBerry');
-            }
-        }
+        $context = new WebRequestContext();
+        $context->fromWebRequest($request);
+
         if (isset($this->_routeCollection)) {
             $matcher = new RouteMatcher($this->_routeCollection, $context);
             try {
