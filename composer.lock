@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "b166a305fe79a244de2c7a3e39a4dd18",
+    "hash": "d6840c1f5d31ebaf0fd4475770e57b2c",
     "packages": [
         {
             "name": "psr/log",
@@ -45,17 +45,17 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.2.1",
+            "version": "2.2.x-dev",
             "target-dir": "Symfony/Component/Config",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "v2.2.1"
+                "reference": "7b87975dcc36f5da71e05388e4af32366bfa4079"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/v2.2.1",
-                "reference": "v2.2.1",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/7b87975dcc36f5da71e05388e4af32366bfa4079",
+                "reference": "7b87975dcc36f5da71e05388e4af32366bfa4079",
                 "shasum": ""
             },
             "require": {
@@ -88,21 +88,21 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-01 10:42:10"
+            "time": "2013-05-10 18:08:31"
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v2.2.1",
+            "version": "2.2.x-dev",
             "target-dir": "Symfony/Component/HttpFoundation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "v2.2.1"
+                "reference": "0875a8c8a1757b508a9895bb2c454af77a67b1c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/v2.2.1",
-                "reference": "v2.2.1",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/0875a8c8a1757b508a9895bb2c454af77a67b1c7",
+                "reference": "0875a8c8a1757b508a9895bb2c454af77a67b1c7",
                 "shasum": ""
             },
             "require": {
@@ -138,21 +138,21 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-04-06 10:15:43"
+            "time": "2013-05-27 14:47:40"
         },
         {
             "name": "symfony/routing",
-            "version": "v2.2.1",
+            "version": "2.2.x-dev",
             "target-dir": "Symfony/Component/Routing",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "v2.2.1"
+                "reference": "351917218674d07847cb51ba22f6934aaea745df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.1",
-                "reference": "v2.2.1",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/351917218674d07847cb51ba22f6934aaea745df",
+                "reference": "351917218674d07847cb51ba22f6934aaea745df",
                 "shasum": ""
             },
             "require": {
@@ -196,21 +196,21 @@
             ],
             "description": "Symfony Routing Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-23 12:03:22"
+            "time": "2013-05-10 16:49:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.2.1",
+            "version": "2.2.x-dev",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "v2.2.1"
+                "reference": "2412f9950036ade5e89581e648edbe04e8fe2681"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.2.1",
-                "reference": "v2.2.1",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/2412f9950036ade5e89581e648edbe04e8fe2681",
+                "reference": "2412f9950036ade5e89581e648edbe04e8fe2681",
                 "shasum": ""
             },
             "require": {
@@ -243,7 +243,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-03-23 07:49:54"
+            "time": "2013-05-10 18:08:31"
         }
     ],
     "packages-dev": [

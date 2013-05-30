@@ -12,7 +12,8 @@
         }
     ],
     "autoload": {
-        "psr-0": { "Synergy": "src/" }
+        "psr-0": { "Synergy": "src/" },
+        "classmap": [ "src/UASparser" ]
     },
     "require": {
         "php": ">=5.3.3",

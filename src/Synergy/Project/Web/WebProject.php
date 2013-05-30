@@ -84,6 +84,12 @@ final class WebProject extends ProjectAbstract
     {
         $Router = new Router();
         $controller = $Router->getControllerFromGlobals();
+
+        $mobileDetect = new \Mobile_Detect();
+        if ($mobileDetect->isMobile()) {
+            Logger::info("Mobile Device detected");
+        }
+
         $this->_controllerClassName = $controller->__toString();
         $method = $Router->getMethodName();
         $controller->$method();
