@@ -74,7 +74,6 @@ class Router extends RouterAbstract
     private $_device;
 
 
-
     /**
      * Attempt to match the request against the routecollection
      *
@@ -86,6 +85,9 @@ class Router extends RouterAbstract
     {
         $context = new RequestContext();
         $context->fromRequest($request);
+        if (!isset($this->_device)) {
+            $this->_detectMobileBrowser();
+        }
         if (isset($this->_device)) {
             $deviceType = ($this->_device->isMobile() ? ($this->_device->isTablet() ? 'tablet' : 'phone') : 'computer');
             $context->setParameter('device', $deviceType);
@@ -234,6 +236,20 @@ class Router extends RouterAbstract
 
 
     /**
+     * Detect the browser type (Mobile, iOS, Android)
+     * using the mobiledetect\Mobile_Detect library
+     *
+     * @return void
+     */
+    private function _detectMobileBrowser()
+    {
+        if (class_exists('\Mobile_Detect')) {
+            $this->_device = new \Mobile_Detect();
+        }
+    }
+
+
+    /**
      * Check the controller with the given name exists and is accessible
      *
      * @param string $controllerName string name controller
@@ -272,9 +288,7 @@ class Router extends RouterAbstract
         $filename = dirname(SYNERGY_WEB_ROOT) . '/app/config/routes.yml';
         try {
             $this->setRouteCollectionFromFile($filename);
-        }
-        catch (\InvalidArgumentException $ex)
-        {
+        } catch (\InvalidArgumentException $ex) {
             // hmm
         }
         $controller = $this->getControllerFromRequest($request);
@@ -356,6 +370,17 @@ class Router extends RouterAbstract
     public function setDevice(\Mobile_Detect $device)
     {
         $this->_device = $device;
+    }
+
+
+    /**
+     * Device object
+     *
+     * @return \Mobile_Detect Device object
+     */
+    public function getDevice()
+    {
+        return $this->_device;
     }
 
 }

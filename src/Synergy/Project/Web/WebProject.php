@@ -86,12 +86,7 @@ final class WebProject extends ProjectAbstract
      */
     public function launch()
     {
-        $device = $this->_detectMobileBrowser();
-
         $Router = new Router();
-        if ($device) {
-            $Router->setDevice($device);
-        }
         $controller = $Router->getControllerFromGlobals();
 
         $this->_controllerClassName = $controller->__toString();
@@ -108,21 +103,6 @@ final class WebProject extends ProjectAbstract
     public function getControllerName()
     {
         return $this->_controllerClassName;
-    }
-
-
-    /**
-     * Detect the browser type (Mobile, iOS, Android)
-     * using the mobiledetect\Mobile_Detect library
-     *
-     * @return \Mobile_Detect
-     */
-    private function _detectMobileBrowser()
-    {
-        if (class_exists('\Mobile_Detect')) {
-            $mobileDetect = new \Mobile_Detect();
-            return $mobileDetect;
-        }
     }
 
 }
