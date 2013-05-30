@@ -33,7 +33,6 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
-use Symfony\Component\HttpFoundation\Request;
 use Synergy\Project\RouterAbstract;
 
 /**
@@ -77,11 +76,11 @@ class Router extends RouterAbstract
     /**
      * Attempt to match the request against the routecollection
      *
-     * @param Request $request a Request object
+     * @param WebRequest $request a WebRequest object
      *
      * @return void
      */
-    private function _run(Request $request)
+    private function _run(WebRequest $request)
     {
         $context = new RequestContext();
         $context->fromRequest($request);
@@ -90,7 +89,7 @@ class Router extends RouterAbstract
         }
         if (isset($this->_device)) {
             $deviceType = ($this->_device->isMobile()
-                ? ($this->_device->isTablet() ? 'tablet' : 'phone')
+                ? ($this->_device->isTablet() ? 'tablet' : 'mobile')
                 : 'computer');
             $context->setParameter('device', $deviceType);
             /** @noinspection PhpUndefinedMethodInspection */
@@ -291,7 +290,7 @@ class Router extends RouterAbstract
      */
     public function getControllerFromGlobals()
     {
-        $request  = Request::createFromGlobals();
+        $request  = WebRequest::createFromGlobals();
         $filename = dirname(SYNERGY_WEB_ROOT) . '/app/config/routes.yml';
         try {
             $this->setRouteCollectionFromFile($filename);
@@ -307,12 +306,12 @@ class Router extends RouterAbstract
     /**
      * Derive a successful controller and method from a Request object
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request request object
+     * @param WebRequest $request request object
      *
      * @return mixed
      * @throws \Synergy\Exception\InvalidControllerException
      */
-    public function getControllerFromRequest(Request $request)
+    public function getControllerFromRequest(WebRequest $request)
     {
         $this->_run($request);
         if ($this->validController()) {
@@ -328,9 +327,9 @@ class Router extends RouterAbstract
      * Match the request to a route and populate our object data
      * Doesn't verify the Controller is valid
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request request object
+     * @param WebRequest $request request object
      */
-    public function match(Request $request)
+    public function match(WebRequest $request)
     {
         $this->_run($request);
     }

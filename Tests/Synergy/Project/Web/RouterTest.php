@@ -26,10 +26,10 @@
 
 namespace Synergy\Tests\Project\Web;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Synergy\Project\Web\Router;
+use Synergy\Project\Web\WebRequest;
 
 /**
  * Class RouterTest
@@ -63,7 +63,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         // Pass our route collection to our Router object
         $obj->setRouteCollection($routes);
 
-        $request = Request::create(
+        $request = WebRequest::create(
             '/test1',
             'GET',
             array('name' => 'Chris Noden')
@@ -89,7 +89,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         // Pass our route collection to our Router object
         $obj->setRouteCollection($routes);
 
-        $request = Request::create(
+        $request = WebRequest::create(
             '/test1',
             'POST',
             array('name' => 'Chris Noden')
@@ -114,7 +114,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         // Pass our route collection to our Router object
         $obj->setRouteCollection($routes);
 
-        $request = Request::create(
+        $request = WebRequest::create(
             '/test2',
             'GET',
             array('name' => 'Chris Noden')
@@ -139,7 +139,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         // Pass our route collection to our Router object
         $obj->setRouteCollection($routes);
 
-        $request = Request::create(
+        $request = WebRequest::create(
             '/test2',
             'POST',
             array('name' => 'Chris Noden')
@@ -162,7 +162,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         // Pass our route collection to our Router object
         $obj->setRouteCollection($routes);
 
-        $request = Request::create(
+        $request = WebRequest::create(
             '/test1',
             'POST',
             array('name' => 'Chris Noden')
@@ -174,7 +174,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('MyController', $obj->getControllerName());
 
         // This GET request should fail
-        $request = Request::create(
+        $request = WebRequest::create(
             '/test1',
             'GET',
             array('name' => 'Chris Noden')
@@ -204,7 +204,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $obj->setRouteCollection($routes);
 
         // Our test request
-        $request = Request::create(
+        $request = WebRequest::create(
             '/mobiletest',
             'GET',
             array('name' => 'Chris Noden')
@@ -239,7 +239,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $obj->setRouteCollection($routes);
 
         // Our test request
-        $request = Request::create(
+        $request = WebRequest::create(
             '/mobiletest',
             'GET',
             array('name' => 'Chris Noden')
@@ -267,7 +267,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $obj = new Router();
         $obj->setRouteCollectionFromFile(SYNERGY_TEST_FILES_DIR . DIRECTORY_SEPARATOR . 'test_routes.yml');
 
-        $request = Request::create(
+        $request = WebRequest::create(
             '/foo',
             'GET',
             array('name' => 'Chris Noden')
@@ -293,7 +293,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $obj->setRouteCollectionFromFile(SYNERGY_TEST_FILES_DIR . DIRECTORY_SEPARATOR . 'test_routes.yml');
 
         // A POST request to a defined path should fail
-        $request = Request::create(
+        $request = WebRequest::create(
             '/foo',
             'POST',
             array('name' => 'Chris Noden')

@@ -26,7 +26,6 @@
 
 namespace Synergy\Project\Web;
 
-use Symfony\Component\HttpFoundation\Request;
 use Synergy\Logger\Logger;
 use Synergy\Project;
 use Synergy\Project\ProjectAbstract;
@@ -59,8 +58,13 @@ final class WebProject extends ProjectAbstract
         // @todo check this actually stops the session before it's been created
 
         // @todo remove the below hack
-        $request = Request::createFromGlobals();
+        $request = WebRequest::createFromGlobals();
         if ($request->getPathInfo() == '/favicon.ico') exit;
+        $device = $request->getDevice();
+        if (!$device->isMobile()) {
+            die("Hello PC");
+        }
+
 
         parent::__construct();
     }
