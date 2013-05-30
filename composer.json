@@ -17,13 +17,14 @@
     "require": {
         "php": ">=5.3.3",
         "psr/log": "1.0.0",
-        "symfony/http-foundation": "v2.2.1",
-        "symfony/routing": "v2.2.1",
-        "symfony/config": "2.2.1",
-        "symfony/yaml": "2.2.1"
+        "symfony/http-foundation": "v2.2.*",
+        "symfony/routing": "v2.2.*",
+        "symfony/config": "2.2.*",
+        "symfony/yaml": "2.2.*"
     },
     "suggest": {
-        "chrisnoden/talkback": "dev-master"
+        "chrisnoden/talkback": "dev-master",
+        "mobiledetect/mobiledetectlib": "2.6.*"
     }
 
 }
