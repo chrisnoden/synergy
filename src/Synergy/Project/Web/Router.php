@@ -105,7 +105,7 @@ class Router extends RouterAbstract
     /**
      * Set the RouteCollection used to match the route
      *
-     * @param RouteCollection $collection
+     * @param RouteCollection $collection our collection of Route objects
      */
     public function setRouteCollection(RouteCollection $collection)
     {
