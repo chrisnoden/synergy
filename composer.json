@@ -17,8 +17,8 @@
     "require": {
         "php": ">=5.3.3",
         "psr/log": "1.0.0",
-        "symfony/http-foundation": "v2.2.*",
-        "symfony/routing": "v2.2.*",
+        "symfony/http-foundation": "2.2.*",
+        "symfony/routing": "2.2.*",
         "symfony/config": "2.2.*",
         "symfony/yaml": "2.2.*"
     },
