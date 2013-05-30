@@ -343,7 +343,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $obj->match($request);
         $this->assertEquals('GenericController', $obj->getControllerName());
         $this->assertEquals('androidAction', $obj->getMethodName());
-
     }
 
 

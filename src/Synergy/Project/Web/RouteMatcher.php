@@ -129,30 +129,11 @@ class RouteMatcher extends UrlMatcher
                  * Test for a specific mobile OS
                  */
                 if ($routeOS = $route->getOption('os')) {
-                    $routeOS = strtolower($routeOS);
-                    if (substr($routeOS, -2) != 'os') {
-                        $routeOS .= 'os';
-                    }
-
-                    // manipulate the possible operating systems
-                    // to create an associative array we can search against
-                    $aTempOs = array_keys($device->getOperatingSystems());
-                    array_walk($aTempOs, function(&$n) {
-                        $n = strtolower($n);
-                    });
-                    $aOperatingSystems = array_combine($aTempOs, array_keys($device->getOperatingSystems()));
-                    /**
-                     * end up with an array like
-                     * 'androidos' => 'AndroidOS',
-                     * 'blackberryos' => 'BlackBerryOS',
-                     * etc
-                     */
-
-
-                    if (!isset($aOperatingSystems[$routeOS]) || !$device->is($aOperatingSystems[$routeOS])) {
-                        continue;
+                    $deviceOS = $this->matchDeviceOS($routeOS, $device);
+                    if ($deviceOS) {
+                        Logger::info("Matched RouteOS: ".$deviceOS);
                     } else {
-                        Logger::info("Matched RouteOS: ".$aOperatingSystems[$routeOS]);
+                        continue;
                     }
                 }
             }
@@ -173,6 +154,46 @@ class RouteMatcher extends UrlMatcher
                 array_replace($matches, $hostMatches)
             );
         }
+    }
+
+
+    protected function matchDeviceOS($routeOS, \Mobile_Detect $device)
+    {
+        $routeOS = strtolower($routeOS);
+        if (substr($routeOS, -2) != 'os') {
+            $routeOS .= 'os';
+        }
+
+        $aOperatingSystems
+            = $this->rejiggerMobileParameterArray($device->getOperatingSystems());
+        if (!isset($aOperatingSystems[$routeOS])
+            || !$device->is($aOperatingSystems[$routeOS])
+        ) {
+            return false;
+        }
+        return $aOperatingSystems[$routeOS];
+    }
+
+
+    /**
+     * manipulate the possible operating systems
+     * to create an associative array we can search against
+     *
+     * @param array $origArray parameter array from \Mobile_Detect library
+     *
+     * @return array
+     */
+    protected function rejiggerMobileParameterArray(array $origArray)
+    {
+        $aKeys = array_keys($origArray);
+        array_walk(
+            $aKeys,
+            function (&$n) {
+                $n = strtolower($n);
+            }
+        );
+        $aValues = array_keys($origArray);
+        return (array_combine($aKeys, $aValues));
     }
 
 }
