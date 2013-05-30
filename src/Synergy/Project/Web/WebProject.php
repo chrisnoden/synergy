@@ -89,7 +89,9 @@ final class WebProject extends ProjectAbstract
         $device = $this->_detectMobileBrowser();
 
         $Router = new Router();
-        $Router->setDevice($device);
+        if ($device) {
+            $Router->setDevice($device);
+        }
         $controller = $Router->getControllerFromGlobals();
 
         $this->_controllerClassName = $controller->__toString();

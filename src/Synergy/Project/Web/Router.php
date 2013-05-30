@@ -305,6 +305,7 @@ class Router extends RouterAbstract
 
     /**
      * Match the request to a route and populate our object data
+     * Doesn't verify the Controller is valid
      *
      * @param \Symfony\Component\HttpFoundation\Request $request request object
      */

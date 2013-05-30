@@ -56,8 +56,8 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      */
     public function testBasicGetMethodRoute()
     {
-        $obj = new Router();
-        $route = new Route('/test1', array('controller' => 'MyController:test'));
+        $obj    = new Router();
+        $route  = new Route('/test1', array('controller' => 'MyController:test'));
         $routes = new RouteCollection();
         $routes->add('route_name', $route);
         // Pass our route collection to our Router object
@@ -82,8 +82,8 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      */
     public function testBasicPostMethodRoute()
     {
-        $obj = new Router();
-        $route = new Route('/test1', array('controller' => 'MyController'));
+        $obj    = new Router();
+        $route  = new Route('/test1', array('controller' => 'MyController'));
         $routes = new RouteCollection();
         $routes->add('route_name', $route);
         // Pass our route collection to our Router object
@@ -107,8 +107,8 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefaultGetMethodRoute()
     {
-        $obj = new Router();
-        $route = new Route('/test1', array('controller' => 'MyController'));
+        $obj    = new Router();
+        $route  = new Route('/test1', array('controller' => 'MyController'));
         $routes = new RouteCollection();
         $routes->add('route_name', $route);
         // Pass our route collection to our Router object
@@ -132,8 +132,8 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefaultPostMethodRoute()
     {
-        $obj = new Router();
-        $route = new Route('/test1', array('controller' => 'MyController'));
+        $obj    = new Router();
+        $route  = new Route('/test1', array('controller' => 'MyController'));
         $routes = new RouteCollection();
         $routes->add('route_name', $route);
         // Pass our route collection to our Router object
@@ -154,7 +154,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
     public function testHttpPostMethodRoute()
     {
-        $obj = new Router();
+        $obj   = new Router();
         $route = new Route('/test1', array('controller' => 'MyController'));
         $route->setMethods(array('POST'));
         $routes = new RouteCollection();
@@ -190,6 +190,76 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
 
     /**
+     * Tests our Extended RouteMatcher to see routing
+     * for a phone or tablet works
+     */
+    public function testPhoneDeviceRoutingSuccess()
+    {
+        $obj = new Router();
+        // Create a route and routecollection
+        $route  = new Route('/mobiletest', array('controller' => 'MyController:test'), array(), array('device' => 'phone'));
+        $routes = new RouteCollection();
+        $routes->add('route_name', $route);
+        // Pass our route collection to our Router object
+        $obj->setRouteCollection($routes);
+
+        // Our test request
+        $request = Request::create(
+            '/mobiletest',
+            'GET',
+            array('name' => 'Chris Noden')
+        );
+        $request->overrideGlobals();
+
+        // Build our fake iPhone test device object
+        $device = new \Mobile_Detect();
+        $device->setUserAgent('Mozilla/5.0 (iPhone; U; CPU iPhone OS 6_0 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/10A5355d Safari/7534.48.3');
+        // Pass it to our Router so it thinks the request came from an iPhone
+        $obj->setDevice($device);
+
+        // Match the request to the route
+        $obj->match($request);
+        $this->assertEquals('MyController', $obj->getControllerName());
+        $this->assertEquals('testAction', $obj->getMethodName());
+    }
+
+
+    /**
+     * Try to match a phone device to a route that requires a tablet
+     * Should fall to the DefaultController and defaultAction
+     */
+    public function testPhoneDeviceRoutingFail()
+    {
+        $obj = new Router();
+        // Create a route and routecollection
+        $route  = new Route('/mobiletest', array('controller' => 'MyController:test'), array(), array('device' => 'tablet'));
+        $routes = new RouteCollection();
+        $routes->add('route_name', $route);
+        // Pass our route collection to our Router object
+        $obj->setRouteCollection($routes);
+
+        // Our test request
+        $request = Request::create(
+            '/mobiletest',
+            'GET',
+            array('name' => 'Chris Noden')
+        );
+        $request->overrideGlobals();
+
+        // Build our fake iPhone test device object
+        $device = new \Mobile_Detect();
+        $device->setUserAgent('Mozilla/5.0 (iPhone; U; CPU iPhone OS 6_0 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/10A5355d Safari/7534.48.3');
+        // Pass it to our Router so it thinks the request came from an iPhone
+        $obj->setDevice($device);
+
+        // Match the request to the route
+        $obj->match($request);
+        $this->assertEquals('Synergy\Controller\DefaultController', $obj->getControllerName());
+        $this->assertEquals('defaultAction', $obj->getMethodName());
+    }
+
+
+    /**
      * Load the RouteCollection from a test yml file
      */
     public function testYamlRouteFile()
@@ -202,6 +272,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             'GET',
             array('name' => 'Chris Noden')
         );
+
         $request->overrideGlobals();
 
         // Match the request to the route
