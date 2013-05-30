@@ -35,6 +35,8 @@ use Synergy\Logger\Logger;
 
 /**
  * Class RouteMatcher
+ * Extends the Symfony UrlMatcher component so we can look for
+ * device options (eg device == phone)
  *
  * @category Synergy\Project\Web
  * @package  Synergy
@@ -47,6 +49,7 @@ class RouteMatcher extends UrlMatcher
 
     /**
      * Tries to match a URL with a set of routes.
+     * Will always return the first route that matches.
      *
      * @param string          $pathinfo The path info to be parsed
      * @param RouteCollection $routes   The set of routes
@@ -56,7 +59,6 @@ class RouteMatcher extends UrlMatcher
      * @throws ResourceNotFoundException If the resource could not be found
      * @throws MethodNotAllowedException method is not allowed
      */
-    /** @noinspection PhpInconsistentReturnPointsInspection */
     protected function matchCollection($pathinfo, RouteCollection $routes)
     {
         $context_params = $this->context->getParameters();
@@ -106,10 +108,11 @@ class RouteMatcher extends UrlMatcher
 
             // check context parameters
             if (is_array($context_params)) {
-                foreach ($context_params AS $paramName=>$paramValue)
-                {
+                foreach ($context_params AS $paramName=>$paramValue) {
                     if ($route->getOption($paramName)
-                        && $route->getOption($paramName) != $paramValue) {
+                        && $route->getOption($paramName) != $paramValue
+                    ) {
+                        // This route is not a match
                         continue(2);
                     }
                 }
@@ -125,7 +128,11 @@ class RouteMatcher extends UrlMatcher
                 continue;
             }
 
-            return $this->getAttributes($route, $name, array_replace($matches, $hostMatches));
+            return $this->getAttributes(
+                $route,
+                $name,
+                array_replace($matches, $hostMatches)
+            );
         }
     }
 
