@@ -28,6 +28,8 @@ namespace Synergy\Project\Web;
 
 use Symfony\Component\HttpFoundation\Request;
 use Synergy\Controller\Controller;
+use Synergy\Exception\InvalidControllerException;
+use Synergy\Exception\ProjectException;
 use Synergy\Logger\Logger;
 use Synergy\Project;
 use Synergy\Project\ProjectAbstract;
@@ -146,8 +148,19 @@ final class WebProject extends ProjectAbstract
      */
     protected function callControllerAction(Controller $controller, $action, $parameters = array())
     {
+        if (!is_callable(array($controller->__toString(), $action))) {
+            throw new InvalidControllerException(
+                sprintf(
+                    "%s::%s() is not callable",
+                    $controller->__toString(),
+                    $action
+                )
+            );
+        }
+
+        $aParamsToPass = array();
+        
         if (count($parameters) > 0) {
-            $aParamsToPass = array();
             $r = new \ReflectionMethod($controller->__toString(), $action);
             $classParams = $r->getParameters();
             foreach ($classParams as $argKey=>$oName) {
@@ -157,11 +170,31 @@ final class WebProject extends ProjectAbstract
                 }
             }
 
-            $response = call_user_func_array(array($controller->__toString(), $action), $aParamsToPass);
-        } else {
-            $response = $controller->$action();
+            if (count($aParamsToPass) != count($classParams)) {
+                throw new ProjectException(
+                    sprintf(
+                        "%s::%s() expects %s parameters",
+                        $controller->__toString(),
+                        $action,
+                        count($classParams)
+                    )
+                );
+            }
         }
 
+        /**
+         * This is quicker than call_user_func_array
+         */
+        switch(count($aParamsToPass)) {
+            case 0: $response = $controller->{$action}(); break;
+            case 1: $response = $controller->{$action}($aParamsToPass[0]); break;
+            case 2: $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1]); break;
+            case 3: $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2]); break;
+            case 4: $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2], $aParamsToPass[3]); break;
+            case 5: $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2], $aParamsToPass[3], $aParamsToPass[4]); break;
+            default: $response = call_user_func_array(array($controller->__toString(), $action), $aParamsToPass);  break;
+        }
+            
         return $response;
     }
 

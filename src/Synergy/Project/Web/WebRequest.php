@@ -107,8 +107,15 @@ class WebRequest extends Request
      *
      * @api
      */
-    public static function create($uri, $method = 'GET', $parameters = array(), $cookies = array(), $files = array(), $server = array(), $content = null)
-    {
+    public static function create(
+        $uri,
+        $method = 'GET',
+        $parameters = array(),
+        $cookies = array(),
+        $files = array(),
+        $server = array(),
+        $content = null
+    ) {
         $server = array_replace(array(
             'SERVER_NAME'          => 'localhost',
             'SERVER_PORT'          => 80,
