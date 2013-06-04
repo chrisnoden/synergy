@@ -43,7 +43,7 @@ class Controller extends Object implements ControllerInterface
     /**
      * Default action to be inherited by your own controller code
      *
-     * @return void
+     * @return \Synergy\Project\Web\WebResponse
      */
     public function defaultAction()
     {

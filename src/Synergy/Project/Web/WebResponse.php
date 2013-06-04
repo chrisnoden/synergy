@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * 
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,33 +24,20 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Controller;
+namespace Synergy\Project\Web;
 
-use Synergy\Project\Web\WebResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class DefaultController
+ * Class WebResponse
  *
- * @category Synergy\Controller
+ * @category Synergy\Project\Web
  * @package  Synergy
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class DefaultController extends Controller
+class WebResponse extends Response
 {
-
-    /**
-     * Just a test action for now
-     *
-     * @todo put in some helpful Response
-     *
-     * @return \Synergy\Project\Web\WebResponse
-     */
-    public function defaultAction()
-    {
-        return new WebResponse("Hello from ".__METHOD__);
-    }
-
 
 }

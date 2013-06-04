@@ -99,6 +99,9 @@ class Router extends RouterAbstract
         }
 
         $this->_storeDataFromRouteParameters($parameters);
+        Logger::info("Route name: " . $this->_route);
+        Logger::info("Controller ClassName: " . $this->_controller);
+        Logger::info("Controller Action: " . $this->_method);
     }
 
 
@@ -159,7 +162,8 @@ class Router extends RouterAbstract
     private function _storeDataFromRouteParameters($aData)
     {
         foreach ($aData AS $key => $val) {
-            switch (strtolower($key)) {
+            switch (strtolower($key))
+            {
                 case '_controller':
                 case 'controller':
                     $this->_parseControllerString($val);
@@ -171,14 +175,9 @@ class Router extends RouterAbstract
                     break;
 
                 default:
-                    if (is_array($val)) {
-                        $this->_parameters = $val;
-                    } else {
-                        $this->_parameters = array($val);
-                    }
+                    $this->_parameters[$key] = $val;
             }
         }
-        Logger::info("Route selected: " . $this->_route);
     }
 
 
@@ -199,8 +198,6 @@ class Router extends RouterAbstract
             $this->_controller = $controller_string;
             $this->_method     = 'defaultAction';
         }
-        Logger::info("Controller selected: " . $this->_controller);
-        Logger::info("Method selected: " . $this->_method);
     }
 
 
@@ -258,27 +255,6 @@ class Router extends RouterAbstract
         throw new InvalidControllerException(
             'Controller ' . $controllerName . ' not found'
         );
-    }
-
-
-    /**
-     * Return a valid Controller object for our web request
-     *
-     * @return \Synergy\Controller\Controller
-     * @throws \Synergy\Exception\InvalidControllerException
-     */
-    public function getControllerFromGlobals()
-    {
-        $request  = WebRequest::createFromGlobals();
-        $filename = dirname(SYNERGY_WEB_ROOT) . '/app/config/routes.yml';
-        try {
-            $this->setRouteCollectionFromFile($filename);
-        } catch (\InvalidArgumentException $ex) {
-            // hmm
-        }
-        $controller = $this->getControllerFromRequest($request);
-
-        return $controller;
     }
 
 
@@ -366,6 +342,17 @@ class Router extends RouterAbstract
     public function getDevice()
     {
         return $this->_device;
+    }
+
+
+    /**
+     * Any parameters to be passed to the Controller Action Method
+     *
+     * @return array any parameters to be passed to the Controller Action
+     */
+    public function getControllerParameters()
+    {
+        return $this->_parameters;
     }
 
 }

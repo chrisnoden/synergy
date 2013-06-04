@@ -55,6 +55,10 @@ abstract class ProjectAbstract extends Object
      * @var @string path where our working temp folder (read-writable) exists
      */
     protected $tempFolderPath;
+    /**
+     * @var bool is this a dev project
+     */
+    protected $isDev = false;
 
 
     /**
@@ -158,5 +162,16 @@ abstract class ProjectAbstract extends Object
         return false;
     }
 
+
+    /**
+     * is this a dev project
+     *
+     * @param bool $isDev is this a dev project
+     */
+    public function setDev(bool $isDev)
+    {
+        $this->isDev = $isDev;
+        Project::setDev($isDev);
+    }
 
 }

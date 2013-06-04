@@ -41,7 +41,7 @@ interface ControllerInterface
     /**
      * Every controller needs a defaultAction
      *
-     * @return mixed
+     * @return \Synergy\Project\Web\WebResponse
      */
     public function defaultAction();
 

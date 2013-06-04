@@ -27,6 +27,7 @@
 namespace Synergy\Project\Web;
 
 use Symfony\Component\HttpFoundation\Request;
+use Synergy\Logger\Logger;
 
 /**
  * Class WebRequest
@@ -70,6 +71,9 @@ class WebRequest extends Request
      */
     public static function createFromGlobals()
     {
+        /**
+         * @static WebRequest
+         */
         $request = new static($_GET, $_POST, array(), $_COOKIE, $_FILES, $_SERVER);
 
         if (0 === strpos($request->headers->get('CONTENT_TYPE'), 'application/x-www-form-urlencoded')

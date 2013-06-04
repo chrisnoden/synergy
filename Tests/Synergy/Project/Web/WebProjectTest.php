@@ -66,7 +66,8 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
 
     public function testDefaultWebResponse()
     {
-        $obj = new WebProject();
+        $request = Project\Web\WebRequest::create('/');
+        $obj = new WebProject($request);
         $this->hasOutput();
         $obj->launch();
         $this->assertEquals(

@@ -88,7 +88,7 @@ final class Project extends Singleton
         }
         if (!defined('SYNERGY_WEB_ROOT')) {
             Project::getLogger()->error('Should define SYNERGY_WEB_ROOT with your web host path');
-            define('SYNERGY_WEB_ROOT', dirname(dirname(dirname(__FILE__))));
+            define('SYNERGY_WEB_ROOT', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
         }
 
         self::$_projectName = null;

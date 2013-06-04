@@ -72,8 +72,8 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         // Match the request to the route
         $obj->match($request);
-//        $this->assertEquals('MyController', $obj->getControllerName());
-//        $this->assertEquals('testAction', $obj->getMethodName());
+        $this->assertEquals('MyController', $obj->getControllerName());
+        $this->assertEquals('testAction', $obj->getMethodName());
     }
 
 
