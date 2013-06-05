@@ -57,6 +57,14 @@ abstract class ProjectAbstract extends Object
      */
     protected $tempFolderPath;
     /**
+     * @var string filename of the main config file
+     */
+    protected $configFilename;
+    /**
+     * @var string path to the src directory
+     */
+    protected $projectDir;
+    /**
      * @var bool is this a dev project
      */
     protected $isDev = false;
@@ -75,12 +83,6 @@ abstract class ProjectAbstract extends Object
             /** @noinspection PhpUndefinedMethodInspection */
             Project::getLogger()->setTag(Tools::randomString(6, '0123456789ABCDEF'));
         }
-
-//        if (Project::getProjectConfigFilename()) {
-//            Config::loadConfig();
-//        } else {
-//            throw new SynergyException("You must set the Project Config filename");
-//        }
     }
 
 
@@ -193,6 +195,41 @@ abstract class ProjectAbstract extends Object
 
 
     /**
+     * filename of the main config file
+     *
+     * @param string $filename filename of the main config file
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function setConfigFilename($filename)
+    {
+        if (!file_exists($filename)) {
+            throw new InvalidArgumentException(
+                sprintf("Missing file %s", $filename)
+            );
+        } else if (!is_readable($filename)) {
+            throw new InvalidArgumentException(
+                sprintf("File %s not readable", $filename)
+            );
+        } else {
+            $this->configFilename = $filename;
+        }
+    }
+
+
+    /**
+     * filename of the main config file
+     *
+     * @return string filename of the main config file
+     */
+    public function getConfigFilename()
+    {
+        return $this->configFilename;
+    }
+
+
+    /**
      * Creates a folder if it doesn't exist (plus the parent folders)
      * Optionally tests it (even if it already exists) for
      * read & write permissions by the platform
@@ -225,6 +262,47 @@ abstract class ProjectAbstract extends Object
     }
 
 
+
+    /**
+     * Set the path where the project src lives
+     *
+     * @param string $dir project directory (no trailing slash)
+     *
+     * @throws InvalidArgumentException
+     * @return void
+     */
+    public function setProjectPath($dir)
+    {
+        if (!is_string($dir)) {
+            throw new InvalidArgumentException(
+                "projectPath must be a string to the directory path"
+            );
+        } else if (!is_dir($dir)) {
+            throw new InvalidArgumentException(
+                "projectPath must be the path to your project directory"
+            );
+        } else if (!is_readable($dir)) {
+            throw new InvalidArgumentException(
+                "projectPath must have read permissions by user:" .
+                get_current_user()
+            );
+        }
+
+        $this->projectDir = $dir;
+    }
+
+
+    /**
+     * path of the
+     *
+     * @return string path of our src dir
+     */
+    public function getProjectPath()
+    {
+        return $this->projectDir;
+    }
+
+
     /**
      * is this a dev project
      *
@@ -232,7 +310,7 @@ abstract class ProjectAbstract extends Object
      *
      * @return void
      */
-    public function setDev(bool $isDev)
+    public function setDev($isDev)
     {
         $this->isDev = $isDev;
         Project::setDev($isDev);

@@ -60,14 +60,6 @@ final class Project extends Singleton
      */
     private static $_isDev = false;
     /**
-     * @var string path to the root of the project
-     */
-    private static $_projectPath;
-    /**
-     * @var string filename of the project config xml file
-     */
-    private static $_configFile;
-    /**
      * @var \Synergy\Project\ProjectAbstract
      */
     private static $_projectInstance;
@@ -269,90 +261,6 @@ final class Project extends Singleton
     public static function getDev()
     {
         return self::$_isDev;
-    }
-
-
-    /**
-     * Set the path where the project lives
-     *
-     * @param string $dir project directory (no trailing slash)
-     *
-     * @throws InvalidArgumentException
-     * @return void
-     */
-    public static function setProjectPath($dir)
-    {
-        if (!is_string($dir)) {
-            throw new InvalidArgumentException(
-                "projectPath must be a string to the directory path"
-            );
-        } else if (!is_dir($dir)) {
-            throw new InvalidArgumentException(
-                "projectPath must be the path to your project directory"
-            );
-        } else if (!is_readable($dir)) {
-            throw new InvalidArgumentException(
-                "projectPath must have read permissions by user:" .
-                get_current_user()
-            );
-        }
-
-        self::$_projectPath = $dir;
-    }
-
-
-    /**
-     * @return string path of our Project code
-     */
-    public static function getProjectPath()
-    {
-        return self::$_projectPath;
-    }
-
-
-    /**
-     * Set the absolute filename of your project config xml
-     *
-     * @param string $filename location of our config file
-     *
-     * @return void
-     * @throws \Synergy\Exception\InvalidArgumentException
-     */
-    public static function setProjectConfigFilename($filename)
-    {
-        // check the filename is valid before setting
-        if (is_string($filename)
-            && substr($filename, 0, 1) == DIRECTORY_SEPARATOR
-            && is_dir(dirname($filename))
-            && file_exists($filename)
-            && is_readable($filename)
-        ) {
-            self::$_configFile = $filename;
-        } else if (is_string($filename) && isset(self::$_projectPath)) {
-            $testFilename = self::$_projectPath . DIRECTORY_SEPARATOR . $filename;
-            if (is_dir(dirname($testFilename))
-                && file_exists($testFilename)
-                && is_readable($testFilename)
-            ) {
-                self::$_configFile = $testFilename;
-            }
-        }
-        if (!isset(self::$_configFile)) {
-            throw new InvalidArgumentException("filename must be an absolute filename to your config XML");
-        }
-    }
-
-
-    /**
-     * @return string
-     */
-    public static function getProjectConfigFilename()
-    {
-        if (isset(self::$_configFile)) {
-            return self::$_configFile;
-        }
-
-        return null;
     }
 
 
