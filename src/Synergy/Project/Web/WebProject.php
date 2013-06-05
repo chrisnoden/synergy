@@ -132,6 +132,8 @@ final class WebProject extends ProjectAbstract
         // Deal with any response object that was returned
         if ($response instanceof WebResponse) {
             $this->handleWebResponse($response);
+        } else if ($response instanceof Template\TemplateAbstract) {
+            $this->handleWebTemplate($response);
         }
     }
 
@@ -227,6 +229,16 @@ final class WebProject extends ProjectAbstract
         $response
             ->prepare($this->_originalWebRequest)
             ->send();
+    }
+
+
+    protected function handleWebTemplate(Template\TemplateAbstract $template)
+    {
+        $template->setCacheDir($this->getTempDir() . DIRECTORY_SEPARATOR . 'cache');
+        $response = $template->getWebResponse();
+        if ($response instanceof WebResponse) {
+            $this->handleWebResponse($response);
+        }
     }
 
 

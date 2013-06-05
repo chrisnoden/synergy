@@ -81,6 +81,11 @@ final class Project extends Singleton
     private static $_options = array();
 
 
+    /**
+     * Initialise the static Project data
+     *
+     * @return void
+     */
     public static function init()
     {
         if (!defined('SYNERGY_LIBRARY_PATH')) {
@@ -99,7 +104,11 @@ final class Project extends Singleton
 
 
     /**
-     * @param ProjectAbstract $object
+     * Set the Project Object
+     *
+     * @param ProjectAbstract $object Project Object
+     *
+     * @return void
      */
     public static function setObject(ProjectAbstract $object)
     {
@@ -108,13 +117,19 @@ final class Project extends Singleton
 
 
     /**
-     * @return ProjectAbstract
+     * The Project Object
+     *
+     * @return ProjectAbstract Project object
      */
     public static function getObject()
     {
         if (!self::$_projectInstance instanceof ProjectAbstract) {
             if (isset(self::$_projectType)) {
-                $classname = "Synergy\\Project\\" . ucfirst(self::$_projectType) . "\\" . ucfirst(self::$_projectType) . 'Project'; // eg Synergy\Project\Web\WebProject
+                $classname = "Synergy\\Project\\" .
+                    ucfirst(self::$_projectType) .
+                    "\\" .
+                    ucfirst(self::$_projectType) .
+                    'Project'; // eg Synergy\Project\Web\WebProject
                 self::$_projectInstance = new $classname();
             }
         }
@@ -127,6 +142,8 @@ final class Project extends Singleton
      * An alias for Synergy\Logger\Logger::setLogger()
      *
      * @param LoggerInterface $logger object must implement the Psr-3 standard
+     *
+     * @return void
      */
     public static function setLogger(LoggerInterface $logger)
     {
@@ -148,20 +165,26 @@ final class Project extends Singleton
     /**
      * Set the project name
      *
-     * @param $projectName
-     * @throws \Synergy\Exception\InvalidArgumentException
+     * @param string $projectName nice name of our project (30 char limit)
+     *
+     * @throws InvalidArgumentException
+     * @return void
      */
     public static function setName($projectName)
     {
         if (is_string($projectName) && mb_strlen(trim($projectName), 'utf-8') < 30) {
             self::$_projectName = trim($projectName);
         } else {
-            throw new InvalidArgumentException("projectName must a string, max 30 chars");
+            throw new InvalidArgumentException(
+                "projectName must a string, max 30 chars"
+            );
         }
     }
 
 
     /**
+     * Name of the project (30 char limit)
+     *
      * @return string name of our Project
      */
     public static function getName()
@@ -171,8 +194,12 @@ final class Project extends Singleton
 
 
     /**
-     * @param $projectType string one of the Project\ProjectType class constants
-     * @throws \Synergy\Exception\InvalidProjectTypeException
+     * Type of project
+     *
+     * @param string $projectType one of the Project\ProjectType class constants
+     *
+     * @throws InvalidProjectTypeException
+     * @return void
      */
     public static function setType($projectType)
     {
@@ -181,7 +208,9 @@ final class Project extends Singleton
         $aConstants = $r->getConstants();
 
         if (!in_array($projectType, $aConstants)) {
-            throw new InvalidProjectTypeException('projectType must be one of ' . implode(', ', $aConstants));
+            throw new InvalidProjectTypeException(
+                'projectType must be one of ' . implode(', ', $aConstants)
+            );
         }
 
         self::$_projectType = $projectType;
@@ -189,7 +218,9 @@ final class Project extends Singleton
 
 
     /**
-     * @return string
+     * Project\ProjectType class constant
+     *
+     * @return string project type
      */
     public static function getType()
     {
@@ -200,8 +231,10 @@ final class Project extends Singleton
     /**
      * Set true if this is a development environment and we want more verbose logging
      *
-     * @param $isDev
-     * @throws \Synergy\Exception\InvalidArgumentException
+     * @param bool $isDev dev environment
+     *
+     * @throws InvalidArgumentException
+     * @return void
      */
     public static function setDev($isDev)
     {
@@ -240,27 +273,31 @@ final class Project extends Singleton
 
 
     /**
-     * @param $path string project directory (no trailing slash)
-     * @throws \Synergy\Exception\InvalidArgumentException
+     * Set the path where the project lives
+     *
+     * @param string $dir project directory (no trailing slash)
+     *
+     * @throws InvalidArgumentException
+     * @return void
      */
-    public static function setProjectPath($path)
+    public static function setProjectPath($dir)
     {
-        if (!is_string($path)) {
+        if (!is_string($dir)) {
             throw new InvalidArgumentException(
                 "projectPath must be a string to the directory path"
             );
-        } else if (!is_dir($path)) {
+        } else if (!is_dir($dir)) {
             throw new InvalidArgumentException(
                 "projectPath must be the path to your project directory"
             );
-        } else if (!is_readable($path)) {
+        } else if (!is_readable($dir)) {
             throw new InvalidArgumentException(
                 "projectPath must have read permissions by user:" .
                 get_current_user()
             );
         }
 
-        self::$_projectPath = $path;
+        self::$_projectPath = $dir;
     }
 
 
@@ -320,7 +357,11 @@ final class Project extends Singleton
 
 
     /**
-     * @param array $options
+     * Set optional extra key:value pairs for the Project
+     *
+     * @param array $options extra params to pass to the Project
+     *
+     * @return void
      */
     public static function setOptions(array $options)
     {

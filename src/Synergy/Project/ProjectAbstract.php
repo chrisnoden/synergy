@@ -27,6 +27,7 @@
 namespace Synergy\Project;
 
 use Psr\Log\LogLevel;
+use Synergy\Exception\InvalidArgumentException;
 use Synergy\Object;
 use Synergy\Project;
 use Synergy\Tools\Tools;
@@ -48,11 +49,11 @@ abstract class ProjectAbstract extends Object
      */
     protected $timeStart;
     /**
-     * @var string the path to the SAL platform directory
+     * @var string path to the app directory
      */
-    protected $platformPath;
+    protected $appDir;
     /**
-     * @var @string path where our working temp folder (read-writable) exists
+     * @var string path where our working temp folder (read-writable) exists
      */
     protected $tempFolderPath;
     /**
@@ -116,32 +117,89 @@ abstract class ProjectAbstract extends Object
     /**
      * create/test our preferred temp folder structure
      *
-     * @param $path string path where we wish to store any project temp files/caches
+     * @param string $dir path where we wish to store any project temp files/caches
+     *
+     * @return void
+     * @throws InvalidArgumentException
      */
-    protected function initTempFolder($path)
+    public function setTempDir($dir)
     {
-        /** @noinspection PhpUndefinedMethodInspection */
-        $documentRoot = $this->initProjectDir($path);
-        if ($documentRoot) {
-            $this->tempFolderPath = $documentRoot;
-            return;
-        }
-        // The preferred temp folder location failed - try a fallback
-        /** @noinspection PhpUndefinedMethodInspection */
-        $documentRoot = $this->initProjectDir(sys_get_temp_dir() . DIRECTORY_SEPARATOR . escapeshellarg(Project::getName()));
-        if ($documentRoot) {
-            $this->tempFolderPath = $documentRoot;
-            return;
+        if (!is_dir($dir) && !$this->mkdir($dir, true)) {
+            throw new InvalidArgumentException(
+                sprintf("Invalid directory, %s", $dir)
+            );
+        } else if (!is_readable($dir)) {
+            throw new InvalidArgumentException(
+                sprintf("Directory %s not readable", $dir)
+            );
+        } else if (!is_writable($dir)) {
+            throw new InvalidArgumentException(
+                sprintf("Directory %s not writable", $dir)
+            );
+        } else {
+            $this->tempFolderPath = $dir;
         }
     }
 
 
     /**
-     * Creates a folder if it doesn't exist (plus the parent folders)
-     * Optionally tests it (even if it already exists) for read & write permissions by the platform
+     * temp directory
      *
-     * @param $path string folder we wish tested/created
-     * @param $test bool default=true test the folder for write permissions
+     * @return string temp dir
+     */
+    public function getTempDir()
+    {
+        return $this->tempFolderPath;
+    }
+
+
+    /**
+     * directory where the app data lives
+     *
+     * @param string $dir directory where the app data live
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function setAppDir($dir)
+    {
+        if (!is_dir($dir) && !$this->mkdir($dir, true)) {
+            throw new InvalidArgumentException(
+                sprintf("Invalid directory, %s", $dir)
+            );
+        } else if (!is_readable($dir)) {
+            throw new InvalidArgumentException(
+                sprintf("Directory %s not readable", $dir)
+            );
+        } else if (!is_writable($dir)) {
+            throw new InvalidArgumentException(
+                sprintf("Directory %s not writable", $dir)
+            );
+        } else {
+            $this->appDir = $dir;
+        }
+    }
+
+
+    /**
+     * directory where app data lives
+     *
+     * @return string directory where app data lives
+     */
+    public function getAppDir()
+    {
+        return $this->appDir;
+    }
+
+
+    /**
+     * Creates a folder if it doesn't exist (plus the parent folders)
+     * Optionally tests it (even if it already exists) for
+     * read & write permissions by the platform
+     *
+     * @param string $path folder we wish tested/created
+     * @param bool   $test default=true test the folder for write permissions
+     *
      * @return bool true if created/exists and is read/writeable
      */
     protected function mkdir($path, $test = true)
@@ -150,11 +208,15 @@ abstract class ProjectAbstract extends Object
             @mkdir($path, 0770, true);
         }
         // Test the folder for suitability
-        if ($test && file_exists($path) && is_readable($path) && is_dir($path)) {
-            // Try to save something in the path
-            @touch($path . DIRECTORY_SEPARATOR . 'testfile');
-            if (file_exists($path . DIRECTORY_SEPARATOR . 'testfile')) {
-                unlink($path . DIRECTORY_SEPARATOR . 'testfile');
+        if (file_exists($path) && is_readable($path) && is_dir($path)) {
+            if ($test) {
+                // Try to save something in the path
+                @touch($path . DIRECTORY_SEPARATOR . 'testfile');
+                if (file_exists($path . DIRECTORY_SEPARATOR . 'testfile')) {
+                    unlink($path . DIRECTORY_SEPARATOR . 'testfile');
+                    return true;
+                }
+            } else {
                 return true;
             }
         }
@@ -167,6 +229,8 @@ abstract class ProjectAbstract extends Object
      * is this a dev project
      *
      * @param bool $isDev is this a dev project
+     *
+     * @return void
      */
     public function setDev(bool $isDev)
     {
