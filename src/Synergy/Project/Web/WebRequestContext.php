@@ -47,7 +47,7 @@ class WebRequestContext extends RequestContext
 
 
     /**
-     * @param WebRequest $request
+     * @param WebRequest $request Object containing the HTTP request
      */
     public function fromWebRequest(WebRequest $request)
     {

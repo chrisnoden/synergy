@@ -109,6 +109,8 @@ class Router extends RouterAbstract
      * Set the RouteCollection used to match the route
      *
      * @param RouteCollection $collection our collection of Route objects
+     *
+     * @return void
      */
     public function setRouteCollection(RouteCollection $collection)
     {
@@ -131,6 +133,8 @@ class Router extends RouterAbstract
      * Set the RouteCollection by parsing a routes file
      *
      * @param string $filename absolute filename of the route config
+     *
+     * @return void
      */
     public function setRouteCollectionFromFile($filename)
     {
@@ -184,7 +188,7 @@ class Router extends RouterAbstract
     /**
      * Sets the $_controller and $_method data
      *
-     * @param $controller_string
+     * @param string $controller_string controller & action colon delimited
      *
      * @return void
      */
@@ -214,20 +218,6 @@ class Router extends RouterAbstract
         );
 
         return $parameters;
-    }
-
-
-    /**
-     * Detect the browser type (Mobile, iOS, Android)
-     * using the mobiledetect\Mobile_Detect library
-     *
-     * @return void
-     */
-    private function _detectMobileBrowser()
-    {
-        if (class_exists('\Mobile_Detect')) {
-            $this->_device = new \Mobile_Detect();
-        }
     }
 
 
@@ -283,6 +273,8 @@ class Router extends RouterAbstract
      * Doesn't verify the Controller is valid
      *
      * @param WebRequest $request request object
+     *
+     * @return void
      */
     public function match(WebRequest $request)
     {
@@ -326,7 +318,9 @@ class Router extends RouterAbstract
     /**
      * Mobile Device info from the mobiledetect\Mobile_Detect library
      *
-     * @param \Mobile_Detect $device
+     * @param \Mobile_Detect $device device object
+     *
+     * @return void
      */
     public function setDevice(\Mobile_Detect $device)
     {

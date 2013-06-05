@@ -145,6 +145,8 @@ final class WebProject extends ProjectAbstract
      * @param array      $parameters any parameters to pass
      *
      * @return mixed
+     * @throws InvalidControllerException
+     * @throws ProjectException
      */
     protected function callControllerAction(Controller $controller, $action, $parameters = array())
     {
@@ -158,41 +160,55 @@ final class WebProject extends ProjectAbstract
             );
         }
 
+        // Initialise the array of parameters for the action method
         $aParamsToPass = array();
-        
-        if (count($parameters) > 0) {
-            $r = new \ReflectionMethod($controller->__toString(), $action);
-            $classParams = $r->getParameters();
-            foreach ($classParams as $argKey=>$oName) {
-                $argName = (string)$oName->getName();
-                if (isset($parameters[(string)$argName])) {
-                    $aParamsToPass[$argKey] = $parameters[(string)$argName];
-                }
-            }
 
-            if (count($aParamsToPass) != count($classParams)) {
-                throw new ProjectException(
-                    sprintf(
-                        "%s::%s() expects %s parameters",
-                        $controller->__toString(),
-                        $action,
-                        count($classParams)
-                    )
-                );
+        // How many parameters does the controller action method expect
+        $r = new \ReflectionMethod($controller->__toString(), $action);
+        $classParams = $r->getParameters();
+        // Populate the parameters for the controller
+        foreach ($classParams as $argKey=>$oName) {
+            $argName = (string)$oName->getName();
+            if (isset($parameters[(string)$argName])) {
+                $aParamsToPass[$argKey] = $parameters[(string)$argName];
             }
         }
 
-        /**
-         * This is quicker than call_user_func_array
-         */
+        // If we don't have enough params for the action method then throw
+        // an exception
+        if (count($aParamsToPass) != count($classParams)) {
+            throw new ProjectException(
+                sprintf(
+                    "%s::%s() expects %s parameters",
+                    $controller->__toString(),
+                    $action,
+                    count($classParams)
+                )
+            );
+        }
+
+        // This is quicker than call_user_func_array
         switch(count($aParamsToPass)) {
-            case 0: $response = $controller->{$action}(); break;
-            case 1: $response = $controller->{$action}($aParamsToPass[0]); break;
-            case 2: $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1]); break;
-            case 3: $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2]); break;
-            case 4: $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2], $aParamsToPass[3]); break;
-            case 5: $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2], $aParamsToPass[3], $aParamsToPass[4]); break;
-            default: $response = call_user_func_array(array($controller->__toString(), $action), $aParamsToPass);  break;
+            case 0:
+                $response = $controller->{$action}();
+                break;
+            case 1:
+                $response = $controller->{$action}($aParamsToPass[0]);
+                break;
+            case 2:
+                $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1]);
+                break;
+            case 3:
+                $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2]);
+                break;
+            case 4:
+                $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2], $aParamsToPass[3]);
+                break;
+            case 5:
+                $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2], $aParamsToPass[3], $aParamsToPass[4]);
+                break;
+            default:
+                $response = call_user_func_array(array($controller->__toString(), $action), $aParamsToPass);
         }
             
         return $response;

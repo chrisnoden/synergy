@@ -175,6 +175,8 @@ class RouteMatcher extends UrlMatcher
                 array_replace($matches, $hostMatches)
             );
         }
+
+        return false;
     }
 
 
