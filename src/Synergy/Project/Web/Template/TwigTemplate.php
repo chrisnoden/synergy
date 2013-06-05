@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- * 
+ *
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,7 +58,7 @@ class TwigTemplate extends TemplateAbstract
     protected function initTemplateEngine()
     {
         $this->_loader = new \Twig_Loader_Filesystem($this->templateDir);
-        $this->_twig = new \Twig_Environment(
+        $this->_twig   = new \Twig_Environment(
             $this->_loader,
             array(
                 'cache' => $this->cacheDir,
@@ -78,12 +78,12 @@ class TwigTemplate extends TemplateAbstract
             $render = $this->_twig->render($this->templateFile, $this->parameters);
             return $render;
         } else {
-          throw new SynergyException(
-              sprintf(
-                  'Invalid call to %s without setting templateFile',
-                  __METHOD__
-              )
-          );
+            throw new SynergyException(
+                sprintf(
+                    'Invalid call to %s without setting templateFile',
+                    __METHOD__
+                )
+            );
         }
     }
 
