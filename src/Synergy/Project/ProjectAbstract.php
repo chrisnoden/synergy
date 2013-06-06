@@ -27,6 +27,7 @@
 namespace Synergy\Project;
 
 use Psr\Log\LogLevel;
+use Synergy\AutoLoader\SplClassLoader;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Object;
 use Synergy\Project;
@@ -60,10 +61,6 @@ abstract class ProjectAbstract extends Object
      * @var string filename of the main config file
      */
     protected $configFilename;
-    /**
-     * @var string path to the src directory
-     */
-    protected $projectDir;
     /**
      * @var bool is this a dev project
      */
@@ -179,6 +176,8 @@ abstract class ProjectAbstract extends Object
             );
         } else {
             $this->appDir = $dir;
+            $classLoader = new SplClassLoader($dir);
+            $classLoader->register();
         }
     }
 
@@ -259,47 +258,6 @@ abstract class ProjectAbstract extends Object
         }
 
         return false;
-    }
-
-
-
-    /**
-     * Set the path where the project src lives
-     *
-     * @param string $dir project directory (no trailing slash)
-     *
-     * @throws InvalidArgumentException
-     * @return void
-     */
-    public function setProjectPath($dir)
-    {
-        if (!is_string($dir)) {
-            throw new InvalidArgumentException(
-                "projectPath must be a string to the directory path"
-            );
-        } else if (!is_dir($dir)) {
-            throw new InvalidArgumentException(
-                "projectPath must be the path to your project directory"
-            );
-        } else if (!is_readable($dir)) {
-            throw new InvalidArgumentException(
-                "projectPath must have read permissions by user:" .
-                get_current_user()
-            );
-        }
-
-        $this->projectDir = $dir;
-    }
-
-
-    /**
-     * path of the
-     *
-     * @return string path of our src dir
-     */
-    public function getProjectPath()
-    {
-        return $this->projectDir;
     }
 
 
