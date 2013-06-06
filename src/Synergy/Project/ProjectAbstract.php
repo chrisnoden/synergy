@@ -56,7 +56,7 @@ abstract class ProjectAbstract extends Object
     /**
      * @var string path where our working temp folder (read-writable) exists
      */
-    protected $tempFolderPath;
+    protected $tempDir;
     /**
      * @var string filename of the main config file
      */
@@ -91,7 +91,10 @@ abstract class ProjectAbstract extends Object
         $synergy_endTime = microtime(true);
         $synergy_execTime = number_format($synergy_endTime - $this->timeStart, 4);
         if (Project::isDev()) {
-            Project::getLogger()->log(LogLevel::INFO, "Execution time=$synergy_execTime seconds");
+            Project::getLogger()->log(
+                LogLevel::INFO,
+                "Execution time=$synergy_execTime seconds"
+            );
         }
     }
 
@@ -136,7 +139,7 @@ abstract class ProjectAbstract extends Object
                 sprintf("Directory %s not writable", $dir)
             );
         } else {
-            $this->tempFolderPath = $dir;
+            $this->tempDir = $dir;
         }
     }
 
@@ -148,7 +151,7 @@ abstract class ProjectAbstract extends Object
      */
     public function getTempDir()
     {
-        return $this->tempFolderPath;
+        return $this->tempDir;
     }
 
 

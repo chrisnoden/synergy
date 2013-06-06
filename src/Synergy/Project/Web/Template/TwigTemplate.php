@@ -87,4 +87,18 @@ class TwigTemplate extends TemplateAbstract
         }
     }
 
+
+    /**
+     * Location of the template cache directory
+     *
+     * @param string $dir absolute location of the template cache directory
+     *
+     * @return void
+     */
+    public function setCacheDir($dir)
+    {
+        $dir .= DIRECTORY_SEPARATOR . 'twig';
+        parent::setCacheDir($dir);
+    }
+
 }

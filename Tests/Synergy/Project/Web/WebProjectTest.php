@@ -76,4 +76,20 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+
+    public function testCacheDir()
+    {
+        $obj = new WebProject();
+        $tempDir = SYNERGY_TEST_FILES_DIR . DIRECTORY_SEPARATOR . 'testcache';
+        if (is_dir($tempDir)) {
+            rmdir($tempDir);
+        }
+        $obj->setTempDir($tempDir);
+        if (is_dir($tempDir)) {
+            rmdir($tempDir);
+        } else {
+            $this->fail('Cache dir not created');
+        }
+    }
+
 }

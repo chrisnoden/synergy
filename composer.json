@@ -1,20 +1,15 @@
 {
     "name": "chrisnoden/synergy",
-    "description": "Synergy MVC framework for rapid web development",
-    "version": "0.1.0-dev",
-    "homepage": "https://github.com/chrisnoden/synergy",
     "type": "library",
+    "description": "Synergy MVC framework for rapid web development",
+    "keywords": ["mvc", "framework", "symfony"],
+    "homepage": "https://github.com/chrisnoden/synergy",
+    "license": "Apache License, Version 2.0",
+    "version": "0.1.0-dev",
     "minimum-stability": "dev",
     "authors": [
-        {
-            "name": "Chris Noden",
-            "email": "chris.noden@gmail.com"
-        }
+        { "name": "Chris Noden", "email": "chris@noden.net", "homepage": "http://www.chrisnoden.com" }
     ],
-    "autoload": {
-        "psr-0": { "Synergy": "src/" },
-        "classmap": [ "src/UASparser" ]
-    },
     "require": {
         "php": ">=5.3.3",
         "psr/log": "1.0.0",
@@ -26,6 +21,9 @@
     "suggest": {
         "chrisnoden/talkback": "dev-master",
         "mobiledetect/mobiledetectlib": "2.6.*"
+    },
+    "autoload": {
+        "psr-0": { "Synergy": "src/" },
+        "classmap": [ "src/UASparser" ]
     }
-
 }
