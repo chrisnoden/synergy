@@ -27,9 +27,10 @@
 namespace Synergy\Controller;
 
 use Synergy\Object;
+use Synergy\Project\Web\WebResponse;
 
 /**
- * Class ${NAME}
+ * Class Controller
  *
  * @category Synergy\Controller
  * @package  Synergy
@@ -43,10 +44,11 @@ class Controller extends Object implements ControllerInterface
     /**
      * Default action to be inherited by your own controller code
      *
-     * @return \Synergy\Project\Web\WebResponse
+     * @return WebResponse
      */
     public function defaultAction()
     {
+        return new WebResponse();
     }
 
 }

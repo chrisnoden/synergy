@@ -67,6 +67,24 @@ class Tools
     }
 
 
+    /**
+     * Recursively remove a directory and all contents - BE CAREFUL
+     *
+     * @param $dir
+     *
+     * @return bool
+     */
+    public static function removeDir($dir)
+    {
+        if (strlen($dir) > 4) {
+            $files = array_diff(scandir($dir), array('.','..'));
+            foreach ($files as $file) {
+                (is_dir("$dir/$file")) ? self::removeDir("$dir/$file") : unlink("$dir/$file");
+            }
+            return rmdir($dir);
+        }
+    }
+
 }
 
 

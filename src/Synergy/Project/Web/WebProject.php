@@ -28,6 +28,7 @@ namespace Synergy\Project\Web;
 
 use Symfony\Component\HttpFoundation\Request;
 use Synergy\Controller\Controller;
+use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\InvalidControllerException;
 use Synergy\Exception\ProjectException;
 use Synergy\Logger\Logger;
@@ -63,6 +64,10 @@ final class WebProject extends ProjectAbstract
      * @var WebRequest
      */
     private $_originalWebRequest;
+    /**
+     * @var string location of the view templates
+     */
+    private $_templateDir;
 
 
     /**
@@ -232,9 +237,22 @@ final class WebProject extends ProjectAbstract
     }
 
 
+    /**
+     * Renders a WebTemplate
+     *
+     * @param Template\TemplateAbstract $template
+     *
+     * @return void
+     */
     protected function handleWebTemplate(Template\TemplateAbstract $template)
     {
         $template->setCacheDir($this->getTempDir() . DIRECTORY_SEPARATOR . 'cache');
+        if (is_null($template->getTemplateDir()) && isset($this->_templateDir)) {
+            $template->setTemplateDir($this->_templateDir);
+        }
+        $template->setDev($this->isDev);
+        $template->setParameters($this->_controllerParameters);
+        $template->init();
         $response = $template->getWebResponse();
         if ($response instanceof WebResponse) {
             $this->handleWebResponse($response);
@@ -261,6 +279,45 @@ final class WebProject extends ProjectAbstract
     public function getWebRequest()
     {
         return $this->_originalWebRequest;
+    }
+
+
+    /**
+     * directory where the view templates are located
+     *
+     * @param string $dir directory where the view templates are located
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function setTemplateDir($dir)
+    {
+        if (!is_dir($dir)) {
+            throw new InvalidArgumentException(
+                sprintf("Invalid directory, %s", $dir)
+            );
+        } else if (!is_readable($dir)) {
+            throw new InvalidArgumentException(
+                sprintf("Directory %s not readable", $dir)
+            );
+        } else if (!is_writable($dir)) {
+            throw new InvalidArgumentException(
+                sprintf("Directory %s not writable", $dir)
+            );
+        } else {
+            $this->_templateDir = $dir;
+        }
+    }
+
+
+    /**
+     * directory where the view templates are located
+     *
+     * @return string directory where the view templates are located
+     */
+    public function getTemplateDir()
+    {
+        return $this->_templateDir;
     }
 
 }

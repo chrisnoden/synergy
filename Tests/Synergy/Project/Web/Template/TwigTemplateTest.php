@@ -27,6 +27,7 @@
 namespace Synergy\Tests\Project\Web\Template;
 
 use Synergy\Project\Web\Template\TwigTemplate;
+use Synergy\Tools\Tools;
 
 /**
  * Class TwigTemplateTest
@@ -62,20 +63,12 @@ class TwigTemplateTest extends \PHPUnit_Framework_TestCase
         $obj = new TwigTemplate();
         $testDir = SYNERGY_TEST_FILES_DIR . DIRECTORY_SEPARATOR . 'testcache';
         if (is_dir($testDir)) {
-            $this->removeDir($testDir);
+            Tools::removeDir($testDir);
         }
         $obj->setCacheDir($testDir);
         $this->assertFileExists($testDir);
-        $this->removeDir($testDir);
+        Tools::removeDir($testDir);
     }
 
-    private function removeDir($dir)
-    {
-        $files = array_diff(scandir($dir), array('.','..'));
-        foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? $this->removeDir("$dir/$file") : unlink("$dir/$file");
-        }
-        return rmdir($dir);
-    }
 
 }

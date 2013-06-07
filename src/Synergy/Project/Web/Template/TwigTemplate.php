@@ -64,6 +64,9 @@ class TwigTemplate extends TemplateAbstract
                 'cache' => $this->cacheDir,
             )
         );
+        if ($this->isDev) {
+            $this->_twig->clearCacheFiles();
+        }
     }
 
 

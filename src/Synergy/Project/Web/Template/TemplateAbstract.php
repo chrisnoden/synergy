@@ -27,8 +27,10 @@
 namespace Synergy\Project\Web\Template;
 
 use Synergy\Exception\InvalidArgumentException;
+use Synergy\Exception\SynergyException;
 use Synergy\Object;
 use Synergy\Project\Web\WebResponse;
+use Synergy\Tools\Tools;
 
 /**
  * Class TemplateAbstract
@@ -58,6 +60,10 @@ abstract class TemplateAbstract extends Object
      * @var string path to the cache directory
      */
     protected $cacheDir;
+    /**
+     * @var bool is this a dev environment
+     */
+    protected $isDev = false;
 
 
     /**
@@ -75,6 +81,7 @@ abstract class TemplateAbstract extends Object
      */
     public function init()
     {
+        $this->testTemplateFile();
         $this->initTemplateEngine();
     }
 
@@ -137,6 +144,38 @@ abstract class TemplateAbstract extends Object
 
 
     /**
+     * Tests that the template file exists
+     *
+     * @throws \Synergy\Exception\InvalidArgumentException
+     * @throws \Synergy\Exception\SynergyException
+     * @return void
+     */
+    protected function testTemplateFile()
+    {
+        if (!isset($this->templateFile)) {
+            throw new SynergyException(
+                'templateFile not set'
+            );
+        } else if (!isset($this->templateDir)) {
+            throw new SynergyException(
+                'templateDir not set'
+            );
+        }
+
+        $testFile = $this->templateDir . DIRECTORY_SEPARATOR . $this->templateFile;
+        if (!file_exists($testFile)) {
+            throw new InvalidArgumentException(
+                sprintf("Template File %s not found", $testFile)
+            );
+        } else if (!is_readable($testFile)) {
+            throw new InvalidArgumentException(
+                sprintf("Template File %s not readable", $testFile)
+            );
+        }
+    }
+
+
+    /**
      * Relative (to the templateDir) filename of the template
      *
      * @param string $filename relative filename of the template
@@ -146,18 +185,7 @@ abstract class TemplateAbstract extends Object
      */
     public function setTemplateFile($filename)
     {
-        $testFile = $this->templateDir . DIRECTORY_SEPARATOR . $filename;
-        if (!file_exists($testFile)) {
-            throw new InvalidArgumentException(
-                sprintf("%s : Template File %s not found", __METHOD__, $testFile)
-            );
-        } else if (!is_readable($testFile)) {
-            throw new InvalidArgumentException(
-                sprintf("%s : Template File %s not readable", __METHOD__, $testFile)
-            );
-        } else {
-            $this->templateFile = $filename;
-        }
+        $this->templateFile = $filename;
     }
 
 
@@ -265,6 +293,32 @@ abstract class TemplateAbstract extends Object
     public function getCacheDir()
     {
         return $this->cacheDir;
+    }
+
+
+    /**
+     * is this a dev project
+     *
+     * @param bool $isDev is this a dev project
+     *
+     * @return void
+     */
+    public function setDev($isDev)
+    {
+        $this->isDev = $isDev;
+    }
+
+
+    /**
+     * Remove the entire template cache dir
+     *
+     * @return void
+     */
+    public function emptyCacheDir()
+    {
+        if (isset($this->cacheDir) && is_dir($this->cacheDir)) {
+            Tools::removeDir($this->cacheDir);
+        }
     }
 
 }
