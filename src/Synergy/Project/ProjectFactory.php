@@ -27,6 +27,7 @@
 namespace Synergy\Project;
 
 use Synergy\Project;
+use \Psr\Log\LoggerInterface;
 
 /**
  * Class ProjectFactory
@@ -55,7 +56,7 @@ final class ProjectFactory
     public static function build(
         $projectName,
         $projectType,
-        \Psr\Log\LoggerInterface $Logger,
+        LoggerInterface $Logger,
         array $options = array()
     ) {
         Project::init();
