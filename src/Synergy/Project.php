@@ -137,7 +137,7 @@ final class Project extends Singleton
      *
      * @return void
      */
-    public static function setLogger(LoggerInterface $logger)
+    public static function setLogger(\Psr\Log\LoggerInterface $logger)
     {
         Logger::setLogger($logger);
     }

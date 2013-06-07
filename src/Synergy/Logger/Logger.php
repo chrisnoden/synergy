@@ -77,7 +77,7 @@ class Logger extends Singleton
      *
      * @param LoggerInterface $logger
      */
-    public static function setLogger(LoggerInterface $logger)
+    public static function setLogger(\Psr\Log\LoggerInterface $logger)
     {
         self::$_logger = $logger;
     }
