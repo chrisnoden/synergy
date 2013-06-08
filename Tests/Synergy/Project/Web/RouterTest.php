@@ -46,7 +46,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $obj = new Router();
         $this->assertInstanceOf('Synergy\Project\Web\Router', $obj);
-        $this->assertInstanceOf('Synergy\Project\RouterAbstract', $obj);
         $this->assertInstanceOf('Synergy\Object', $obj);
     }
 
