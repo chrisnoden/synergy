@@ -32,7 +32,7 @@ use Synergy\Logger\Logger;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
-use Synergy\Project\RouterAbstract;
+use Synergy\Object;
 
 /**
  * Class Router
@@ -43,7 +43,7 @@ use Synergy\Project\RouterAbstract;
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class Router extends RouterAbstract
+class Router extends Object
 {
 
     /**
