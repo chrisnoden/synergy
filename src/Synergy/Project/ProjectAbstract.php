@@ -126,7 +126,7 @@ abstract class ProjectAbstract extends Object
      */
     public function setTempDir($dir)
     {
-        if (!is_dir($dir) && !$this->mkdir($dir, true)) {
+        if (!is_dir($dir) && !Tools::mkdir($dir, true)) {
             throw new InvalidArgumentException(
                 sprintf("Invalid directory, %s", $dir)
             );
@@ -165,7 +165,7 @@ abstract class ProjectAbstract extends Object
      */
     public function setAppDir($dir)
     {
-        if (!is_dir($dir) && !$this->mkdir($dir, true)) {
+        if (!is_dir($dir) && !Tools::mkdir($dir, true)) {
             throw new InvalidArgumentException(
                 sprintf("Invalid directory, %s", $dir)
             );
@@ -228,39 +228,6 @@ abstract class ProjectAbstract extends Object
     public function getConfigFilename()
     {
         return $this->configFilename;
-    }
-
-
-    /**
-     * Creates a folder if it doesn't exist (plus the parent folders)
-     * Optionally tests it (even if it already exists) for
-     * read & write permissions by the platform
-     *
-     * @param string $path folder we wish tested/created
-     * @param bool   $test default=true test the folder for write permissions
-     *
-     * @return bool true if created/exists and is read/writeable
-     */
-    protected function mkdir($path, $test = true)
-    {
-        if (!file_exists($path) || !is_dir($path)) {
-            @mkdir($path, 0770, true);
-        }
-        // Test the folder for suitability
-        if (file_exists($path) && is_readable($path) && is_dir($path)) {
-            if ($test) {
-                // Try to save something in the path
-                @touch($path . DIRECTORY_SEPARATOR . 'testfile');
-                if (file_exists($path . DIRECTORY_SEPARATOR . 'testfile')) {
-                    unlink($path . DIRECTORY_SEPARATOR . 'testfile');
-                    return true;
-                }
-            } else {
-                return true;
-            }
-        }
-
-        return false;
     }
 
 

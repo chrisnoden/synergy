@@ -41,6 +41,14 @@ class CliProject extends ProjectAbstract
 {
 
     /**
+     * Instantiate a new CliProject object
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
      * Run our CLI Project
      *
      * @return void

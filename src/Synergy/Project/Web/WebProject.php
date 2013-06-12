@@ -71,7 +71,7 @@ final class WebProject extends ProjectAbstract
 
 
     /**
-     * Instantiate a new Web_Handler object
+     * Instantiate a new object
      *
      * @param WebRequest $request optional WebRequest object
      */
