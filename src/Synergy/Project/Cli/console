@@ -1,0 +1,80 @@
+#!/usr/bin/env php
+<?php
+
+// if you don't want to setup permissions the proper way, just uncomment the following PHP line
+// read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
+//umask(0000);
+
+/**
+ * Choose your own timezone if this is not appropriate
+ * The possible values are here: http://uk.php.net/manual/en/timezones.php
+ */
+if (!ini_get('date.timezone')) {
+    date_default_timezone_set('Europe/London');
+}
+
+/**
+ * Optional - Set our locale for string/character functions
+ * NB This does not work on all systems so you may need to remove it
+ */
+setlocale(LC_ALL, 'en_GB');
+
+// Check this is coming from the CLI
+if (PHP_SAPI !== 'cli') {
+    die("Must be run on command line, eg php -f ".__FILE__."\n");
+}
+
+/**
+ * Stop PHP timing out
+ */
+set_time_limit(0);
+
+/**
+ * Load composer autoload.php
+ */
+require_once(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'autoload.php');
+
+
+/**
+ * Init the Synergy Exception and Error handling
+ */
+set_exception_handler('Synergy\ExceptionHandler::ExceptionHandler');
+set_error_handler('Synergy\ExceptionHandler::ErrorHandler');
+
+/**
+ * We also register a shutdown function
+ */
+register_shutdown_function('Synergy\ExceptionHandler::ShutdownHandler');
+
+/**
+ * Create a Talkback collection
+ */
+$logger = \Talkback\Logger::getLogger('bundle logger');
+$logger
+    ->addChannel(
+        array(
+            \Psr\Log\LogLevel::ERROR,
+            \Psr\Log\LogLevel::CRITICAL,
+            \Psr\Log\LogLevel::ALERT,
+            \Psr\Log\LogLevel::EMERGENCY,
+            \Psr\Log\LogLevel::INFO,
+            \Psr\Log\LogLevel::NOTICE,
+            \Psr\Log\LogLevel::WARNING
+        ),
+        \Talkback\Channel\ChannelFactory::File('/tmp/synergy.log'))
+    ->addChannel(\Psr\Log\LogLevel::CRITICAL, \Talkback\Channel\ChannelFactory::Basic())
+    ->addChannel(\Psr\Log\LogLevel::INFO, \Talkback\Channel\ChannelFactory::Growl('Bundle'));
+
+/**
+ * @var \Synergy\Project\Cli\CliProject $project
+ */
+$project =
+    \Synergy\Project\ProjectFactory::build(
+        'Synergy Bundle',
+        \Synergy\Project\ProjectType::CLI,
+        $logger
+    );
+$project->setDev(true);
+$project->setAppDir(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'app');
+$project->setTempDir('/tmp');
+$project->launch();
