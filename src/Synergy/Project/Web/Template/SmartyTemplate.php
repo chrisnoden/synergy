@@ -117,36 +117,38 @@ class SmartyTemplate extends TemplateAbstract
     {
         if (!is_dir($this->cacheDir)) {
             $this->mkdir($this->cacheDir, true);
-            // compiled templates dir
-            $path
-                = $this->cacheDir .
-                DIRECTORY_SEPARATOR .
-                'templates_c' .
-                DIRECTORY_SEPARATOR;
-            if ($this->mkdir($path, false)) {
-                $this->_loader->setCompileDir($path);
-            }
-
-            // cache dir
-            $path
-                = $this->cacheDir .
-                DIRECTORY_SEPARATOR .
-                'cache' .
-                DIRECTORY_SEPARATOR;
-            if ($this->mkdir($path, false)) {
-                $this->_loader->setCacheDir($path);
-            }
-
-            // configs dir
-            $path
-                = $this->cacheDir .
-                DIRECTORY_SEPARATOR .
-                'configs' .
-                DIRECTORY_SEPARATOR;
-            if ($this->mkdir($path, false)) {
-                $this->_loader->setConfigDir($path);
-            }
         }
+
+        // compiled templates dir
+        $path
+            = $this->cacheDir .
+            DIRECTORY_SEPARATOR .
+            'templates_c' .
+            DIRECTORY_SEPARATOR;
+        if (!is_dir(path) && $this->mkdir($path, false)) {
+            $this->_loader->setCompileDir($path);
+        }
+
+        // cache dir
+        $path
+            = $this->cacheDir .
+            DIRECTORY_SEPARATOR .
+            'cache' .
+            DIRECTORY_SEPARATOR;
+        if (!is_dir(path) && $this->mkdir($path, false)) {
+            $this->_loader->setCacheDir($path);
+        }
+
+        // configs dir
+        $path
+            = $this->cacheDir .
+            DIRECTORY_SEPARATOR .
+            'configs' .
+            DIRECTORY_SEPARATOR;
+        if (!is_dir(path) && $this->mkdir($path, false)) {
+            $this->_loader->setConfigDir($path);
+        }
+
     }
 
 }
