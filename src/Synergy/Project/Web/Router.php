@@ -27,6 +27,7 @@
 namespace Synergy\Project\Web;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Synergy\Controller\Parser;
 use Synergy\Exception\InvalidControllerException;
 use Synergy\Logger\Logger;
 use Symfony\Component\Routing\RouteCollection;
@@ -55,13 +56,9 @@ class Router extends Object
      */
     private $_route;
     /**
-     * @var string name of the winning controller
+     * @var Parser matching controller and method
      */
-    private $_controller;
-    /**
-     * @var string name of the winning method/action
-     */
-    private $_method;
+    private $_parser;
     /**
      * @var array parameters to pass to the method
      */
@@ -100,8 +97,8 @@ class Router extends Object
 
         $this->_storeDataFromRouteParameters($parameters);
         Logger::info("Route name: " . $this->_route);
-        Logger::info("Controller ClassName: " . $this->_controller);
-        Logger::info("Controller Action: " . $this->_method);
+        Logger::info("Controller ClassName: " . $this->_parser->getControllerName());
+        Logger::info("Controller Action: " . $this->_parser->getMethodName());
     }
 
 
@@ -170,7 +167,7 @@ class Router extends Object
             {
                 case '_controller':
                 case 'controller':
-                    $this->_parseControllerString($val);
+                    $this->_parser = new Parser($val);
                     break;
 
                 case '_route':
@@ -181,26 +178,6 @@ class Router extends Object
                 default:
                     $this->_parameters[$key] = $val;
             }
-        }
-    }
-
-
-    /**
-     * Sets the $_controller and $_method data
-     *
-     * @param string $controller_string controller & action colon delimited
-     *
-     * @return void
-     */
-    private function _parseControllerString($controller_string)
-    {
-        if (strpos($controller_string, ':')) {
-            $arr               = explode(':', $controller_string);
-            $this->_controller = $arr[0];
-            $this->_method     = $arr[1] . 'Action';
-        } else {
-            $this->_controller = $controller_string;
-            $this->_method     = 'defaultAction';
         }
     }
 
@@ -222,33 +199,6 @@ class Router extends Object
 
 
     /**
-     * Check the controller with the given name exists and is accessible
-     *
-     * @param string $controllerName string name controller
-     *
-     * @return bool
-     * @throws \Synergy\Exception\InvalidControllerException
-     */
-    public function validController($controllerName = null)
-    {
-        if (is_null($controllerName) && !is_null($this->_controller)) {
-            $controllerName = $this->_controller;
-        }
-
-        if (is_null($controllerName)) {
-            return false;
-        }
-
-        if (class_exists($controllerName)) {
-            return true;
-        }
-        throw new InvalidControllerException(
-            'Controller ' . $controllerName . ' not found'
-        );
-    }
-
-
-    /**
      * Derive a successful controller and method from a Request object
      *
      * @param WebRequest $request request object
@@ -259,12 +209,9 @@ class Router extends Object
     public function getControllerFromRequest(WebRequest $request)
     {
         $this->_run($request);
-        if ($this->validController()) {
-            $controller = new $this->_controller();
-            return $controller;
-        }
-
-        throw new InvalidControllerException("Unable to locate a valid controller");
+        $controllerName = $this->_parser->getControllerName();
+        $controller = new $controllerName();
+        return $controller;
     }
 
 
@@ -289,7 +236,7 @@ class Router extends Object
      */
     public function getMethodName()
     {
-        return $this->_method;
+        return $this->_parser->getMethodName();
     }
 
 
@@ -300,7 +247,7 @@ class Router extends Object
      */
     public function getControllerName()
     {
-        return $this->_controller;
+        return $this->_parser->getControllerName();
     }
 
 

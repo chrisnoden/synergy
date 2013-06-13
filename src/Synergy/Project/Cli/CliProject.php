@@ -48,12 +48,16 @@ class CliProject extends ProjectAbstract
         parent::__construct();
     }
 
+
     /**
      * Run our CLI Project
      *
+     * @param string $action     class and method to launch
+     * @param array  $parameters parameters to pass to the method
+     *
      * @return void
      */
-    public function launch()
+    public function launch($action = null, array $parameters = array())
     {
 
     }
