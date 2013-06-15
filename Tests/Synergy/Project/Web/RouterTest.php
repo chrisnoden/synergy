@@ -311,53 +311,55 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      * Creating a route for a specific mobile operating system
      * The router should return that controller & method
      */
-//    public function testDeviceOsRouting()
-//    {
-//        // Create a route and routecollection
-//        $route0  = new Route('/mobiletest', array('controller' => 'MobileController:android'), array(), array('device' => 'mobile', 'os' => 'android'));
-//        $route1  = new Route('/mobiletest', array('controller' => 'MobileController:ios'), array(), array('device' => 'mobile', 'os' => 'iOS', 'type' => 'iPhone'));
-//        $route2  = new Route('/mobiletest', array('controller' => 'MobileController:default'), array(), array('device' => 'mobile'));
-//        $route3  = new Route('/mobiletest', array('controller' => 'GenericController:android'), array(), array('device' => 'tablet', 'os' => 'Android', 'type' => 'SonyTablet'));
-//        $routes = new RouteCollection();
-//        $routes->add('route0', $route0);
-//        $routes->add('route1', $route1);
-//        $routes->add('route2', $route2);
-//        $routes->add('route3', $route3);
-//
-//        // Our test request
-//        $request = WebRequest::create(
-//            '/mobiletest',
-//            'GET',
-//            array('name' => 'Chris Noden')
-//        );
-//        $request->overrideGlobals();
-//
-//        // Build our fake iPhone test device object
-//        $device = new \Mobile_Detect();
-//        $device->setUserAgent('Mozilla/5.0 (iPhone; U; CPU iPhone OS 6_0 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/10A5355d Safari/7534.48.3');
-//        // Pass it to our WebRequest so it thinks the request came from an iPhone
-//        $request->setDevice($device);
-//
-//        $obj = new WebRouter($request);
-//        // Match the request to the route
-//        $obj->match();
-//        $controller = $obj->getController();
-//        $this->assertEquals('MobileController', $controller->getClassName());
-//        $this->assertEquals('iosAction', $controller->getMethodName());
-//
-//        // Test using an Android Tablet
-//        $device->setUserAgent('Mozilla/5.0 (Linux; U; Android 4.0.3; ja-jp; Sony Tablet P Build/TISU0085) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30');
-//        $request->setDevice($device);
-//
-//        $obj = new WebRouter($request);
-//        // Pass our route collection to our WebRouter object
-//        $obj->setRouteCollection($routes);
-//        // Match the request to the route
-//        $obj->match();
-//        $controller = $obj->getController();
-//        $this->assertEquals('GenericController', $controller->getClassName());
-//        $this->assertEquals('androidAction', $controller->getMethodName());
-//    }
+    public function testDeviceOsRouting()
+    {
+        // Create a route and routecollection
+        $route0  = new Route('/mobiletest', array('controller' => 'MobileController:android'), array(), array('device' => 'mobile', 'os' => 'android'));
+        $route1  = new Route('/mobiletest', array('controller' => 'MobileController:ios'), array(), array('device' => 'mobile', 'os' => 'iOS', 'type' => 'iPhone'));
+        $route2  = new Route('/mobiletest', array('controller' => 'MobileController:default'), array(), array('device' => 'mobile'));
+        $route3  = new Route('/mobiletest', array('controller' => 'GenericController:android'), array(), array('device' => 'tablet', 'os' => 'Android', 'type' => 'SonyTablet'));
+        $routes = new RouteCollection();
+        $routes->add('route0', $route0);
+        $routes->add('route1', $route1);
+        $routes->add('route2', $route2);
+        $routes->add('route3', $route3);
+
+        // Our test request
+        $request = WebRequest::create(
+            '/mobiletest',
+            'GET',
+            array('name' => 'Chris Noden')
+        );
+        $request->overrideGlobals();
+
+        // Build our fake iPhone test device object
+        $device = new \Mobile_Detect();
+        $device->setUserAgent('Mozilla/5.0 (iPhone; U; CPU iPhone OS 6_0 like Mac OS X; en-us) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/10A5355d Safari/7534.48.3');
+        // Pass it to our WebRequest so it thinks the request came from an iPhone
+        $request->setDevice($device);
+
+        $obj = new WebRouter($request);
+        // Pass our route collection to our WebRouter object
+        $obj->setRouteCollection($routes);
+        // Match the request to the route
+        $obj->match();
+        $controller = $obj->getController();
+        $this->assertEquals('MobileController', $controller->getClassName());
+        $this->assertEquals('iosAction', $controller->getMethodName());
+
+        // Test using an Android Tablet
+        $device->setUserAgent('Mozilla/5.0 (Linux; U; Android 4.0.3; ja-jp; Sony Tablet P Build/TISU0085) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30');
+        $request->setDevice($device);
+
+        $obj = new WebRouter($request);
+        // Pass our route collection to our WebRouter object
+        $obj->setRouteCollection($routes);
+        // Match the request to the route
+        $obj->match();
+        $controller = $obj->getController();
+        $this->assertEquals('GenericController', $controller->getClassName());
+        $this->assertEquals('androidAction', $controller->getMethodName());
+    }
 
 
     /**
