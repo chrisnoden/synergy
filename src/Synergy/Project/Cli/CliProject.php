@@ -26,6 +26,7 @@
 
 namespace Synergy\Project\Cli;
 
+use Synergy\Controller\Parser;
 use Synergy\Project\ProjectAbstract;
 
 /**
@@ -59,7 +60,13 @@ class CliProject extends ProjectAbstract
      */
     public function launch($action = null, array $parameters = array())
     {
-
+        if (!is_null($action)) {
+            $parser = new Parser($action);
+            $controllerName = $parser->getControllerName();
+            $methodName = $parser->getMethodName();
+            $controller = new $controllerName();
+            $controller->{$methodName}();
+        }
     }
 
 }

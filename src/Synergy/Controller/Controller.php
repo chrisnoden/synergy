@@ -44,11 +44,10 @@ class Controller extends Object implements ControllerInterface
     /**
      * Default action to be inherited by your own controller code
      *
-     * @return WebResponse
+     * @return void
      */
     public function defaultAction()
     {
-        return new WebResponse();
     }
 
 }

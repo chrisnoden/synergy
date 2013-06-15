@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * 
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,25 +24,20 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Controller;
+namespace Synergy\Project\Cli;
+
+use Synergy\Router\RouterAbstract;
 
 /**
- * Class ControllerInterface
+ * Class CliRouter
  *
- * @category Synergy\Controller
+ * @category Synergy\Project\Cli
  * @package  Synergy
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-interface ControllerInterface
+class CliRouter extends RouterAbstract
 {
-
-    /**
-     * Every controller needs a defaultAction
-     *
-     * @return mixed|void
-     */
-    public function defaultAction();
 
 }

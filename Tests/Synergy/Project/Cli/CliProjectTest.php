@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * 
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,25 +24,42 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Controller;
+namespace Synergy\Tests\Project\Cli;
+
+use Synergy\Project;
+use Synergy\Project\Cli\CliProject;
 
 /**
- * Class ControllerInterface
+ * Class CliProjectTest
  *
- * @category Synergy\Controller
+ * @category Synergy\Tests\Project\Cli
  * @package  Synergy
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-interface ControllerInterface
+class CliProjectTest extends \PHPUnit_Framework_TestCase
 {
 
-    /**
-     * Every controller needs a defaultAction
-     *
-     * @return mixed|void
-     */
-    public function defaultAction();
+    public static function setUpBeforeClass()
+    {
+        Project::setName('TestProject');
+    }
+
+
+    public function testBaseObject()
+    {
+        $obj = new CliProject();
+        $this->assertInstanceOf('Synergy\Project\Cli\CliProject', $obj);
+        $this->assertInstanceOf('Synergy\Project\ProjectAbstract', $obj);
+        $this->assertInstanceOf('Synergy\Object', $obj);
+        $this->assertEquals('TestProject', $obj->__toString());
+    }
+
+    public function testSimpleRoutingRequest()
+    {
+        $obj = new CliProject();
+
+    }
 
 }

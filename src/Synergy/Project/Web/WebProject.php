@@ -27,10 +27,8 @@
 namespace Synergy\Project\Web;
 
 use Symfony\Component\HttpFoundation\Request;
-use Synergy\Controller\Controller;
+use Synergy\Controller\ControllerEntity;
 use Synergy\Exception\InvalidArgumentException;
-use Synergy\Exception\InvalidControllerException;
-use Synergy\Exception\ProjectException;
 use Synergy\Logger\Logger;
 use Synergy\Project;
 use Synergy\Project\ProjectAbstract;
@@ -49,17 +47,9 @@ final class WebProject extends ProjectAbstract
 {
 
     /**
-     * @var string name of the successful controller class
+     * @var ControllerEntity
      */
-    private $_controllerClassName;
-    /**
-     * @var string name of the successful action method
-     */
-    private $_controllerActionName;
-    /**
-     * @var array parameters to pass to the controller
-     */
-    private $_controllerParameters = array();
+    private $_controller;
     /**
      * @var WebRequest
      */
@@ -109,30 +99,19 @@ final class WebProject extends ProjectAbstract
      */
     public function launch()
     {
-        $router = new Router();
+        $router = new WebRouter($this->_originalWebRequest);
         if (defined('SYNERGY_WEB_ROOT')) {
             $filename = dirname(SYNERGY_WEB_ROOT) . '/app/config/routes.yml';
             $router->setRouteCollectionFromFile($filename);
         }
+        $router->match();
 
         /**
-         * Get the Controller object
+         * Get the ControllerEntity
          */
-        $controller = $router->getControllerFromRequest(
-            $this->_originalWebRequest
-        );
-        // Store the name of the successful controller
-        $this->_controllerClassName = $router->getControllerName();
-        // Store the name of the successful action method
-        $this->_controllerActionName = $router->getMethodName();
-        // Store the parameters to be passed to the action
-        $this->_controllerParameters = $router->getControllerParameters();
+        $this->_controller = $router->getController();
         // Call the action
-        $response = $this->callControllerAction(
-            $controller,
-            $this->_controllerActionName,
-            $this->_controllerParameters
-        );
+        $response = $this->_controller->callControllerAction();
 
         // Deal with any response object that was returned
         if ($response instanceof WebResponse) {
@@ -142,84 +121,6 @@ final class WebProject extends ProjectAbstract
         }
     }
 
-
-    /**
-     * Call the successful method in the controller class passing in the
-     * necessary parameters
-     *
-     * @param Controller $controller the Controller object
-     * @param string     $action     the method name
-     * @param array      $parameters any parameters to pass
-     *
-     * @return mixed
-     * @throws InvalidControllerException
-     * @throws ProjectException
-     */
-    protected function callControllerAction(Controller $controller, $action, $parameters = array())
-    {
-        if (!is_callable(array($controller->__toString(), $action))) {
-            throw new InvalidControllerException(
-                sprintf(
-                    "%s::%s() is not callable",
-                    $controller->__toString(),
-                    $action
-                )
-            );
-        }
-
-        // Initialise the array of parameters for the action method
-        $aParamsToPass = array();
-
-        // How many parameters does the controller action method expect
-        $r = new \ReflectionMethod($controller->__toString(), $action);
-        $classParams = $r->getParameters();
-        // Populate the parameters for the controller
-        foreach ($classParams as $argKey=>$oName) {
-            $argName = (string)$oName->getName();
-            if (isset($parameters[(string)$argName])) {
-                $aParamsToPass[$argKey] = $parameters[(string)$argName];
-            }
-        }
-
-        // If we don't have enough params for the action method then throw
-        // an exception
-        if (count($aParamsToPass) != count($classParams)) {
-            throw new ProjectException(
-                sprintf(
-                    "%s::%s() expects %s parameters",
-                    $controller->__toString(),
-                    $action,
-                    count($classParams)
-                )
-            );
-        }
-
-        // This is quicker than call_user_func_array
-        switch(count($aParamsToPass)) {
-            case 0:
-                $response = $controller->{$action}();
-                break;
-            case 1:
-                $response = $controller->{$action}($aParamsToPass[0]);
-                break;
-            case 2:
-                $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1]);
-                break;
-            case 3:
-                $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2]);
-                break;
-            case 4:
-                $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2], $aParamsToPass[3]);
-                break;
-            case 5:
-                $response = $controller->{$action}($aParamsToPass[0], $aParamsToPass[1], $aParamsToPass[2], $aParamsToPass[3], $aParamsToPass[4]);
-                break;
-            default:
-                $response = call_user_func_array(array($controller->__toString(), $action), $aParamsToPass);
-        }
-            
-        return $response;
-    }
 
 
     /**
@@ -251,7 +152,7 @@ final class WebProject extends ProjectAbstract
             $template->setTemplateDir($this->_templateDir);
         }
         $template->setDev($this->isDev);
-        $template->setParameters($this->_controllerParameters);
+        $template->setParameters($this->_controller->getParameters());
         $template->init();
         $response = $template->getWebResponse();
         if ($response instanceof WebResponse) {
@@ -267,7 +168,18 @@ final class WebProject extends ProjectAbstract
      */
     public function getControllerName()
     {
-        return $this->_controllerClassName;
+        return $this->_controller->getClassName();
+    }
+
+
+    /**
+     * Value of member _controller
+     *
+     * @return \Synergy\Controller\ControllerEntity value of member
+     */
+    public function getController()
+    {
+        return $this->_controller;
     }
 
 
