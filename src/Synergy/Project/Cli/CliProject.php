@@ -27,6 +27,7 @@
 namespace Synergy\Project\Cli;
 
 use Synergy\Controller\Parser;
+use Synergy\Exception\SynergyException;
 use Synergy\Project\ProjectAbstract;
 
 /**
@@ -42,10 +43,37 @@ class CliProject extends ProjectAbstract
 {
 
     /**
-     * Instantiate a new CliProject object
+     * @var string
      */
-    public function __construct()
+    protected $request;
+    /**
+     * @var array
+     */
+    protected $parameters = array();
+
+
+    /**
+     * Instantiate a new CliProject object
+     *
+     * @param null  $request    the action request notation
+     * @param array $parameters parameters to pass to the action
+     *
+     * @throws SynergyException
+     */
+    public function __construct($request = null, array $parameters = array())
     {
+        // Check this is coming from the CLI
+        if (PHP_SAPI !== 'cli') {
+            throw new SynergyException(
+                sprintf('%s must be run from command line project', __CLASS__)
+            );
+        }
+
+        if (!is_null($request)) {
+            $this->request = $request;
+        }
+        $this->parameters = $parameters;
+
         parent::__construct();
     }
 
@@ -60,13 +88,14 @@ class CliProject extends ProjectAbstract
      */
     public function launch($action = null, array $parameters = array())
     {
-        if (!is_null($action)) {
-            $parser = new Parser($action);
-            $controllerName = $parser->getControllerName();
-            $methodName = $parser->getMethodName();
-            $controller = new $controllerName();
-            $controller->{$methodName}();
-        }
+//        if (!is_null($action)) {
+//            $controllerName = $parser->getControllerName();
+//            $methodName = $parser->getMethodName();
+//            $controller = new $controllerName();
+//            $controller->{$methodName}();
+//        }
+
+
     }
 
 }
