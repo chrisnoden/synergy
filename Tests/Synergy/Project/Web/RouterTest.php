@@ -359,6 +359,20 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $controller = $obj->getController();
         $this->assertEquals('GenericController', $controller->getClassName());
         $this->assertEquals('androidAction', $controller->getMethodName());
+
+        // Test fall through
+        $device->setUserAgent('ChrisNoden/Synergy (Not a real browser;OK)');
+        $request->setDevice($device);
+
+        $obj = new WebRouter($request);
+        // Pass our route collection to our WebRouter object
+        $obj->setRouteCollection($routes);
+        // Match the request to the route
+        $obj->match();
+        $controller = $obj->getController();
+        $this->assertEquals('Synergy\Controller\DefaultController', $controller->getClassName());
+        $this->assertEquals('defaultAction', $controller->getMethodName());
+
     }
 
 
