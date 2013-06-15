@@ -8,7 +8,7 @@
     "version": "0.1.0-dev",
     "minimum-stability": "dev",
     "authors": [
-        { "name": "Chris Noden", "email": "chris@noden.net", "homepage": "http://www.chrisnoden.com" }
+        { "name": "Chris Noden", "email": "chris.noden@gmail.com", "homepage": "http://www.chrisnoden.com" }
     ],
     "require": {
         "php": ">=5.3.3",
@@ -17,7 +17,7 @@
         "symfony/routing": "2.2.*",
         "symfony/config": "2.2.*",
         "symfony/yaml": "2.2.*",
-        "zetacomponents/console-tools": "dev-master"
+        "zetacomponents/console-tools": "1.6"
     },
     "suggest": {
         "chrisnoden/talkback": "dev-master",
