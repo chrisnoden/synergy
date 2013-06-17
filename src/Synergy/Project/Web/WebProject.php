@@ -97,7 +97,7 @@ final class WebProject extends ProjectAbstract
      *
      * @return void
      */
-    public function launch()
+    protected  function launch()
     {
         $router = new WebRouter($this->_originalWebRequest);
         if (defined('SYNERGY_WEB_ROOT')) {

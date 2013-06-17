@@ -110,11 +110,41 @@ abstract class ProjectAbstract extends Object
 
 
     /**
+     * Run our project
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $this->loadBootstrap();
+
+        $this->launch();
+    }
+
+
+    /**
+     * Include a project based bootstrap file
+     *
+     * @param string $filename bootstrap file to include
+     */
+    protected function loadBootstrap($filename = null)
+    {
+        if (is_null($filename)) {
+            $filename = $this->appDir . DIRECTORY_SEPARATOR . 'bootstrap.php';
+        }
+        if (file_exists($filename) && is_readable($filename)) {
+            @include_once($filename);
+            Logger::info("Bootstrap loaded");
+        }
+    }
+
+
+    /**
      * Launch your main project code
      *
      * @return void
      */
-    abstract public function launch();
+    abstract protected function launch();
 
 
     /**

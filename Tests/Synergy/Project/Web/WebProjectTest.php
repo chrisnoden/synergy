@@ -69,7 +69,7 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
         $request = Project\Web\WebRequest::create('/');
         $obj = new WebProject($request);
         $this->hasOutput();
-        $obj->launch();
+        $obj->run();
         $this->assertEquals(
             'Synergy\Controller\DefaultController',
             $obj->getControllerName()

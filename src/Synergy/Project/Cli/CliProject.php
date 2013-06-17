@@ -97,7 +97,7 @@ class CliProject extends ProjectAbstract
      *
      * @return void
      */
-    public function launch()
+    protected function launch()
     {
         $router = new CliRouter($this->request);
         $router->match();

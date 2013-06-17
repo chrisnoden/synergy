@@ -92,4 +92,4 @@ $project =
 $project->setDev(true);
 $project->setAppDir(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))))) . DIRECTORY_SEPARATOR . 'app');
 $project->setTempDir('/tmp');
-$project->launch();
+$project->run();
