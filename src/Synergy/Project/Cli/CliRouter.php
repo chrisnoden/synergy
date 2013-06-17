@@ -40,4 +40,17 @@ use Synergy\Router\RouterAbstract;
 class CliRouter extends RouterAbstract
 {
 
+    /**
+     * Our request should contain the controller
+     * @return mixed|void
+     */
+    protected function matchRoute()
+    {
+        if (!isset($this->request)) {
+            $this->request = $this->defaultClass;
+        }
+        var_dump($this->request);
+        $this->controller = $this->fetchControllerEntity($this->request);
+    }
+
 }

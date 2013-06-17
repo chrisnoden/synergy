@@ -29,6 +29,7 @@ namespace Synergy\Project;
 use Psr\Log\LogLevel;
 use Synergy\AutoLoader\SplClassLoader;
 use Synergy\Exception\InvalidArgumentException;
+use Synergy\Logger\Logger;
 use Synergy\Object;
 use Synergy\Project;
 use Synergy\Tools\Tools;

@@ -26,8 +26,8 @@
 
 namespace Synergy\Project\Cli;
 
-use Synergy\Controller\Parser;
 use Synergy\Exception\SynergyException;
+use Synergy\Object;
 use Synergy\Project\ProjectAbstract;
 
 /**
@@ -50,6 +50,14 @@ class CliProject extends ProjectAbstract
      * @var array
      */
     protected $parameters = array();
+    /**
+     * @var string
+     */
+    protected $rawArguments = '';
+    /**
+     * @var array arguments for the Symfony CliProject
+     */
+    protected $sysArgs = array();
 
 
     /**
@@ -69,33 +77,111 @@ class CliProject extends ProjectAbstract
             );
         }
 
+        // Store or build the request
+        $this->parameters = $parameters;
         if (!is_null($request)) {
             $this->request = $request;
+        } else {
+            $result = $this->parseArgumentsForProjectParams();
+            $this->request = $result['request'];
+            $this->rawArguments = $result['arguments'];
         }
-        $this->parameters = $parameters;
 
         parent::__construct();
     }
 
 
+
     /**
      * Run our CLI Project
      *
-     * @param string $action     class and method to launch
-     * @param array  $parameters parameters to pass to the method
-     *
      * @return void
      */
-    public function launch($action = null, array $parameters = array())
+    public function launch()
     {
-//        if (!is_null($action)) {
-//            $controllerName = $parser->getControllerName();
-//            $methodName = $parser->getMethodName();
-//            $controller = new $controllerName();
-//            $controller->{$methodName}();
-//        }
+        $router = new CliRouter($this->request);
+        $router->match();
 
+        /**
+         * Get the ControllerEntity
+         */
+        $this->_controller = $router->getController();
+        // Call the action
+        $response = $this->_controller->callControllerAction();
+
+        if (is_string($response)) {
+            \Cli\line($response);
+        } else if ($response instanceof Object) {
+            \Cli\line($response->__toString());
+        }
 
     }
+
+
+    /**
+     * Parses out all the command line arguments to find the arguments
+     * for the Symfony CliProject and the requested controller plus any
+     * arguments to pass to the controller
+     *
+     * @return array associative array of the request and the raw arguments for it
+     */
+    protected function parseArgumentsForProjectParams()
+    {
+        /**
+         * Store our parsed results here
+         */
+        $result = array();
+
+        $request = null;
+        $requestArgs = array();
+        $systemArgs = array();
+        $phase = 1;
+        $script_filename = strtolower($_SERVER['SCRIPT_FILENAME']);
+
+        foreach ($_SERVER['argv'] AS $val)
+        {
+            switch ($phase)
+            {
+                case 1:
+                    // look for our app/console script first
+                    if (strtolower($val) == $script_filename) {
+                        $phase = 2;
+                        continue;
+                    }
+                    break;
+
+                case 2:
+                    // look for any args for Symfony
+                    if (substr($val, 0, 1) == '-') {
+                        $systemArgs[] = $val;
+                    } else {
+                        $phase = 3;
+                        $request = $val;
+                    }
+                    break;
+
+                case 3:
+                    // look for any args for the request
+                    $requestArgs[] = $val;
+
+            }
+        }
+
+        $this->parseSystemArgs($systemArgs);
+
+        $result = array(
+            'request' => $request,
+            'arguments' => join(' ', $requestArgs)
+        );
+
+        return $result;
+    }
+
+
+    protected function parseSystemArgs($systemArgs)
+    {
+        $this->sysArgs = $systemArgs;
+    }
+
 
 }

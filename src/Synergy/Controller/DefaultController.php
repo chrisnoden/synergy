@@ -26,6 +26,7 @@
 
 namespace Synergy\Controller;
 
+use Synergy\Logger\Logger;
 use Synergy\Project\Web\WebResponse;
 
 /**
@@ -49,6 +50,7 @@ class DefaultController extends Controller
      */
     public function defaultAction()
     {
+        Logger::info("Default Action Called");
         return new WebResponse("Hello from ".__METHOD__);
     }
 

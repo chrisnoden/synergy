@@ -60,6 +60,16 @@ abstract class RouterAbstract extends Object
      * @var mixed the request to match to the route
      */
     protected $request;
+    /**
+     * @var string the fall-thru class if no route matched
+     */
+    protected $defaultClass = 'Synergy\\Controller\\DefaultController';
+    /**
+     * @var string name of the fall-thru class route
+     */
+    protected $defaultRoute = 'SynergyDefault';
+
+
 
 
     /**
@@ -69,7 +79,7 @@ abstract class RouterAbstract extends Object
      */
     public function __construct($request)
     {
-
+        $this->request = $request;
     }
 
 
@@ -131,8 +141,8 @@ abstract class RouterAbstract extends Object
     protected function getDefaultController()
     {
         $parameters = array(
-            '_controller' => 'Synergy\\Controller\\DefaultController',
-            '_route'      => 'SynergyDefault'
+            '_controller' => $this->defaultClass,
+            '_route'      => $this->defaultRoute
         );
 
         return $parameters;

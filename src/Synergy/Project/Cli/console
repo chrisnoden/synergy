@@ -34,6 +34,13 @@ set_time_limit(0);
  */
 require_once dirname(dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))))) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
+/**
+ * Configure PHP errors & logging
+ */
+ini_set('display_errors', 1);
+ini_set('log_errors', 0);
+ini_set('html_errors', 0);
+
 
 /**
  * Init the Synergy Exception and Error handling
@@ -83,6 +90,6 @@ $project =
         $logger
     );
 $project->setDev(true);
-$project->setAppDir(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'app');
+$project->setAppDir(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))))) . DIRECTORY_SEPARATOR . 'app');
 $project->setTempDir('/tmp');
 $project->launch();
