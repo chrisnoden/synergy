@@ -68,6 +68,10 @@ abstract class RouterAbstract extends Object
      * @var string name of the fall-thru class route
      */
     protected $defaultRoute = 'SynergyDefault';
+    /**
+     * @var array parameters to pass to the controller
+     */
+    protected $parameters = array();
 
 
 
@@ -173,7 +177,7 @@ abstract class RouterAbstract extends Object
                     break;
 
                 default:
-                    $this->_parameters[$key] = $val;
+                    $this->parameters[$key] = $val;
             }
         }
     }
@@ -221,6 +225,7 @@ abstract class RouterAbstract extends Object
      */
     public function getController()
     {
+        $this->controller->setParameters($this->parameters);
         return $this->controller;
     }
 

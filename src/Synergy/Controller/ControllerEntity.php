@@ -349,10 +349,11 @@ class ControllerEntity extends Object
         if (count($aParamsToPass) != count($classParams)) {
             throw new ProjectException(
                 sprintf(
-                    "%s::%s() expects %s parameters",
+                    "%s::%s() expects %s parameter%s",
                     $className,
                     $methodName,
-                    count($classParams)
+                    count($classParams),
+                    count($classParams) == 1 ? '' : 's'
                 )
             );
         }
