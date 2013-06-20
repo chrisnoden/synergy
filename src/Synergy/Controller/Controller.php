@@ -31,6 +31,7 @@ use Synergy\Logger\Logger;
 use Synergy\Project\Web\Template\SmartyTemplate;
 use Synergy\Project\Web\Template\TwigTemplate;
 use Synergy\Project\Web\Template\TemplateAbstract;
+use Synergy\Project\Web\Template\HtmlTemplate;
 use Synergy\Project\Web\WebRequest;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Object;
@@ -105,7 +106,7 @@ class Controller extends Object implements ControllerInterface
                 break;
 
             default:
-                return $this->matchAsset($matchDir, $file);
+                $this->matchAsset($matchDir, $file);
         }
     }
 
@@ -122,7 +123,8 @@ class Controller extends Object implements ControllerInterface
     {
         $testfile = $matchDir . $file;
         if (file_exists($testfile)) {
-            $template = new SmartyTemplate();
+            $template = new HtmlTemplate();
+            $template->setTemplateDir($matchDir);
             $template->setTemplateFile($file);
             return $template;
         } else if (file_exists($testfile . '.tpl')) {
@@ -169,6 +171,11 @@ class Controller extends Object implements ControllerInterface
      */
     protected function matchAsset($matchDir, $file)
     {
+        if (substr($file, 0, 11) == '/_synergy_/') {
+            // internal asset request
+            $matchDir = SYNERGY_LIBRARY_PATH . DIRECTORY_SEPARATOR . 'View';
+            $file = substr($file, 10);
+        }
         $testfile = $matchDir . $file;
         if (file_exists($testfile)) {
             Logger::info("Asset found: $testfile");

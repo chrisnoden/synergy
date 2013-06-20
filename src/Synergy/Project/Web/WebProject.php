@@ -29,9 +29,11 @@ namespace Synergy\Project\Web;
 use Symfony\Component\HttpFoundation\Request;
 use Synergy\Controller\ControllerEntity;
 use Synergy\Exception\InvalidArgumentException;
+use Synergy\Exception\NotFoundException;
 use Synergy\Logger\Logger;
 use Synergy\Project;
 use Synergy\Project\ProjectAbstract;
+use Synergy\Project\Web\Template\HtmlTemplate;
 
 /**
  * Class WebProject
@@ -120,7 +122,10 @@ final class WebProject extends ProjectAbstract
             $this->handleWebResponse($response);
         } else if ($response instanceof Template\TemplateAbstract) {
             $this->handleWebTemplate($response);
+        } else {
+            $this->handleNotFoundException();
         }
+
     }
 
 
@@ -159,6 +164,29 @@ final class WebProject extends ProjectAbstract
         $response = $template->getWebResponse();
         if ($response instanceof WebResponse) {
             $this->handleWebResponse($response);
+        }
+    }
+
+
+    /**
+     * Display a 404 error or similar
+     *
+     * @throws \Synergy\Exception\NotFoundException
+     */
+    protected function handleNotFoundException()
+    {
+        $template = new HtmlTemplate();
+        $template->setTemplateDir(SYNERGY_LIBRARY_PATH . DIRECTORY_SEPARATOR . 'View');
+        $template->setTemplateFile('404.html');
+        $template->init();
+        $response = $template->getWebResponse();
+        $response->setStatusCode(404);
+        if ($response instanceof WebResponse) {
+            $this->handleWebResponse($response);
+        } else {
+            throw new NotFoundException(
+                'Unable to match Request to a Response via a Route'
+            );
         }
     }
 
