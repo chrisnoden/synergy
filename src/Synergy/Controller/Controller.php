@@ -29,6 +29,8 @@ namespace Synergy\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Synergy\Logger\Logger;
 use Synergy\Project\Web\Template\SmartyTemplate;
+use Synergy\Project\Web\Template\TwigTemplate;
+use Synergy\Project\Web\Template\TemplateAbstract;
 use Synergy\Project\Web\WebRequest;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Object;
@@ -62,6 +64,13 @@ class Controller extends Object implements ControllerInterface
     }
 
 
+    /**
+     * Find a template or asset that can fulfil our request
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return TemplateAbstract|void returns a template or null
+     */
     protected function requestMatch($request = null)
     {
         if (is_a($request, '\Synergy\Project\Web\WebRequest') || ($this->request instanceof WebRequest && $request = $this->request)) {
@@ -72,6 +81,15 @@ class Controller extends Object implements ControllerInterface
     }
 
 
+    /**
+     * Looks for a web file (template or asset) matching the
+     * $file in the matchDir (or below)
+     *
+     * @param string $matchDir
+     * @param string $file
+     *
+     * @return SmartyTemplate|void
+     */
     protected function matchWebFile($matchDir, $file)
     {
         $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
@@ -92,6 +110,14 @@ class Controller extends Object implements ControllerInterface
     }
 
 
+    /**
+     * Look for a template file within the matchDir
+     *
+     * @param string $matchDir
+     * @param string $file
+     *
+     * @return SmartyTemplate|TwigTemplate|null
+     */
     protected function matchTemplate($matchDir, $file)
     {
         $testfile = $matchDir . $file;
@@ -104,18 +130,43 @@ class Controller extends Object implements ControllerInterface
             $template->setTemplateDir(dirname($testfile));
             $template->setTemplateFile(basename($testfile) . '.tpl');
             return $template;
+        } else if (file_exists($testfile . '.twig')) {
+            $template = new TwigTemplate();
+            $template->setTemplateDir(dirname($testfile));
+            $template->setTemplateFile(basename($testfile) . '.twig');
+            return $template;
         }
     }
 
+
+    /**
+     * Try to match to an index.html template in the given path
+     *
+     * @param string $rootDir
+     * @param string $path
+     *
+     * @return SmartyTemplate
+     */
     protected function matchDirectory($rootDir, $path)
     {
         $testdir = $rootDir . $path;
         if (is_dir($testdir)) {
             return $this->matchTemplate($rootDir, $path . DIRECTORY_SEPARATOR . 'index.html');
         }
+
+        $response = $this->matchTemplate($rootDir, $path . '.html');
+        if ($response) {
+            return $response;
+        }
     }
 
 
+    /**
+     * Try to match an asset file in our templateDir
+     *
+     * @param string $matchDir
+     * @param string $file
+     */
     protected function matchAsset($matchDir, $file)
     {
         $testfile = $matchDir . $file;
@@ -126,6 +177,11 @@ class Controller extends Object implements ControllerInterface
     }
 
 
+    /**
+     * Sends the asset straight to the browser and exits
+     *
+     * @param string $filename the full path and name of the asset to deliver
+     */
     protected function deliverAsset($filename)
     {
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
