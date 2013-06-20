@@ -26,6 +26,7 @@
 
 namespace Synergy\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\ProjectException;
 use Synergy\Object;
@@ -73,6 +74,10 @@ class ControllerEntity extends Object
      * @var string default class called if route not matched
      */
     protected $defaultClassName = 'Synergy\Controller\DefaultController';
+    /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    protected $request;
 
 
     /**
@@ -223,6 +228,36 @@ class ControllerEntity extends Object
     public function getMethodSuffix()
     {
         return $this->methodSuffix;
+    }
+
+
+    /**
+     * Set the request object which is used by some controllers
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request request object is used by some controllers
+     *
+     * @return void
+     */
+    public function setRequest($request)
+    {
+        if ($request instanceof Request) {
+            $this->request = $request;
+        } else {
+            throw new InvalidArgumentException(
+                '$request must be an instance of \Symfony\Component\HttpFoundation\Request'
+            );
+        }
+    }
+
+
+    /**
+     * request object is used by some controllers
+     *
+     * @return \Symfony\Component\HttpFoundation\Request value of member
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 
 
@@ -430,6 +465,10 @@ class ControllerEntity extends Object
          * @var \Synergy\Controller\ControllerInterface $object
          */
         $object = $this->instantiateObject($className);
+
+        if (!is_null($this->request)) {
+            $object->setRequest($this->request);
+        }
 
         // This is quicker than call_user_func_array
         switch(count($parameters)) {

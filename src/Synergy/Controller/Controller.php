@@ -26,8 +26,13 @@
 
 namespace Synergy\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
+use Synergy\Logger\Logger;
+use Synergy\Project\Web\Template\SmartyTemplate;
+use Synergy\Project\Web\WebRequest;
+use Synergy\Exception\InvalidArgumentException;
 use Synergy\Object;
-use Synergy\Project\Web\WebResponse;
+use Synergy\Project;
 
 /**
  * Class Controller
@@ -42,12 +47,213 @@ class Controller extends Object implements ControllerInterface
 {
 
     /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    protected $request;
+
+
+    /**
      * Default action to be inherited by your own controller code
      *
      * @return void
      */
     public function defaultAction()
     {
+    }
+
+
+    protected function requestMatch($request = null)
+    {
+        if (is_a($request, '\Synergy\Project\Web\WebRequest') || ($this->request instanceof WebRequest && $request = $this->request)) {
+            return $this->matchWebFile($request->getTemplateDir(), $request->getPathInfo());
+        } else {
+            return;
+        }
+    }
+
+
+    protected function matchWebFile($matchDir, $file)
+    {
+        $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        switch ($extension)
+        {
+            case 'htm':
+            case 'html':
+                return $this->matchTemplate($matchDir, $file);
+                break;
+
+            case '':
+                return $this->matchDirectory($matchDir, $file);
+                break;
+
+            default:
+                return $this->matchAsset($matchDir, $file);
+        }
+    }
+
+
+    protected function matchTemplate($matchDir, $file)
+    {
+        $testfile = $matchDir . $file;
+        if (file_exists($testfile)) {
+            $template = new SmartyTemplate();
+            $template->setTemplateFile($file);
+            return $template;
+        } else if (file_exists($testfile . '.tpl')) {
+            $template = new SmartyTemplate();
+            $template->setTemplateDir(dirname($testfile));
+            $template->setTemplateFile(basename($testfile) . '.tpl');
+            return $template;
+        }
+    }
+
+    protected function matchDirectory($rootDir, $path)
+    {
+        $testdir = $rootDir . $path;
+        if (is_dir($testdir)) {
+            return $this->matchTemplate($rootDir, $path . DIRECTORY_SEPARATOR . 'index.html');
+        }
+    }
+
+
+    protected function matchAsset($matchDir, $file)
+    {
+        $testfile = $matchDir . $file;
+        if (file_exists($testfile)) {
+            Logger::info("Asset found: $testfile");
+            $this->deliverAsset($testfile);
+        }
+    }
+
+
+    protected function deliverAsset($filename)
+    {
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        // Determine Content Type
+        switch ($extension) {
+            case 'pdf':
+                $ctype = 'application/pdf';
+                break;
+            case 'exe':
+                $ctype = 'application/octet-stream';
+                break;
+            case 'zip':
+                $ctype = 'application/zip';
+                break;
+            case 'doc':
+                $ctype = 'application/msword';
+                break;
+            case 'xls':
+                $ctype = 'application/vnd.ms-excel';
+                break;
+            case 'ppt':
+                $ctype = 'application/vnd.ms-powerpoint';
+                break;
+            case 'gif':
+                $ctype = 'image/gif';
+                break;
+            case 'png':
+                $ctype = 'image/png';
+                break;
+            case 'jpeg':
+            case 'jpg':
+                $ctype = 'image/jpeg';
+                break;
+            case 'js':
+                $ctype = 'application/x-javascript';
+                break;
+            case 'json':
+                $ctype = 'application/json';
+                break;
+            case 'css':
+                $ctype = 'text/css';
+                break;
+            case 'xml':
+                $ctype = 'text/xml';
+                break;
+            case 'txt':
+                $ctype = 'text/plain';
+                break;
+            case 'htm':
+            case 'html':
+                $ctype = 'text/html';
+                break;
+            case 'ico':
+                $ctype = 'image/vnd.microsoft.icon';
+                break;
+            default:
+                if ($filename) {
+                    $file = escapeshellarg($filename);
+                    $ctype = shell_exec('file -bi ' . $file);
+                }
+                break;
+        }
+
+        header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
+        header('Status: 200 OK');
+        if (Project::isDev()) {
+            $aHeaders = array(
+                'Expires' => date('r', strtotime('Yesterday')),
+                'Cache-Control' => 'no-store, no-cache, max-age=0, must-revalidate',
+                'Pragma' => 'no-cache'
+            );
+        } else {
+            $aHeaders = array(
+                'Expires' => date('r', strtotime('+5 min')),
+                'Cache-Control' => 'private, max-age=300, must-revalidate',
+                'Pragma' => 'private'
+            );
+        }
+        // Important headers
+        $aHeaders['Last-Modified'] = date('r', filectime($filename));
+        $aHeaders['ETag'] = md5(filectime($filename));
+
+        // now, finally, we send the headers
+        foreach ($aHeaders AS $name => $value) {
+            if ($value === false) continue;
+            $hdr = sprintf('%s: %s', $name, $value);
+            header($hdr);
+        }
+        header('Content-Length: ' . filesize($filename));
+        if (isset($ctype)) {
+            header('Content-Type: '.$ctype);
+        }
+        header('X-Filename: '. $filename);
+
+        $fp = fopen($filename, 'rb');
+        fpassthru($fp);
+        exit;
+    }
+
+
+    /**
+     * Set the value of request member
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return void
+     */
+    public function setRequest($request)
+    {
+        if ($request instanceof \Symfony\Component\HttpFoundation\Request) {
+            $this->request = $request;
+        } else {
+            throw new InvalidArgumentException(
+                '$request must be an instance of \Symfony\Component\HttpFoundation\Request'
+            );
+        }
+    }
+
+
+    /**
+     * Value of member request
+     *
+     * @return \Symfony\Component\HttpFoundation\Request value of member
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 
 }

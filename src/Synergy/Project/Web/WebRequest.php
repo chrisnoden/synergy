@@ -27,6 +27,7 @@
 namespace Synergy\Project\Web;
 
 use Symfony\Component\HttpFoundation\Request;
+use Synergy\Exception\InvalidArgumentException;
 use Synergy\Logger\Logger;
 
 /**
@@ -46,6 +47,10 @@ class WebRequest extends Request
      * @var \Mobile_Detect mobile device type
      */
     private $_device;
+    /**
+     * @var string path where web templates are stored
+     */
+    protected $templateDir;
 
 
     /**
@@ -216,6 +221,45 @@ class WebRequest extends Request
     public function getDevice()
     {
         return $this->_device;
+    }
+
+
+    /**
+     * directory where the view templates are located
+     *
+     * @param string $dir directory where the view templates are located
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function setTemplateDir($dir)
+    {
+        if (!is_dir($dir)) {
+            throw new InvalidArgumentException(
+                sprintf("Invalid directory, %s", $dir)
+            );
+        } else if (!is_readable($dir)) {
+            throw new InvalidArgumentException(
+                sprintf("Directory %s not readable", $dir)
+            );
+        } else if (!is_writable($dir)) {
+            throw new InvalidArgumentException(
+                sprintf("Directory %s not writable", $dir)
+            );
+        } else {
+            $this->templateDir = $dir;
+        }
+    }
+
+
+    /**
+     * directory where the view templates are located
+     *
+     * @return string directory where the view templates are located
+     */
+    public function getTemplateDir()
+    {
+        return $this->templateDir;
     }
 
 }

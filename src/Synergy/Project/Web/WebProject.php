@@ -53,7 +53,7 @@ final class WebProject extends ProjectAbstract
     /**
      * @var WebRequest
      */
-    private $_originalWebRequest;
+    private $_request;
     /**
      * @var string location of the view templates
      */
@@ -77,7 +77,7 @@ final class WebProject extends ProjectAbstract
         // @todo remove the below hack
         if ($request->getPathInfo() == '/favicon.ico') exit;
         // Store the request as the original WebRequest
-        $this->_originalWebRequest = $request;
+        $this->_request = $request;
 
         parent::__construct();
     }
@@ -99,7 +99,8 @@ final class WebProject extends ProjectAbstract
      */
     protected function launch()
     {
-        $router = new WebRouter($this->_originalWebRequest);
+
+        $router = new WebRouter($this->_request);
         if (defined('SYNERGY_WEB_ROOT')) {
             $filename = dirname(SYNERGY_WEB_ROOT) . '/app/config/routes.yml';
             $router->setRouteCollectionFromFile($filename);
@@ -110,6 +111,7 @@ final class WebProject extends ProjectAbstract
          * Get the ControllerEntity
          */
         $this->_controller = $router->getController();
+        $this->_controller->setRequest($this->_request);
         // Call the action
         $response = $this->_controller->callControllerAction();
 
@@ -133,7 +135,7 @@ final class WebProject extends ProjectAbstract
     protected function handleWebResponse(WebResponse $response)
     {
         $response
-            ->prepare($this->_originalWebRequest)
+            ->prepare($this->_request)
             ->send();
     }
 
@@ -190,7 +192,7 @@ final class WebProject extends ProjectAbstract
      */
     public function getWebRequest()
     {
-        return $this->_originalWebRequest;
+        return $this->_request;
     }
 
 
@@ -217,6 +219,7 @@ final class WebProject extends ProjectAbstract
                 sprintf("Directory %s not writable", $dir)
             );
         } else {
+            $this->_request->setTemplateDir($dir);
             $this->_templateDir = $dir;
         }
     }

@@ -50,8 +50,7 @@ class DefaultController extends Controller
      */
     public function defaultAction()
     {
-        Logger::info("Default Action Called");
-        return new WebResponse("Hello from ".__METHOD__);
+        return $this->requestMatch();
     }
 
 
