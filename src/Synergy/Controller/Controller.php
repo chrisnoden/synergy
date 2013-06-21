@@ -123,16 +123,19 @@ class Controller extends Object implements ControllerInterface
     {
         $testfile = $matchDir . $file;
         if (file_exists($testfile)) {
+            Logger::info('HTML: '.$file);
             $template = new HtmlTemplate();
             $template->setTemplateDir($matchDir);
             $template->setTemplateFile($file);
             return $template;
         } else if (file_exists($testfile . '.tpl')) {
+            Logger::info('Smarty Template: '.$file.'.tpl');
             $template = new SmartyTemplate();
             $template->setTemplateDir(dirname($testfile));
             $template->setTemplateFile(basename($testfile) . '.tpl');
             return $template;
         } else if (file_exists($testfile . '.twig')) {
+            Logger::info('Twig Template: '.$file.'.twig');
             $template = new TwigTemplate();
             $template->setTemplateDir(dirname($testfile));
             $template->setTemplateFile(basename($testfile) . '.twig');
@@ -177,8 +180,8 @@ class Controller extends Object implements ControllerInterface
             $file = substr($file, 10);
         }
         $testfile = $matchDir . $file;
-        if (file_exists($testfile)) {
-            Logger::info("Asset found: $testfile");
+        if (file_exists($testfile) && is_readable($testfile)) {
+            Logger::debug("Asset found: $file");
             $this->deliverAsset($testfile);
         }
     }
@@ -286,6 +289,7 @@ class Controller extends Object implements ControllerInterface
 
         $fp = fopen($filename, 'rb');
         fpassthru($fp);
+
         exit;
     }
 

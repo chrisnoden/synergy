@@ -76,9 +76,7 @@ final class WebProject extends ProjectAbstract
         if (is_null($request)) {
             $request = WebRequest::createFromGlobals();
         }
-        // @todo remove the below hack
-        if ($request->getPathInfo() == '/favicon.ico') exit;
-        // Store the request as the original WebRequest
+        // Store the request
         $this->_request = $request;
 
         parent::__construct();

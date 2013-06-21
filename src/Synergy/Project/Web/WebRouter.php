@@ -28,7 +28,6 @@ namespace Synergy\Project\Web;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Synergy\Controller\Parser;
-use Synergy\Exception\InvalidControllerException;
 use Synergy\Logger\Logger;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Synergy\Router\RouterAbstract;
@@ -70,19 +69,24 @@ class WebRouter extends RouterAbstract
 
             $matcher = new RouteMatcher($this->routeCollection, $context);
             try {
+                Logger::debug(
+                    'Looking for route match: '.$this->request->getPathInfo()
+                );
                 $parameters = $matcher->match($this->request->getPathInfo());
             } catch (ResourceNotFoundException $ex) {
-                // @todo Replace/refactor with something user-definable
                 // Use our DefaultController
+                $parameters = $this->getDefaultController();
             }
         }
 
         if (!isset($parameters)) {
-            $parameters = $this->getDefaultController();
+            Logger::alert('Route not found');
+        } else {
+            $this->parseRouteParameters($parameters);
+            Logger::debug(
+                'Route matched: ' . $this->route
+            );
         }
-
-        $this->parseRouteParameters($parameters);
-        Logger::info("Route name: " . $this->route);
     }
 
 }

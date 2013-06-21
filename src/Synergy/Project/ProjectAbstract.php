@@ -47,10 +47,6 @@ abstract class ProjectAbstract extends Object
 {
 
     /**
-     * @var int utime of when the project object was instantiated
-     */
-    protected $timeStart;
-    /**
      * @var string path to the app directory
      */
     protected $appDir;
@@ -74,7 +70,9 @@ abstract class ProjectAbstract extends Object
      */
     public function __construct()
     {
-        $this->timeStart = microtime(true);
+        if (!defined('SYNERGY_LIBRARY_PATH')) {
+            define('SYNERGY_LIBRARY_PATH', dirname(dirname(__FILE__)));
+        }
 
         // Set our random logging ID using the log scope
         if (method_exists(Project::getLogger(), 'setTag')) {
@@ -89,14 +87,6 @@ abstract class ProjectAbstract extends Object
      */
     public function __destruct()
     {
-        $synergy_endTime = microtime(true);
-        $synergy_execTime = number_format($synergy_endTime - $this->timeStart, 4);
-        if (Project::isDev()) {
-            Project::getLogger()->log(
-                LogLevel::INFO,
-                "Execution time=$synergy_execTime seconds"
-            );
-        }
     }
 
 
@@ -134,7 +124,11 @@ abstract class ProjectAbstract extends Object
         }
         if (file_exists($filename) && is_readable($filename)) {
             @include_once($filename);
-            Logger::info("Bootstrap loaded");
+            Logger::debug(
+                sprintf('Bootstrap %s loaded',
+                    str_ireplace(dirname($this->appDir).DIRECTORY_SEPARATOR, '', $filename)
+                )
+            );
         }
     }
 
