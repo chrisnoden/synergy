@@ -4,7 +4,7 @@
     "description": "Synergy MVC framework for rapid web development",
     "keywords": ["mvc", "framework", "symfony"],
     "homepage": "https://github.com/chrisnoden/synergy",
-    "license": "Apache License, Version 2.0",
+    "license": "Apache-2.0",
     "version": "0.1.0-dev",
     "minimum-stability": "dev",
     "authors": [
