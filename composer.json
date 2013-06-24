@@ -12,7 +12,6 @@
     ],
     "require": {
         "php": ">=5.3.21",
-        "ext-Core": "*",
         "ext-Reflection": "*",
         "ext-curl": "*",
         "ext-SPL": "*",
