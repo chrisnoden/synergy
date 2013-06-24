@@ -27,7 +27,7 @@
         "wp-cli/php-cli-tools": "dev-master"
     },
     "suggest": {
-        "chrisnoden/talkback": "1.*",
+        "chrisnoden/talkback": ">=1.0.0",
         "mobiledetect/mobiledetectlib": "2.6.*"
     },
     "autoload": {
