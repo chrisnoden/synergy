@@ -11,8 +11,16 @@
         { "name": "Chris Noden", "email": "chris.noden@gmail.com", "homepage": "http://www.chrisnoden.com" }
     ],
     "require": {
-        "php": ">=5.3.19",
+        "php": ">=5.3.21",
+        "ext-Core": "*",
         "ext-Reflection": "*",
+        "ext-curl": "*",
+        "ext-SPL": "*",
+        "ext-date": "*",
+        "ext-mbstring": "*",
+        "ext-pcre": "*",
+        "ext-posix": "*",
+        "ext-standard": "*",
         "psr/log": "1.0.0",
         "symfony/http-foundation": "2.2.*",
         "symfony/routing": "2.2.*",
