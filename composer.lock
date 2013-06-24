@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "d6840c1f5d31ebaf0fd4475770e57b2c",
+    "hash": "5998a23485e2a36bf43a3a9151f6c003",
     "packages": [
         {
             "name": "psr/log",
@@ -50,12 +50,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "7b87975dcc36f5da71e05388e4af32366bfa4079"
+                "reference": "v2.2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/7b87975dcc36f5da71e05388e4af32366bfa4079",
-                "reference": "7b87975dcc36f5da71e05388e4af32366bfa4079",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/v2.2.3",
+                "reference": "v2.2.3",
                 "shasum": ""
             },
             "require": {
@@ -97,12 +97,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "0875a8c8a1757b508a9895bb2c454af77a67b1c7"
+                "reference": "v2.2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/0875a8c8a1757b508a9895bb2c454af77a67b1c7",
-                "reference": "0875a8c8a1757b508a9895bb2c454af77a67b1c7",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/v2.2.3",
+                "reference": "v2.2.3",
                 "shasum": ""
             },
             "require": {
@@ -138,7 +138,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-05-27 14:47:40"
+            "time": "2013-06-13 12:48:26"
         },
         {
             "name": "symfony/routing",
@@ -147,12 +147,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "351917218674d07847cb51ba22f6934aaea745df"
+                "reference": "844f21ea5370dcb58abd65dbc66b4849fb090c1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/351917218674d07847cb51ba22f6934aaea745df",
-                "reference": "351917218674d07847cb51ba22f6934aaea745df",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/844f21ea5370dcb58abd65dbc66b4849fb090c1d",
+                "reference": "844f21ea5370dcb58abd65dbc66b4849fb090c1d",
                 "shasum": ""
             },
             "require": {
@@ -196,7 +196,7 @@
             ],
             "description": "Symfony Routing Component",
             "homepage": "http://symfony.com",
-            "time": "2013-05-10 16:49:00"
+            "time": "2013-06-23 06:56:04"
         },
         {
             "name": "symfony/yaml",
@@ -205,12 +205,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "2412f9950036ade5e89581e648edbe04e8fe2681"
+                "reference": "v2.2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/2412f9950036ade5e89581e648edbe04e8fe2681",
-                "reference": "2412f9950036ade5e89581e648edbe04e8fe2681",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.2.3",
+                "reference": "v2.2.3",
                 "shasum": ""
             },
             "require": {
@@ -244,6 +244,51 @@
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
             "time": "2013-05-10 18:08:31"
+        },
+        {
+            "name": "wp-cli/php-cli-tools",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wp-cli/php-cli-tools.git",
+                "reference": "c14d0bfad917bef1e05bcc2333ef6943c43b9061"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/c14d0bfad917bef1e05bcc2333ef6943c43b9061",
+                "reference": "c14d0bfad917bef1e05bcc2333ef6943c43b9061",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "cli": "lib/"
+                },
+                "files": [
+                    "lib/cli/cli.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Logsdon",
+                    "email": "jlogsdon@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Console utilities for PHP",
+            "homepage": "http://github.com/jlogsdon/php-cli-tools",
+            "keywords": [
+                "cli",
+                "console"
+            ],
+            "time": "2013-06-23 17:55:08"
         }
     ],
     "packages-dev": [
@@ -253,11 +298,12 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "wp-cli/php-cli-tools": 20
+    },
     "platform": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.19",
+        "ext-reflection": "*"
     },
     "platform-dev": [
 
