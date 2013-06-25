@@ -1,5 +1,8 @@
-# vendor directoris
+# Dev Only directories
 vendor/*
+app/*
+templates/*
+temp/*
 
 # IDE Files
 .idea

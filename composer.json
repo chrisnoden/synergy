@@ -26,6 +26,12 @@
         "symfony/yaml": "2.2.*",
         "wp-cli/php-cli-tools": "dev-master"
     },
+    "require-dev": {
+        "mobiledetect/mobiledetectlib": "2.6.*",
+        "smarty/smarty": "3.1.*",
+        "propel/propel1": "1.6.*",
+        "twig/twig": "v1.13.1"
+    },
     "suggest": {
         "chrisnoden/talkback": ">=1.0.0",
         "mobiledetect/mobiledetectlib": "2.6.*"
