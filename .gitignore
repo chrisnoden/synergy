@@ -4,6 +4,8 @@ app/*
 templates/*
 temp/*
 
+composer.lock
+
 # IDE Files
 .idea
 
