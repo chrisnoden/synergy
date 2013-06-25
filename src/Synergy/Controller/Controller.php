@@ -258,7 +258,7 @@ class Controller extends Object implements ControllerInterface
                 $ctype = 'application/x-font-opentype';
                 break;
             case 'woff':
-                $ctype = 'application/x-font-woff';
+                $ctype = 'application/font-woff';
                 break;
             case 'eot':
                 $ctype = 'application/vnd.ms-fontobject';
