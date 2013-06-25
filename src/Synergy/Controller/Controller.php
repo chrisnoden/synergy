@@ -248,6 +248,21 @@ class Controller extends Object implements ControllerInterface
             case 'ico':
                 $ctype = 'image/vnd.microsoft.icon';
                 break;
+            case 'svg':
+                $ctype = 'image/svg+xml';
+                break;
+            case 'ttf':
+                $ctype = 'application/x-font-ttf';
+                break;
+            case 'otf':
+                $ctype = 'application/x-font-opentype';
+                break;
+            case 'woff':
+                $ctype = 'application/x-font-woff';
+                break;
+            case 'eot':
+                $ctype = 'application/vnd.ms-fontobject';
+                break;
             default:
                 if ($filename) {
                     $file = escapeshellarg($filename);
