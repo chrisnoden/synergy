@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "ea89d3c1c1084355c0640466a676ab7a",
+    "hash": "3ec877e3166cf935a3911aedddef05ad",
     "packages": [
         {
             "name": "psr/log",
@@ -251,12 +251,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/php-cli-tools.git",
-                "reference": "c14d0bfad917bef1e05bcc2333ef6943c43b9061"
+                "reference": "d351fa71c7425427c041c0308c820e94cbd9cd51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/c14d0bfad917bef1e05bcc2333ef6943c43b9061",
-                "reference": "c14d0bfad917bef1e05bcc2333ef6943c43b9061",
+                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/d351fa71c7425427c041c0308c820e94cbd9cd51",
+                "reference": "d351fa71c7425427c041c0308c820e94cbd9cd51",
                 "shasum": ""
             },
             "require": {
@@ -288,7 +288,7 @@
                 "cli",
                 "console"
             ],
-            "time": "2013-06-23 17:55:08"
+            "time": "2013-06-26 09:23:20"
         }
     ],
     "packages-dev": [

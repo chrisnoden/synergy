@@ -62,6 +62,10 @@ abstract class ProjectAbstract extends Object
      * @var bool is this a dev project
      */
     protected $isDev = false;
+    /**
+     * @var ControllerEntity
+     */
+    protected $controller;
 
 
     /**

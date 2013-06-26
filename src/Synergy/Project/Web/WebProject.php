@@ -49,10 +49,6 @@ final class WebProject extends ProjectAbstract
 {
 
     /**
-     * @var ControllerEntity
-     */
-    private $_controller;
-    /**
      * @var WebRequest
      */
     private $_request;
@@ -110,10 +106,10 @@ final class WebProject extends ProjectAbstract
         /**
          * Get the ControllerEntity
          */
-        $this->_controller = $router->getController();
-        $this->_controller->setRequest($this->_request);
+        $this->controller = $router->getController();
+        $this->controller->setRequest($this->_request);
         // Call the action
-        $response = $this->_controller->callControllerAction();
+        $response = $this->controller->callControllerAction();
 
         // Deal with any response object that was returned
         if ($response instanceof WebResponse) {
@@ -157,7 +153,7 @@ final class WebProject extends ProjectAbstract
             $template->setTemplateDir($this->_templateDir);
         }
         $template->setDev($this->isDev);
-        $template->setParameters($this->_controller->getParameters());
+        $template->setParameters($this->controller->getParameters());
         $template->init();
         $response = $template->getWebResponse();
         if ($response instanceof WebResponse) {
@@ -196,7 +192,7 @@ final class WebProject extends ProjectAbstract
      */
     public function getControllerName()
     {
-        return $this->_controller->getClassName();
+        return $this->controller->getClassName();
     }
 
 
@@ -207,7 +203,7 @@ final class WebProject extends ProjectAbstract
      */
     public function getController()
     {
-        return $this->_controller;
+        return $this->controller;
     }
 
 

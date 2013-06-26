@@ -58,6 +58,10 @@ class CliProject extends ProjectAbstract
      * @var array arguments for the Symfony CliProject
      */
     protected $sysArgs = array();
+    /**
+     * @var SignalHandler
+     */
+    protected $sigHandler;
 
 
     /**
@@ -105,9 +109,9 @@ class CliProject extends ProjectAbstract
         /**
          * Get the ControllerEntity
          */
-        $this->_controller = $router->getController();
+        $this->controller = $router->getController();
         // Call the action
-        $response = $this->_controller->callControllerAction();
+        $response = $this->controller->callControllerAction();
 
         if (is_string($response)) {
             \Cli\line($response);

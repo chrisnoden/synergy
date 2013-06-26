@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * 
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,41 +17,40 @@
  * limitations under the License.
  *
  * @category  File
- * @package   Synergy
+ * @package   Synergy MVC Library
  * @author    Chris Noden <chris.noden@gmail.com>
- * @copyright 2009-2013 Chris Noden
+ * @copyright 2013 Chris Noden
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link      https://github.com/chrisnoden
  */
+declare(ticks = 1);
 
-namespace Synergy\Project\Daemon;
-
-use Synergy\Project\Cli\CliProject;
-use Synergy\Project\Cli\SignalHandler;
+namespace Synergy\Project\Cli;
 
 /**
- * Class DaemonProject
+ * Class SignalHandler
  *
- * @category Synergy\Project\Daemon
- * @package  Synergy
+ * @category Synergy\Project\Cli
+ * @package  Synergy MVC Library
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class DaemonProject extends CliProject
+class SignalHandler
 {
 
-    /**
-     * run our project
-     *
-     * @return void
-     */
-    public function launch()
-    {
-        $this->sigHandler = new SignalHandler();
-
-        parent::launch();
+    public function __construct() {
+        $this->_init();
     }
 
+    private function _init() {
+        pcntl_signal(SIGTERM, array(&$this,"handleSignals"));
+    }
+
+    public function handleSignals($signal)
+    {
+        echo "SIG: $signal\n";
+        exit;
+    }
 
 }
