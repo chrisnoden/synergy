@@ -40,6 +40,6 @@
         "psr-0": { "Synergy": "src/" },
         "classmap": [ "src/UASparser" ]
     },
-    "bin": [ "Synergy/Project/Cli/console","Synergy/Project/Cli/daemon" ]
+    "bin": [ "bin/console","bin/daemon" ]
 
 }

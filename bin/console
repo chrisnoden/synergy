@@ -32,7 +32,7 @@ set_time_limit(0);
 /**
  * Load composer autoload.php
  */
-require_once dirname(dirname(dirname(dirname(dirname(dirname(dirname(__DIR__))))))) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 /**
  * Configure PHP errors & logging
