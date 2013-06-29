@@ -23,6 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link      https://github.com/chrisnoden
  */
+declare(ticks = 1);
 
 namespace Synergy\Project\Cli;
 
@@ -58,10 +59,6 @@ class CliProject extends ProjectAbstract
      * @var array arguments for the Symfony CliProject
      */
     protected $sysArgs = array();
-    /**
-     * @var SignalHandler
-     */
-    protected $sigHandler;
 
 
     /**
@@ -74,6 +71,8 @@ class CliProject extends ProjectAbstract
      */
     public function __construct($request = null, array $parameters = array())
     {
+        register_tick_function(array(&$this, "checkExit"));
+
         // Check this is coming from the CLI
         if (PHP_SAPI !== 'cli') {
             throw new SynergyException(
@@ -91,9 +90,47 @@ class CliProject extends ProjectAbstract
             $this->rawArguments = $result['arguments'];
         }
 
+        $this->registerSignalHandler();
+
         parent::__construct();
     }
 
+
+    /**
+     * Registers a signal handler method to respond
+     * to any kill signals
+     */
+    protected  function registerSignalHandler() {
+        pcntl_signal(SIGTERM, array(&$this,"handleSignals"));
+        pcntl_signal(SIGINT, array(&$this,"handleSignals"));
+    }
+
+
+    /**
+     * Respond to a signal
+     *
+     * @param $signal
+     */
+    public function handleSignals($signal)
+    {
+        if (!SignalHandler::$blockExit) {
+            exit;
+        } else {
+            SignalHandler::$forceExit = true;
+        }
+    }
+
+
+    /**
+     * If an exit has been requested and we have removed the block
+     * then we can now exit
+     */
+    public function checkExit()
+    {
+        if (!SignalHandler::$blockExit && SignalHandler::$forceExit) {
+            exit;
+        }
+    }
 
 
     /**

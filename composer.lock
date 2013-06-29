@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1e9dfd45cf884c215e2122f653f17e69",
+    "hash": "00f56eb3437c032383d183217362bf8a",
     "packages": [
         {
             "name": "psr/log",
@@ -292,6 +292,69 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "chrisnoden/talkback",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chrisnoden/talkback.git",
+                "reference": "v1.0.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chrisnoden/talkback/zipball/v1.0.4",
+                "reference": "v1.0.4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-date": "*",
+                "ext-mbstring": "*",
+                "ext-pcre": "*",
+                "ext-posix": "*",
+                "ext-reflection": "*",
+                "ext-spl": "*",
+                "php": ">=5.3.21",
+                "psr/log": "1.*"
+            },
+            "require-dev": {
+                "wp-cli/php-cli-tools": "dev-master",
+                "xenji/prowlphp": "1.*"
+            },
+            "suggest": {
+                "wp-cli/php-cli-tools": "dev-master",
+                "xenji/prowlphp": "1.0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Talkback": "src/"
+                },
+                "classmap": [
+                    "src/Net_Growl",
+                    "src/Net_Growl/Growl"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Noden",
+                    "email": "chris.noden@gmail.com",
+                    "homepage": "http://www.chrisnoden.com"
+                }
+            ],
+            "description": "Logging and messaging library that builds upon Psr-3 with Growl, Prowl, Html and other modules",
+            "homepage": "https://github.com/chrisnoden/talkback",
+            "keywords": [
+                "growl",
+                "logging",
+                "prowl",
+                "psr-3"
+            ],
+            "time": "2013-06-24 17:25:34"
+        },
         {
             "name": "mobiledetect/mobiledetectlib",
             "version": "2.6.2",

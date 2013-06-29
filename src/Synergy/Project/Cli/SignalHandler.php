@@ -23,11 +23,12 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link      https://github.com/chrisnoden
  */
-declare(ticks = 1);
 
-namespace Synergy\Project\Cli;
+ namespace Synergy\Project\Cli;
 
-/**
+ use Synergy\Singleton;
+
+ /**
  * Class SignalHandler
  *
  * @category Synergy\Project\Cli
@@ -36,21 +37,20 @@ namespace Synergy\Project\Cli;
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class SignalHandler
+final class SignalHandler extends Singleton
 {
 
-    public function __construct() {
-        $this->_init();
-    }
-
-    private function _init() {
-        pcntl_signal(SIGTERM, array(&$this,"handleSignals"));
-    }
-
-    public function handleSignals($signal)
-    {
-        echo "SIG: $signal\n";
-        exit;
-    }
+    /**
+     * @var Singleton
+     */
+    protected static $instance;
+    /**
+     * @var bool can the script exit if terminated
+     */
+    public static $blockExit = false;
+    /**
+     * @var bool exit as soon as possible
+     */
+    public static $forceExit = false;
 
 }
