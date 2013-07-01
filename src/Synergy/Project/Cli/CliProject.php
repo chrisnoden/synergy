@@ -85,7 +85,8 @@ class CliProject extends ProjectAbstract
         if (!is_null($request)) {
             $this->request = $request;
         } else {
-            $result = $this->parseArgumentsForProjectParams();
+            $args = new ArgumentParser();
+            $result = $args->parseArguments();
             $this->request = $result['request'];
             $this->rawArguments = $result['arguments'];
         }
@@ -158,72 +159,6 @@ class CliProject extends ProjectAbstract
             \Cli\line($response->__toString());
         }
 
-    }
-
-
-    /**
-     * Parses out all the command line arguments to find the arguments
-     * for the Symfony CliProject and the requested controller plus any
-     * arguments to pass to the controller
-     *
-     * @return array associative array of the request and the raw arguments for it
-     */
-    protected function parseArgumentsForProjectParams()
-    {
-        /**
-         * Store our parsed results here
-         */
-        $result = array();
-
-        $request = null;
-        $requestArgs = array();
-        $systemArgs = array();
-        $phase = 1;
-        $script_filename = strtolower($_SERVER['SCRIPT_FILENAME']);
-
-        foreach ($_SERVER['argv'] AS $val)
-        {
-            switch ($phase)
-            {
-                case 1:
-                    // look for our app/console script first
-                    if (strtolower($val) == $script_filename) {
-                        $phase = 2;
-                        continue;
-                    }
-                    break;
-
-                case 2:
-                    // look for any args for Symfony
-                    if (substr($val, 0, 1) == '-') {
-                        $systemArgs[] = $val;
-                    } else {
-                        $phase = 3;
-                        $request = $val;
-                    }
-                    break;
-
-                case 3:
-                    // look for any args for the request
-                    $requestArgs[] = $val;
-
-            }
-        }
-
-        $this->parseSystemArgs($systemArgs);
-
-        $result = array(
-            'request' => $request,
-            'arguments' => join(' ', $requestArgs)
-        );
-
-        return $result;
-    }
-
-
-    protected function parseSystemArgs($systemArgs)
-    {
-        $this->sysArgs = $systemArgs;
     }
 
 
