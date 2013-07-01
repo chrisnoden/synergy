@@ -133,7 +133,7 @@ final class Project extends Singleton
     /**
      * An alias for Synergy\Logger\Logger::setLogger()
      *
-     * @param LoggerInterface $logger object must implement the Psr-3 standard
+     * @param \Psr\Log\LoggerInterface $logger object must implement the Psr-3 standard
      *
      * @return void
      */

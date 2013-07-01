@@ -236,10 +236,6 @@ final class WebProject extends ProjectAbstract
             throw new InvalidArgumentException(
                 sprintf("Directory %s not readable", $dir)
             );
-        } else if (!is_writable($dir)) {
-            throw new InvalidArgumentException(
-                sprintf("Directory %s not writable", $dir)
-            );
         } else {
             $this->_request->setTemplateDir($dir);
             $this->_templateDir = $dir;

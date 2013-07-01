@@ -33,6 +33,7 @@ use Synergy\Logger\Logger;
 use Synergy\Object;
 use Synergy\Project;
 use Synergy\Tools\Tools;
+use Synergy\Controller\ControllerEntity;
 
 /**
  * Class ProjectAbstract
