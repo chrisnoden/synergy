@@ -97,9 +97,11 @@ final class WebProject extends ProjectAbstract
     {
 
         $router = new WebRouter($this->_request);
-        if (defined('SYNERGY_WEB_ROOT')) {
-            $filename = dirname(SYNERGY_WEB_ROOT) . '/app/config/routes.yml';
-            $router->setRouteCollectionFromFile($filename);
+        if (isset($this->appDir)) {
+            $filename = $this->appDir . DIRECTORY_SEPARATOR . 'config'. DIRECTORY_SEPARATOR . 'routes.yml';
+            if (file_exists($filename)) {
+                $router->setRouteCollectionFromFile($filename);
+            }
         }
         $router->match();
 

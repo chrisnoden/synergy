@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "00f56eb3437c032383d183217362bf8a",
+    "hash": "ecc0b476627520568f63ed5a3f78ed18",
     "packages": [
         {
             "name": "psr/log",
@@ -45,7 +45,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "2.2.x-dev",
+            "version": "v2.2.3",
             "target-dir": "Symfony/Component/Config",
             "source": {
                 "type": "git",
@@ -92,7 +92,7 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "2.2.x-dev",
+            "version": "v2.2.3",
             "target-dir": "Symfony/Component/HttpFoundation",
             "source": {
                 "type": "git",
@@ -142,17 +142,17 @@
         },
         {
             "name": "symfony/routing",
-            "version": "2.2.x-dev",
+            "version": "v2.2.3",
             "target-dir": "Symfony/Component/Routing",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "844f21ea5370dcb58abd65dbc66b4849fb090c1d"
+                "reference": "v2.2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/844f21ea5370dcb58abd65dbc66b4849fb090c1d",
-                "reference": "844f21ea5370dcb58abd65dbc66b4849fb090c1d",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.3",
+                "reference": "v2.2.3",
                 "shasum": ""
             },
             "require": {
@@ -196,11 +196,11 @@
             ],
             "description": "Symfony Routing Component",
             "homepage": "http://symfony.com",
-            "time": "2013-06-23 06:56:04"
+            "time": "2013-05-10 16:49:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "2.2.x-dev",
+            "version": "v2.2.3",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
@@ -247,16 +247,16 @@
         },
         {
             "name": "wp-cli/php-cli-tools",
-            "version": "dev-master",
+            "version": "v0.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/php-cli-tools.git",
-                "reference": "d351fa71c7425427c041c0308c820e94cbd9cd51"
+                "reference": "v0.9.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/d351fa71c7425427c041c0308c820e94cbd9cd51",
-                "reference": "d351fa71c7425427c041c0308c820e94cbd9cd51",
+                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/v0.9.4",
+                "reference": "v0.9.4",
                 "shasum": ""
             },
             "require": {
@@ -288,31 +288,25 @@
                 "cli",
                 "console"
             ],
-            "time": "2013-06-26 09:23:20"
+            "time": "2013-06-17 19:40:15"
         }
     ],
     "packages-dev": [
         {
             "name": "chrisnoden/talkback",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chrisnoden/talkback.git",
-                "reference": "v1.0.4"
+                "reference": "v1.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chrisnoden/talkback/zipball/v1.0.4",
-                "reference": "v1.0.4",
+                "url": "https://api.github.com/repos/chrisnoden/talkback/zipball/v1.0.0",
+                "reference": "v1.0.0",
                 "shasum": ""
             },
             "require": {
-                "ext-date": "*",
-                "ext-mbstring": "*",
-                "ext-pcre": "*",
-                "ext-posix": "*",
-                "ext-reflection": "*",
-                "ext-spl": "*",
                 "php": ">=5.3.21",
                 "psr/log": "1.*"
             },
@@ -353,7 +347,7 @@
                 "prowl",
                 "psr-3"
             ],
-            "time": "2013-06-24 17:25:34"
+            "time": "2013-06-23 21:25:44"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -455,16 +449,16 @@
         },
         {
             "name": "propel/propel1",
-            "version": "1.6.x-dev",
+            "version": "1.6.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/propelorm/Propel.git",
-                "reference": "7b8597359b1048bdd7d2e2afa4731d17b01a1716"
+                "reference": "1.6.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/propelorm/Propel/zipball/7b8597359b1048bdd7d2e2afa4731d17b01a1716",
-                "reference": "7b8597359b1048bdd7d2e2afa4731d17b01a1716",
+                "url": "https://api.github.com/repos/propelorm/Propel/zipball/1.6.9",
+                "reference": "1.6.9",
                 "shasum": ""
             },
             "require": {
@@ -511,7 +505,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2013-04-19 12:04:32"
+            "time": "2013-03-31 17:20:51"
         },
         {
             "name": "smarty/smarty",
@@ -609,10 +603,10 @@
     "aliases": [
 
     ],
-    "minimum-stability": "dev",
-    "stability-flags": {
-        "wp-cli/php-cli-tools": 20
-    },
+    "minimum-stability": "beta",
+    "stability-flags": [
+
+    ],
     "platform": {
         "php": ">=5.3.21",
         "ext-reflection": "*",

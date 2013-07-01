@@ -77,6 +77,9 @@ class WebRouter extends RouterAbstract
                 // Use our DefaultController
                 $parameters = $this->getDefaultController();
             }
+        } else {
+            // no route to match against, so use the DefaultController
+            $parameters = $this->getDefaultController();
         }
 
         if (!isset($parameters)) {
