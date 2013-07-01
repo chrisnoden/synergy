@@ -156,6 +156,10 @@ class Controller extends Object implements ControllerInterface
     {
         $testdir = $rootDir . $path;
         if (is_dir($testdir)) {
+            if (substr($testdir, strlen($testdir)-1) != '/') {
+                header("Location: ".$testdir.'/');
+                exit;
+            }
             return $this->matchTemplate($rootDir, $path . DIRECTORY_SEPARATOR . 'index.html');
         }
 
