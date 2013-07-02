@@ -437,12 +437,12 @@ class ControllerEntity extends Object
      *
      * @param string $className name of the class to instantiate
      *
-     * @return ControllerInterface
+     * @return Controller
      */
     protected function instantiateObject($className)
     {
         /**
-         * @var \Synergy\Controller\ControllerInterface $object
+         * @var Controller $object
          */
         $object = new $className();
 
