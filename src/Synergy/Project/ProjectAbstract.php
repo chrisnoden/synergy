@@ -27,6 +27,8 @@
 namespace Synergy\Project;
 
 use Psr\Log\LogLevel;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Synergy\AutoLoader\SplClassLoader;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\SynergyException;
@@ -68,6 +70,10 @@ abstract class ProjectAbstract extends Object
      * @var ControllerEntity
      */
     protected $controller;
+    /**
+     * @var array project configuration settings
+     */
+    protected $options = array();
 
 
     /**
@@ -379,7 +385,18 @@ abstract class ProjectAbstract extends Object
                 sprintf("File %s not readable", $filename)
             );
         } else {
-            $this->configFilename = $filename;
+            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+            switch (strtolower($extension)) {
+                case 'yml':
+                    $this->configFilename = $filename;
+                    $this->options = \Spyc::YAMLLoad($filename);
+                    break;
+
+                default:
+                    throw new InvalidArgumentException(
+                        sprintf("Config file format is not supported", $filename)
+                    );
+            }
         }
     }
 
@@ -406,6 +423,17 @@ abstract class ProjectAbstract extends Object
     {
         $this->isDev = $isDev;
         Project::setDev($isDev);
+    }
+
+
+    /**
+     * Value of member options
+     *
+     * @return array value of member
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
 }
