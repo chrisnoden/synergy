@@ -178,7 +178,7 @@ class Controller extends Object implements ControllerInterface
      */
     protected function matchAsset($matchDir, $file)
     {
-        if (substr($file, 0, 11) == '/_synergy_/') {
+        if (strpos($file, '_synergy_')) {
             // internal asset request
             $matchDir = SYNERGY_LIBRARY_PATH . DIRECTORY_SEPARATOR . 'View';
             $file = substr($file, 10);
