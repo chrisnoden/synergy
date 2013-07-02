@@ -29,6 +29,7 @@ namespace Synergy\Project;
 use Psr\Log\LogLevel;
 use Synergy\AutoLoader\SplClassLoader;
 use Synergy\Exception\InvalidArgumentException;
+use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
 use Synergy\Object;
 use Synergy\Project;
@@ -113,6 +114,8 @@ abstract class ProjectAbstract extends Object
     {
         $this->loadBootstrap();
 
+        $this->checkEnv();
+
         $this->launch();
     }
 
@@ -147,6 +150,27 @@ abstract class ProjectAbstract extends Object
 
 
     /**
+     * Checks everything is good with our project before we run it
+     *
+     * @throws \Synergy\Exception\SynergyException
+     */
+    protected function checkEnv()
+    {
+        if (!isset($this->appDir) && !$this->searchAppDir()) {
+            throw new SynergyException(
+                'Unable to init Synergy library without an app directory'
+            );
+        }
+
+        if (!isset($this->configFilename) && !$this->searchConfigFile()) {
+            throw new SynergyException(
+                'Unable to init Synergy library without config file'
+            );
+        }
+    }
+
+
+    /**
      * create/test our preferred temp folder structure
      *
      * @param string $dir path where we wish to store any project temp files/caches
@@ -158,15 +182,15 @@ abstract class ProjectAbstract extends Object
     {
         if (!is_dir($dir) && !Tools::mkdir($dir, true)) {
             throw new InvalidArgumentException(
-                sprintf("Invalid directory, %s", $dir)
+                sprintf("Invalid temp directory, %s", $dir)
             );
         } else if (!is_readable($dir)) {
             throw new InvalidArgumentException(
-                sprintf("Directory %s not readable", $dir)
+                sprintf("Temp Directory %s not readable", $dir)
             );
         } else if (!is_writable($dir)) {
             throw new InvalidArgumentException(
-                sprintf("Directory %s not writable", $dir)
+                sprintf("Temp Directory %s not writable", $dir)
             );
         } else {
             $this->tempDir = $dir;
@@ -197,15 +221,11 @@ abstract class ProjectAbstract extends Object
     {
         if (!is_dir($dir) && !Tools::mkdir($dir, true)) {
             throw new InvalidArgumentException(
-                sprintf("Invalid directory, %s", $dir)
+                sprintf("Invalid App directory, %s", $dir)
             );
         } else if (!is_readable($dir)) {
             throw new InvalidArgumentException(
-                sprintf("Directory %s not readable", $dir)
-            );
-        } else if (!is_writable($dir)) {
-            throw new InvalidArgumentException(
-                sprintf("Directory %s not writable", $dir)
+                sprintf("App Directory %s not readable", $dir)
             );
         } else {
             $this->appDir = $dir;
@@ -223,6 +243,120 @@ abstract class ProjectAbstract extends Object
     public function getAppDir()
     {
         return $this->appDir;
+    }
+
+
+    /**
+     * Attempts to locate our app directory
+     *
+     * @param string $baseDir directory to search down from
+     *
+     * @return bool false if nothing found
+     */
+    protected function searchAppDir($baseDir = null)
+    {
+        if (!is_string($baseDir)) {
+            // test 3 levels up
+            $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'app';
+            if ($this->isValidDirectory($testfile)) {
+                $this->appDir = $testfile;
+                return true;
+            }
+            $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'App';
+            if ($this->isValidDirectory($testfile)) {
+                $this->appDir = $testfile;
+                return true;
+            }
+
+            // test 6 levels up
+            $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'app';
+            if ($this->isValidDirectory($testfile)) {
+                $this->appDir = $testfile;
+                return true;
+            }
+            $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'App';
+            if ($this->isValidDirectory($testfile)) {
+                $this->appDir = $testfile;
+                return true;
+            }
+        } else {
+            $testfile = $baseDir . DIRECTORY_SEPARATOR . 'app';
+            if ($this->isValidDirectory($testfile)) {
+                $this->appDir = $testfile;
+                return true;
+            }
+            $testfile = $baseDir . DIRECTORY_SEPARATOR . 'App';
+            if ($this->isValidDirectory($testfile)) {
+                $this->appDir = $testfile;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Searches for a possible config file
+     *
+     * @param string $baseDir path to start looking in
+     *
+     * @return bool false if nothing found
+     */
+    protected function searchConfigFile($baseDir = null)
+    {
+        if (is_null($baseDir) && isset($this->appDir)) {
+            $baseDir = $this->appDir;
+        }
+        if (is_string($baseDir) && is_dir($baseDir)) {
+            $testfile = $baseDir . DIRECTORY_SEPARATOR . 'config';
+            if ($this->isValidDirectory($testfile)) {
+                $configDir = $testfile;
+            } else {
+                $testfile = $baseDir . DIRECTORY_SEPARATOR . 'Config';
+                if ($this->isValidDirectory($testfile)) {
+                    $configDir = $testfile;
+                }
+            }
+
+            if (isset($configDir)) {
+                $d = dir($configDir);
+                while (false !== ($entry = $d->read())) {
+                    if (substr($entry, 0, 1) == '.') {
+                        continue;
+                    }
+                    $arr = explode('.', $entry);
+                    if (strtolower($arr[0]) == 'config') {
+                        try {
+                            $this->setConfigFilename($configDir . DIRECTORY_SEPARATOR . $entry);
+                            $d->close();
+                            return true;
+                        } catch (InvalidArgumentException $ex) {
+                            // not a valid filename - keep trying
+                        }
+                    }
+                }
+                $d->close();
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Tests the validity of the directory - can we use it?
+     *
+     * @param string $dirname dir to test
+     *
+     * @return bool
+     */
+    protected function isValidDirectory($dirname)
+    {
+        if (file_exists($dirname) && is_dir($dirname)) {
+            return true;
+        }
+
+        return false;
     }
 
 
