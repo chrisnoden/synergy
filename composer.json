@@ -20,6 +20,7 @@
         "ext-pcre": "*",
         "ext-posix": "*",
         "psr/log": "1.0.0",
+        "mustangostang/spyc": "0.5.1",
         "symfony/http-foundation": "2.2.*",
         "symfony/routing": "2.2.*",
         "symfony/config": "2.2.*",
@@ -27,7 +28,7 @@
         "wp-cli/php-cli-tools": "0.9.*"
     },
     "require-dev": {
-        "chrisnoden/talkback": ">=1.0.0",
+        "chrisnoden/talkback": "1.*",
         "mobiledetect/mobiledetectlib": "2.6.*",
         "smarty/smarty": "3.1.*",
         "propel/propel1": "1.6.*",
