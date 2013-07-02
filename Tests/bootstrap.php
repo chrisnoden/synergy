@@ -37,3 +37,4 @@ if (is_file($autoloadFile)) {
 }
 
 define('SYNERGY_TEST_FILES_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files');
+define('SYNERGY_ROOT_DIR', __DIR__);
