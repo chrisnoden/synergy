@@ -262,6 +262,30 @@ abstract class ProjectAbstract extends Object
     protected function searchAppDir($baseDir = null)
     {
         if (!is_string($baseDir)) {
+            // test from script path
+            $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'app';
+            if ($this->isValidDirectory($testfile)) {
+                $this->app_dir = $testfile;
+                return true;
+            }
+            $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'App';
+            if ($this->isValidDirectory($testfile)) {
+                $this->app_dir = $testfile;
+                return true;
+            }
+
+            // test from 1 level up from script path
+            $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'app';
+            if ($this->isValidDirectory($testfile)) {
+                $this->app_dir = $testfile;
+                return true;
+            }
+            $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'App';
+            if ($this->isValidDirectory($testfile)) {
+                $this->app_dir = $testfile;
+                return true;
+            }
+
             // test 3 levels up
             $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'app';
             if ($this->isValidDirectory($testfile)) {
