@@ -97,17 +97,6 @@ final class WebProject extends ProjectAbstract
     {
         parent::checkEnv();
 
-        if (!defined('SYNERGY_ROOT_DIR')) {
-            $testroot = dirname(dirname($_SERVER['SCRIPT_FILENAME']));
-            if ($this->isValidDirectory($testroot)) {
-                define('SYNERGY_ROOT_DIR', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
-            } else {
-                throw new SynergyException(
-                    'Please define your project root directory as SYNERGY_ROOT_DIR'
-                );
-            }
-        }
-
         if (!isset($this->_templateDir) && $this->getOption('synergy:webproject:template_dir')) {
             try {
                 $this->setTemplateDir($this->getOption('synergy:webproject:template_dir'));

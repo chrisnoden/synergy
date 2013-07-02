@@ -162,6 +162,21 @@ abstract class ProjectAbstract extends Object
      */
     protected function checkEnv()
     {
+        if (!defined('SYNERGY_ROOT_DIR')) {
+            $testroot = dirname(dirname($_SERVER['SCRIPT_FILENAME']));
+            if ($this->isValidDirectory($testroot)) {
+                define('SYNERGY_ROOT_DIR', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
+            } else {
+                throw new SynergyException(
+                    'Please define your project root directory as SYNERGY_ROOT_DIR'
+                );
+            }
+        } else if (!is_dir(SYNERGY_ROOT_DIR)) {
+            throw new SynergyException(
+                'SYNERGY_ROOT_DIR must point to a valid directory at the root of your project'
+            );
+        }
+
         if (!isset($this->app_dir) && !$this->searchAppDir()) {
             throw new SynergyException(
                 'Unable to init Synergy library without an app directory'
@@ -261,18 +276,10 @@ abstract class ProjectAbstract extends Object
      */
     protected function searchAppDir($baseDir = null)
     {
+        if (!is_string($baseDir) && defined('SYNERGY_WEB_ROOT')) {
+                $baseDir = SYNERGY_ROOT_DIR;
+        }
         if (!is_string($baseDir)) {
-            // test from script path
-            $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'app';
-            if ($this->isValidDirectory($testfile)) {
-                $this->app_dir = $testfile;
-                return true;
-            }
-            $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'App';
-            if ($this->isValidDirectory($testfile)) {
-                $this->app_dir = $testfile;
-                return true;
-            }
 
             // test from 1 level up from script path
             $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'app';
@@ -322,6 +329,20 @@ abstract class ProjectAbstract extends Object
             }
         }
 
+        // fall through :
+
+        // test from script path
+        $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'app';
+        if ($this->isValidDirectory($testfile)) {
+            $this->app_dir = $testfile;
+            return true;
+        }
+        $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'App';
+        if ($this->isValidDirectory($testfile)) {
+            $this->app_dir = $testfile;
+            return true;
+        }
+
         return false;
     }
 
@@ -337,6 +358,8 @@ abstract class ProjectAbstract extends Object
     {
         if (is_null($baseDir) && isset($this->app_dir)) {
             $baseDir = $this->app_dir;
+        } else if (is_null($baseDir) && defined('SYNERGY_ROOT_DIR')) {
+            $baseDir = SYNERGY_ROOT_DIR;
         }
         if (is_string($baseDir) && is_dir($baseDir)) {
             $testfile = $baseDir . DIRECTORY_SEPARATOR . 'config';
@@ -352,7 +375,7 @@ abstract class ProjectAbstract extends Object
             if (isset($configDir)) {
                 $d = dir($configDir);
                 while (false !== ($entry = $d->read())) {
-                    if (substr($entry, 0, 1) == '.') {
+                    if (substr($entry, 0, 1) == '.' || is_dir($entry)) {
                         continue;
                     }
                     $arr = explode('.', $entry);
