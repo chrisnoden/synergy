@@ -31,6 +31,7 @@ use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\ProjectException;
 use Synergy\Object;
 use Synergy\Exception\InvalidControllerException;
+use Synergy\Project\ProjectAbstract;
 
 /**
  * Class ControllerEntity
@@ -78,6 +79,10 @@ class ControllerEntity extends Object
      * @var \Symfony\Component\HttpFoundation\Request
      */
     protected $request;
+    /**
+     * @var \Synergy\Project\ProjectAbstract
+     */
+    protected $project;
 
 
     /**
@@ -258,6 +263,37 @@ class ControllerEntity extends Object
     public function getRequest()
     {
         return $this->request;
+    }
+
+
+    /**
+     * Set the value of project member
+     *
+     * @param ProjectAbstract $project
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function setProject($project)
+    {
+        if ($project instanceof ProjectAbstract) {
+            $this->project = $project;
+        } else {
+            throw new InvalidArgumentException(
+                '$project must be an instance of \\Synergy\\Project\\ProjectAbstract'
+            );
+        }
+    }
+
+
+    /**
+     * Value of member project
+     *
+     * @return \Synergy\Project\ProjectAbstract value of member
+     */
+    public function getProject()
+    {
+        return $this->project;
     }
 
 
@@ -445,6 +481,9 @@ class ControllerEntity extends Object
          * @var Controller $object
          */
         $object = new $className();
+        if (isset($this->project)) {
+            $object->setProject($this->project);
+        }
 
         return $object;
     }

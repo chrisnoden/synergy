@@ -134,6 +134,7 @@ final class WebProject extends ProjectAbstract
          * Get the ControllerEntity
          */
         $this->controller = $router->getController();
+        $this->controller->setProject($this);
         $this->controller->setRequest($this->_request);
         // Call the action
         $response = $this->controller->callControllerAction();

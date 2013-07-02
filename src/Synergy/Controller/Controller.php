@@ -46,13 +46,17 @@ use Synergy\Project;
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class Controller extends Object implements ControllerInterface
+class Controller extends Object
 {
 
     /**
      * @var \Symfony\Component\HttpFoundation\Request
      */
     protected $request;
+    /**
+     * @var \Synergy\Project\ProjectAbstract
+     */
+    protected $project;
 
 
     /**
@@ -340,6 +344,44 @@ class Controller extends Object implements ControllerInterface
     public function getRequest()
     {
         return $this->request;
+    }
+
+
+    /**
+     * Set the value of project member
+     *
+     * @param \Synergy\Project\ProjectAbstract $project
+     *
+     * @return void
+     */
+    public function setProject($project)
+    {
+        $this->project = $project;
+    }
+
+
+    /**
+     * Value of member project
+     *
+     * @return \Synergy\Project\ProjectAbstract value of member
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+
+
+    /**
+     * If a config option with the keyname exists then return the value
+     * doing any variable substitution first
+     *
+     * @param string $keyname eg synergy:webproject:template_dir
+     *
+     * @return bool|mixed
+     */
+    public function getOption($keyname)
+    {
+        return $this->project->getOption($keyname);
     }
 
 }
