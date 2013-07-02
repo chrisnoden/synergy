@@ -46,6 +46,12 @@ setlocale(LC_ALL, 'en_GB');
  */
 require_once('../vendor/autoload.php');
 
+/**
+ * Synergy will base all relative files and paths on this root
+ * This should be your main project directory (where your composer.json lives)
+ */
+define('SYNERGY_ROOT_DIR', dirname(__DIR__));
+
 
 /**
  * Init the Synergy Exception and Error handling

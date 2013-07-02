@@ -97,12 +97,30 @@ final class WebProject extends ProjectAbstract
     {
         parent::checkEnv();
 
-        if (!isset($this->_templateDir)) {
-            if (!$this->_templateDir = $this->getOption('synergy:webproject:template_dir')) {
+        if (!defined('SYNERGY_ROOT_DIR')) {
+            $testroot = dirname(dirname($_SERVER['SCRIPT_FILENAME']));
+            if ($this->isValidDirectory($testroot)) {
+                define('SYNERGY_ROOT_DIR', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
+            } else {
                 throw new SynergyException(
-                    'Need to set a template_dir in the config'
+                    'Please define your project root directory as SYNERGY_ROOT_DIR'
                 );
             }
+        }
+
+        if (!isset($this->_templateDir) && $this->getOption('synergy:webproject:template_dir')) {
+            try {
+                $this->setTemplateDir($this->getOption('synergy:webproject:template_dir'));
+            }
+            catch (InvalidArgumentException $ex) {
+                throw new SynergyException(
+                    'Unable to find a valid config file'
+                );
+            }
+        } else {
+            throw new SynergyException(
+                'Need to set a template_dir in the config'
+            );
         }
     }
 
@@ -248,6 +266,9 @@ final class WebProject extends ProjectAbstract
      */
     public function setTemplateDir($dir)
     {
+        if (substr($dir, 0, 1) != DIRECTORY_SEPARATOR && defined('SYNERGY_ROOT_DIR')) {
+            $dir = SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . $dir;
+        }
         if (!is_dir($dir)) {
             throw new InvalidArgumentException(
                 sprintf("Invalid directory, %s", $dir)
