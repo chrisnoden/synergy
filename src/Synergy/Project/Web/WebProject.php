@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Synergy\Controller\ControllerEntity;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\NotFoundException;
+use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
 use Synergy\Project;
 use Synergy\Project\ProjectAbstract;
@@ -87,6 +88,23 @@ final class WebProject extends ProjectAbstract
         parent::__destruct();
     }
 
+    /**
+     * Checks everything is good with our project before we run it
+     *
+     * @throws \Synergy\Exception\SynergyException
+     */
+    protected function checkEnv()
+    {
+        parent::checkEnv();
+
+        if (!isset($this->_templateDir)) {
+            if (!$this->_templateDir = $this->getOption('synergy:webproject:template_dir')) {
+                throw new SynergyException(
+                    'Need to set a template_dir in the config'
+                );
+            }
+        }
+    }
 
     /**
      * Our main method : let's go and run our web project
@@ -97,8 +115,8 @@ final class WebProject extends ProjectAbstract
     {
 
         $router = new WebRouter($this->_request);
-        if (isset($this->appDir)) {
-            $filename = $this->appDir . DIRECTORY_SEPARATOR . 'config'. DIRECTORY_SEPARATOR . 'routes.yml';
+        if (isset($this->app_dir)) {
+            $filename = $this->app_dir . DIRECTORY_SEPARATOR . 'config'. DIRECTORY_SEPARATOR . 'routes.yml';
             if (file_exists($filename)) {
                 $router->setRouteCollectionFromFile($filename);
             }
@@ -253,6 +271,26 @@ final class WebProject extends ProjectAbstract
     public function getTemplateDir()
     {
         return $this->_templateDir;
+    }
+
+
+    /**
+     * Replaces any variable tags (eg %app_dir%) in the value
+     *
+     * @param string $option_value look for variables to substitute in this string
+     *
+     * @return string
+     */
+    protected function replaceOptionVariables($option_value)
+    {
+        if (isset($this->_templateDir)) {
+            $option_value = preg_replace('/%template_dir%/', $this->_templateDir, $option_value);
+        }
+
+        // run any parent substitutions
+        $option_value = parent::replaceOptionVariables($option_value);
+
+        return $option_value;
     }
 
 }

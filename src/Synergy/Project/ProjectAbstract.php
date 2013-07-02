@@ -53,11 +53,11 @@ abstract class ProjectAbstract extends Object
     /**
      * @var string path to the app directory
      */
-    protected $appDir;
+    protected $app_dir;
     /**
      * @var string path where our working temp folder (read-writable) exists
      */
-    protected $tempDir;
+    protected $temp_dir;
     /**
      * @var string filename of the main config file
      */
@@ -134,13 +134,13 @@ abstract class ProjectAbstract extends Object
     protected function loadBootstrap($filename = null)
     {
         if (is_null($filename)) {
-            $filename = $this->appDir . DIRECTORY_SEPARATOR . 'bootstrap.php';
+            $filename = $this->app_dir . DIRECTORY_SEPARATOR . 'bootstrap.php';
         }
         if (file_exists($filename) && is_readable($filename)) {
             @include_once($filename);
             Logger::debug(
                 sprintf('Bootstrap %s loaded',
-                    str_ireplace(dirname($this->appDir).DIRECTORY_SEPARATOR, '', $filename)
+                    str_ireplace(dirname($this->app_dir).DIRECTORY_SEPARATOR, '', $filename)
                 )
             );
         }
@@ -162,7 +162,7 @@ abstract class ProjectAbstract extends Object
      */
     protected function checkEnv()
     {
-        if (!isset($this->appDir) && !$this->searchAppDir()) {
+        if (!isset($this->app_dir) && !$this->searchAppDir()) {
             throw new SynergyException(
                 'Unable to init Synergy library without an app directory'
             );
@@ -199,7 +199,7 @@ abstract class ProjectAbstract extends Object
                 sprintf("Temp Directory %s not writable", $dir)
             );
         } else {
-            $this->tempDir = $dir;
+            $this->temp_dir = $dir;
         }
     }
 
@@ -211,7 +211,7 @@ abstract class ProjectAbstract extends Object
      */
     public function getTempDir()
     {
-        return $this->tempDir;
+        return $this->temp_dir;
     }
 
 
@@ -234,7 +234,7 @@ abstract class ProjectAbstract extends Object
                 sprintf("App Directory %s not readable", $dir)
             );
         } else {
-            $this->appDir = $dir;
+            $this->app_dir = $dir;
             $classLoader = new SplClassLoader($dir);
             $classLoader->register();
         }
@@ -248,7 +248,7 @@ abstract class ProjectAbstract extends Object
      */
     public function getAppDir()
     {
-        return $this->appDir;
+        return $this->app_dir;
     }
 
 
@@ -265,35 +265,35 @@ abstract class ProjectAbstract extends Object
             // test 3 levels up
             $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'app';
             if ($this->isValidDirectory($testfile)) {
-                $this->appDir = $testfile;
+                $this->app_dir = $testfile;
                 return true;
             }
             $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'App';
             if ($this->isValidDirectory($testfile)) {
-                $this->appDir = $testfile;
+                $this->app_dir = $testfile;
                 return true;
             }
 
             // test 6 levels up
             $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'app';
             if ($this->isValidDirectory($testfile)) {
-                $this->appDir = $testfile;
+                $this->app_dir = $testfile;
                 return true;
             }
             $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'App';
             if ($this->isValidDirectory($testfile)) {
-                $this->appDir = $testfile;
+                $this->app_dir = $testfile;
                 return true;
             }
         } else {
             $testfile = $baseDir . DIRECTORY_SEPARATOR . 'app';
             if ($this->isValidDirectory($testfile)) {
-                $this->appDir = $testfile;
+                $this->app_dir = $testfile;
                 return true;
             }
             $testfile = $baseDir . DIRECTORY_SEPARATOR . 'App';
             if ($this->isValidDirectory($testfile)) {
-                $this->appDir = $testfile;
+                $this->app_dir = $testfile;
                 return true;
             }
         }
@@ -311,8 +311,8 @@ abstract class ProjectAbstract extends Object
      */
     protected function searchConfigFile($baseDir = null)
     {
-        if (is_null($baseDir) && isset($this->appDir)) {
-            $baseDir = $this->appDir;
+        if (is_null($baseDir) && isset($this->app_dir)) {
+            $baseDir = $this->app_dir;
         }
         if (is_string($baseDir) && is_dir($baseDir)) {
             $testfile = $baseDir . DIRECTORY_SEPARATOR . 'config';
@@ -435,5 +435,77 @@ abstract class ProjectAbstract extends Object
     {
         return $this->options;
     }
+
+
+    /**
+     * If a config option with the keyname exists then return the value
+     * doing any variable substitution first
+     *
+     * @param string $keyname eg synergy:webproject:template_dir
+     *
+     * @return bool|mixed
+     */
+    public function getOption($keyname)
+    {
+        // iterate through our options for the specific key
+        $arr = explode(':', $keyname);
+        if (count($arr) > 1) {
+            $testArr = $this->options;
+            foreach ($arr AS $testkey)
+            {
+                if ($this->isArrayKeyAnArray($testArr, $testkey)) {
+                    $testArr = $testArr[$testkey];
+                }
+            }
+        } else {
+            $testArr = $this->options;
+        }
+
+        if (isset($testArr[$arr[count($arr)-1]])) {
+            $value = $testArr[$arr[count($arr)-1]];
+            $value = $this->replaceOptionVariables($value);
+            return $value;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Replaces any variable tags (eg %app_dir%) in the value
+     *
+     * @param string $option_value look for variables to substitute in this string
+     *
+     * @return string
+     */
+    protected function replaceOptionVariables($option_value)
+    {
+        if (isset($this->app_dir)) {
+            $option_value = preg_replace('/%app_dir%/', $this->app_dir, $option_value);
+        }
+        if (isset($this->temp_dir)) {
+            $option_value = preg_replace('/%temp_dir%/', $this->temp_dir, $option_value);
+        }
+
+        return $option_value;
+    }
+
+
+    /**
+     * Tests if the key in the array exists and returns an array
+     *
+     * @param $array
+     * @param $key
+     *
+     * @return bool
+     */
+    protected function isArrayKeyAnArray($array, $key)
+    {
+        if (isset($array[$key]) && is_array($array[$key])) {
+            return true;
+        }
+        return false;
+    }
+
 
 }
