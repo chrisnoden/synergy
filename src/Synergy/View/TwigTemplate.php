@@ -31,7 +31,7 @@ use Synergy\Exception\SynergyException;
 /**
  * Class TwigTemplate
  *
- * @category Synergy\Project\Web\Template
+ * @category Synergy\View\Template
  * @package  Synergy
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0

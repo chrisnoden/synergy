@@ -77,6 +77,7 @@ $logger
             \Psr\Log\LogLevel::EMERGENCY,
             \Psr\Log\LogLevel::INFO,
             \Psr\Log\LogLevel::NOTICE,
+            \Psr\Log\LogLevel::DEBUG,
             \Psr\Log\LogLevel::WARNING
         ),
         \Talkback\Channel\ChannelFactory::File('/tmp/synergy.log'))

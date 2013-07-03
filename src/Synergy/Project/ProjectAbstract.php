@@ -193,12 +193,12 @@ abstract class ProjectAbstract extends Object
 
         if (!isset($this->temp_dir) && $this->getOption('synergy:temp_dir')) {
             $this->setTempDir($this->getOption('synergy:temp_dir'));
-            Logger::info('Temp Dir: '.$this->temp_dir);
         } else if (!$this->searchTempDir()) {
             throw new SynergyException(
                 'Unable to init Synergy library without a temp (cache) directory'
             );
         }
+        Logger::debug('Temp Dir: '.$this->temp_dir);
 
     }
 
@@ -435,6 +435,7 @@ abstract class ProjectAbstract extends Object
         return false;
     }
 
+
     /**
      * Tests the validity of the directory - can we use it?
      *
@@ -476,6 +477,7 @@ abstract class ProjectAbstract extends Object
                 case 'yml':
                     $this->configFilename = $filename;
                     $this->options = \Spyc::YAMLLoad($filename);
+                    Logger::debug('Config file: '.$filename);
                     break;
 
                 default:

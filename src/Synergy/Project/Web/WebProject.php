@@ -101,7 +101,7 @@ final class WebProject extends ProjectAbstract
         if (!isset($this->_templateDir) && $this->getOption('synergy:webproject:template_dir')) {
             try {
                 $this->setTemplateDir($this->getOption('synergy:webproject:template_dir'));
-                Logger::info('Template Dir: '.$this->_templateDir);
+                Logger::debug('Template Dir: '.$this->_templateDir);
             }
             catch (InvalidArgumentException $ex) {
                 throw new SynergyException(
@@ -176,7 +176,7 @@ final class WebProject extends ProjectAbstract
      *
      * @return void
      */
-    protected function handleWebTemplate(Template $template)
+    protected function handleWebTemplate(TemplateAbstract $template)
     {
         $template->setCacheDir($this->getTempDir() . DIRECTORY_SEPARATOR . 'cache');
         if (is_null($template->getTemplateDir()) && isset($this->_templateDir)) {

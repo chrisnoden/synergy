@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @category  Smarty Function
+ * @category  File
  * @package   Synergy MVC Library
  * @author    Chris Noden <chris.noden@gmail.com>
  * @copyright 2013 Chris Noden
@@ -24,28 +24,18 @@
  * @link      https://github.com/chrisnoden
  */
 
+namespace Synergy\Exception;
 
-/*
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     function.getConfigValue.php
- * Type:     function
- * Name:     getConfigValue
- * Purpose:  get a value from the config file
- * -------------------------------------------------------------
+/**
+ * Class TemplateFunctionException
+ *
+ * @category Synergy\Exception
+ * @package  Synergy MVC Library
+ * @author   Chris Noden <chris.noden@gmail.com>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link     https://github.com/chrisnoden/synergy
  */
-function smarty_function_getConfigValue($params, Smarty_Internal_Template $template)
+class TemplateFunctionException extends SynergyException
 {
-    if (isset($params['keyname'])) {
-        $project = \Synergy\Project::getObject();
-        if ($project instanceof \Synergy\Project\ProjectAbstract)
-        {
-            $template->assign($params['assign'], $project->getOption($params['keyname']));
-        }
-    } else {
-        throw new \Synergy\Exception\TemplateFunctionException(
-            'getConfigValue function requires a keyname to search for'
-        );
-    }
-}
 
+}

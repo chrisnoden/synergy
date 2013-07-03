@@ -27,12 +27,13 @@
 namespace Synergy\View;
 
 use Synergy\Exception\SynergyException;
+use Synergy\Logger\Logger;
 use Synergy\Project\ProjectAbstract;
 
 /**
  * Class SmartyTemplate
  *
- * @category Synergy\Project\Web\Template
+ * @category Synergy\View\Template
  * @package  Synergy
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
@@ -59,6 +60,7 @@ class SmartyTemplate extends TemplateAbstract
         $this->_loader->setTemplateDir($this->templateDir);
         $this->_loader->addPluginsDir(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'SmartyPlugins');
         $this->_initSmartyCache();
+        Logger::debug("Smarty Cache: ".$this->_loader->getCacheDir());
     }
 
 
@@ -106,6 +108,7 @@ class SmartyTemplate extends TemplateAbstract
     public function setCacheDir($dir)
     {
         $dir .= DIRECTORY_SEPARATOR . 'smarty';
+        Logger::debug("Smarty cache dir set to: ".$dir);
         parent::setCacheDir($dir);
     }
 
@@ -127,9 +130,10 @@ class SmartyTemplate extends TemplateAbstract
             DIRECTORY_SEPARATOR .
             'templates_c' .
             DIRECTORY_SEPARATOR;
-        if (!is_dir($path) && $this->mkdir($path, false)) {
-            $this->_loader->setCompileDir($path);
+        if (!is_dir($path)) {
+            $this->mkdir($path, false);
         }
+        $this->_loader->setCompileDir($path);
 
         // cache dir
         $path
@@ -137,9 +141,10 @@ class SmartyTemplate extends TemplateAbstract
             DIRECTORY_SEPARATOR .
             'cache' .
             DIRECTORY_SEPARATOR;
-        if (!is_dir($path) && $this->mkdir($path, false)) {
-            $this->_loader->setCacheDir($path);
+        if (!is_dir($path)) {
+            $this->mkdir($path, false);
         }
+        $this->_loader->setCacheDir($path);
 
         // configs dir
         $path
@@ -147,9 +152,10 @@ class SmartyTemplate extends TemplateAbstract
             DIRECTORY_SEPARATOR .
             'configs' .
             DIRECTORY_SEPARATOR;
-        if (!is_dir($path) && $this->mkdir($path, false)) {
-            $this->_loader->setConfigDir($path);
+        if (!is_dir($path)) {
+            $this->mkdir($path, false);
         }
+        $this->_loader->setConfigDir($path);
 
     }
 
