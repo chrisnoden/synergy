@@ -3,6 +3,7 @@ vendor/*
 app/*
 templates/*
 temp/*
+Tests/app/temp/*
 
 composer.lock
 
