@@ -2,6 +2,7 @@ imports:
     - { resource: security.yml }
 
 synergy:
+    temp_dir: /tmp
     webproject:
         template_dir: %app_dir%/templates
 
