@@ -28,10 +28,10 @@ namespace Synergy\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Synergy\Logger\Logger;
-use Synergy\Project\Web\Template\SmartyTemplate;
-use Synergy\Project\Web\Template\TwigTemplate;
-use Synergy\Project\Web\Template\TemplateAbstract;
-use Synergy\Project\Web\Template\HtmlTemplate;
+use Synergy\View\SmartyTemplate;
+use Synergy\View\TwigTemplate;
+use Synergy\View\TemplateAbstract;
+use Synergy\View\HtmlTemplate;
 use Synergy\Project\Web\WebRequest;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Object;
@@ -184,7 +184,7 @@ class Controller extends Object
     {
         if (strpos($file, '_synergy_')) {
             // internal asset request
-            $matchDir = SYNERGY_LIBRARY_PATH . DIRECTORY_SEPARATOR . 'View';
+            $matchDir = SYNERGY_LIBRARY_PATH . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . '_synergy_';
             $file = substr($file, 10);
         }
         $testfile = $matchDir . $file;

@@ -34,7 +34,8 @@ use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
 use Synergy\Project;
 use Synergy\Project\ProjectAbstract;
-use Synergy\Project\Web\Template\HtmlTemplate;
+use Synergy\View\HtmlTemplate;
+use Synergy\View\TemplateAbstract;
 
 /**
  * Class WebProject
@@ -100,6 +101,7 @@ final class WebProject extends ProjectAbstract
         if (!isset($this->_templateDir) && $this->getOption('synergy:webproject:template_dir')) {
             try {
                 $this->setTemplateDir($this->getOption('synergy:webproject:template_dir'));
+                Logger::info('Template Dir: '.$this->_templateDir);
             }
             catch (InvalidArgumentException $ex) {
                 throw new SynergyException(
@@ -142,7 +144,7 @@ final class WebProject extends ProjectAbstract
         // Deal with any response object that was returned
         if ($response instanceof WebResponse) {
             $this->handleWebResponse($response);
-        } else if ($response instanceof Template\TemplateAbstract) {
+        } else if ($response instanceof TemplateAbstract) {
             $this->handleWebTemplate($response);
         } else {
             $this->handleNotFoundException();
@@ -170,11 +172,11 @@ final class WebProject extends ProjectAbstract
     /**
      * Renders a WebTemplate
      *
-     * @param Template\TemplateAbstract $template
+     * @param TemplateAbstract $template
      *
      * @return void
      */
-    protected function handleWebTemplate(Template\TemplateAbstract $template)
+    protected function handleWebTemplate(TemplateAbstract $template)
     {
         $template->setCacheDir($this->getTempDir() . DIRECTORY_SEPARATOR . 'cache');
         if (is_null($template->getTemplateDir()) && isset($this->_templateDir)) {
@@ -198,7 +200,7 @@ final class WebProject extends ProjectAbstract
     protected function handleNotFoundException()
     {
         $template = new HtmlTemplate();
-        $template->setTemplateDir(SYNERGY_LIBRARY_PATH . DIRECTORY_SEPARATOR . 'View');
+        $template->setTemplateDir(SYNERGY_LIBRARY_PATH . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . '_synergy_');
         $template->setTemplateFile('404.html');
         $template->init();
         $response = $template->getWebResponse();

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- * 
+ *
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,12 +24,12 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Project\Web\Template;
+namespace Synergy\View;
 
 use Synergy\Exception\SynergyException;
 
 /**
- * Class HtmlTemplate
+ * Class TwigTemplate
  *
  * @category Synergy\Project\Web\Template
  * @package  Synergy
@@ -37,16 +37,36 @@ use Synergy\Exception\SynergyException;
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class HtmlTemplate extends TemplateAbstract
+class TwigTemplate extends TemplateAbstract
 {
 
     /**
-     * Initialise
+     * @var \Twig_Loader_Filesystem
+     */
+    private $_loader;
+    /**
+     * @var \Twig_Environment
+     */
+    private $_twig;
+
+
+    /**
+     * Initialise Twig
      *
      * @return void
      */
     protected function initTemplateEngine()
     {
+        $this->_loader = new \Twig_Loader_Filesystem($this->templateDir);
+        $this->_twig   = new \Twig_Environment(
+            $this->_loader,
+            array(
+                'cache' => $this->cacheDir,
+            )
+        );
+        if ($this->isDev) {
+            $this->_twig->clearCacheFiles();
+        }
     }
 
 
@@ -54,18 +74,16 @@ class HtmlTemplate extends TemplateAbstract
      * template render output
      *
      * @return string template render output
-     * @throws SynergyException
      */
     protected function getRender()
     {
-        $filename = $this->templateDir . DIRECTORY_SEPARATOR . $this->templateFile;
-        if (file_exists($filename) && is_readable($filename)) {
-            $render = file_get_contents($filename);
+        if (isset($this->templateFile)) {
+            $render = $this->_twig->render($this->templateFile, $this->parameters);
             return $render;
         } else {
             throw new SynergyException(
                 sprintf(
-                    'Invalid call to %s without setting templateFile or templateFile not readable',
+                    'Invalid call to %s without setting templateFile',
                     __METHOD__
                 )
             );
@@ -82,6 +100,8 @@ class HtmlTemplate extends TemplateAbstract
      */
     public function setCacheDir($dir)
     {
+        $dir .= DIRECTORY_SEPARATOR . 'twig';
+        parent::setCacheDir($dir);
     }
 
 }

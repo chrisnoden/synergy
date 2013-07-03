@@ -24,51 +24,64 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Tests\Project\Web\Template;
+namespace Synergy\View;
 
-use Synergy\View\TwigTemplate;
-use Synergy\Tools\Tools;
+use Synergy\Exception\SynergyException;
 
 /**
- * Class TwigTemplateTest
+ * Class HtmlTemplate
  *
- * @category Synergy\Tests\Project\Web\Template
+ * @category Synergy\Project\Web\Template
  * @package  Synergy
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class TwigTemplateTest extends \PHPUnit_Framework_TestCase
+class HtmlTemplate extends TemplateAbstract
 {
 
-    public function testBaseObject()
+    /**
+     * Initialise
+     *
+     * @return void
+     */
+    protected function initTemplateEngine()
     {
-        $obj = new TwigTemplate();
-        $this->assertInstanceOf(
-            'Synergy\View\TwigTemplate',
-            $obj
-        );
-        $this->assertInstanceOf(
-            'Synergy\View\TemplateAbstract',
-            $obj
-        );
-        $this->assertInstanceOf(
-            'Synergy\Object',
-            $obj
-        );
     }
 
-    public function testCacheDir()
+
+    /**
+     * template render output
+     *
+     * @return string template render output
+     * @throws SynergyException
+     */
+    protected function getRender()
     {
-        $obj = new TwigTemplate();
-        $testDir = SYNERGY_TEST_FILES_DIR . DIRECTORY_SEPARATOR . 'testcache';
-        if (is_dir($testDir)) {
-            Tools::removeDir($testDir);
+        $filename = $this->templateDir . DIRECTORY_SEPARATOR . $this->templateFile;
+        if (file_exists($filename) && is_readable($filename)) {
+            $render = file_get_contents($filename);
+            return $render;
+        } else {
+            throw new SynergyException(
+                sprintf(
+                    'Invalid call to %s without setting templateFile or templateFile not readable',
+                    __METHOD__
+                )
+            );
         }
-        $obj->setCacheDir($testDir);
-        $this->assertFileExists($testDir);
-        Tools::removeDir($testDir);
     }
 
+
+    /**
+     * Location of the template cache directory
+     *
+     * @param string $dir absolute location of the template cache directory
+     *
+     * @return void
+     */
+    public function setCacheDir($dir)
+    {
+    }
 
 }

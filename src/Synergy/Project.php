@@ -83,10 +83,6 @@ final class Project extends Singleton
         if (!defined('SYNERGY_LIBRARY_PATH')) {
             define('SYNERGY_LIBRARY_PATH', dirname(__FILE__));
         }
-        if (!defined('SYNERGY_WEB_ROOT')) {
-            Project::getLogger()->error('Should define SYNERGY_WEB_ROOT with your web host path');
-            define('SYNERGY_WEB_ROOT', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
-        }
 
         self::$_projectName = null;
         self::$_projectInstance = null;

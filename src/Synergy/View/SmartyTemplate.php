@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * 
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,12 +24,12 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Project\Web\Template;
+namespace Synergy\View;
 
 use Synergy\Exception\SynergyException;
 
 /**
- * Class TwigTemplate
+ * Class SmartyTemplate
  *
  * @category Synergy\Project\Web\Template
  * @package  Synergy
@@ -37,17 +37,13 @@ use Synergy\Exception\SynergyException;
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class TwigTemplate extends TemplateAbstract
+class SmartyTemplate extends TemplateAbstract
 {
 
     /**
-     * @var \Twig_Loader_Filesystem
+     * @var \Smarty
      */
     private $_loader;
-    /**
-     * @var \Twig_Environment
-     */
-    private $_twig;
 
 
     /**
@@ -57,16 +53,10 @@ class TwigTemplate extends TemplateAbstract
      */
     protected function initTemplateEngine()
     {
-        $this->_loader = new \Twig_Loader_Filesystem($this->templateDir);
-        $this->_twig   = new \Twig_Environment(
-            $this->_loader,
-            array(
-                'cache' => $this->cacheDir,
-            )
-        );
-        if ($this->isDev) {
-            $this->_twig->clearCacheFiles();
-        }
+        $this->_loader = new \Smarty();
+        $this->_loader->muteExpectedErrors();
+        $this->_loader->setTemplateDir($this->templateDir);
+        $this->_initSmartyCache();
     }
 
 
@@ -74,11 +64,13 @@ class TwigTemplate extends TemplateAbstract
      * template render output
      *
      * @return string template render output
+     * @throws SynergyException
      */
     protected function getRender()
     {
         if (isset($this->templateFile)) {
-            $render = $this->_twig->render($this->templateFile, $this->parameters);
+            $this->assignSmartyVariables();
+            $render = $this->_loader->fetch($this->templateFile);
             return $render;
         } else {
             throw new SynergyException(
@@ -92,6 +84,17 @@ class TwigTemplate extends TemplateAbstract
 
 
     /**
+     * Set the variables so Smarty can access them
+     *
+     * @return void
+     */
+    protected function assignSmartyVariables()
+    {
+        $this->_loader->assign($this->parameters);
+    }
+
+
+    /**
      * Location of the template cache directory
      *
      * @param string $dir absolute location of the template cache directory
@@ -100,8 +103,52 @@ class TwigTemplate extends TemplateAbstract
      */
     public function setCacheDir($dir)
     {
-        $dir .= DIRECTORY_SEPARATOR . 'twig';
+        $dir .= DIRECTORY_SEPARATOR . 'smarty';
         parent::setCacheDir($dir);
+    }
+
+
+    /**
+     * Prepares the cache folder for Smarty
+     *
+     * @return void
+     */
+    private function _initSmartyCache()
+    {
+        if (!is_dir($this->cacheDir)) {
+            $this->mkdir($this->cacheDir, true);
+        }
+
+        // compiled templates dir
+        $path
+            = $this->cacheDir .
+            DIRECTORY_SEPARATOR .
+            'templates_c' .
+            DIRECTORY_SEPARATOR;
+        if (!is_dir(path) && $this->mkdir($path, false)) {
+            $this->_loader->setCompileDir($path);
+        }
+
+        // cache dir
+        $path
+            = $this->cacheDir .
+            DIRECTORY_SEPARATOR .
+            'cache' .
+            DIRECTORY_SEPARATOR;
+        if (!is_dir(path) && $this->mkdir($path, false)) {
+            $this->_loader->setCacheDir($path);
+        }
+
+        // configs dir
+        $path
+            = $this->cacheDir .
+            DIRECTORY_SEPARATOR .
+            'configs' .
+            DIRECTORY_SEPARATOR;
+        if (!is_dir(path) && $this->mkdir($path, false)) {
+            $this->_loader->setConfigDir($path);
+        }
+
     }
 
 }

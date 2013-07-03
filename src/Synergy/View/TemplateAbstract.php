@@ -24,7 +24,7 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Project\Web\Template;
+namespace Synergy\View;
 
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\SynergyException;

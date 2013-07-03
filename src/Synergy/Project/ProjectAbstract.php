@@ -276,7 +276,7 @@ abstract class ProjectAbstract extends Object
      */
     protected function searchAppDir($baseDir = null)
     {
-        if (!is_string($baseDir) && defined('SYNERGY_WEB_ROOT')) {
+        if (!is_string($baseDir) && defined('SYNERGY_ROOT_DIR')) {
                 $baseDir = SYNERGY_ROOT_DIR;
         }
         if (!is_string($baseDir)) {
