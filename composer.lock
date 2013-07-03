@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "181b32964b2b166aae2d273d8b51656e",
+    "hash": "c8826d1c9f4c38e1c54d0630007e8018",
     "packages": [
         {
             "name": "mustangostang/spyc",
@@ -341,19 +341,25 @@
     "packages-dev": [
         {
             "name": "chrisnoden/talkback",
-            "version": "1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chrisnoden/talkback.git",
-                "reference": "v1.0.0"
+                "reference": "v1.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chrisnoden/talkback/zipball/v1.0.0",
-                "reference": "v1.0.0",
+                "url": "https://api.github.com/repos/chrisnoden/talkback/zipball/v1.0.1",
+                "reference": "v1.0.1",
                 "shasum": ""
             },
             "require": {
+                "ext-date": "*",
+                "ext-mbstring": "*",
+                "ext-pcre": "*",
+                "ext-posix": "*",
+                "ext-reflection": "*",
+                "ext-spl": "*",
                 "php": ">=5.3.21",
                 "psr/log": "1.*"
             },
@@ -394,20 +400,20 @@
                 "prowl",
                 "psr-3"
             ],
-            "time": "2013-06-23 21:25:44"
+            "time": "2013-07-03 16:24:56"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
-            "version": "2.6.2",
+            "version": "2.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "2.6.2"
+                "reference": "2.6.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/2.6.2",
-                "reference": "2.6.2",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/2.6.3",
+                "reference": "2.6.3",
                 "shasum": ""
             },
             "require": {
@@ -440,7 +446,7 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2013-06-06 10:06:54"
+            "time": "2013-07-03 16:20:06"
         },
         {
             "name": "phing/phing",
@@ -556,11 +562,11 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.13",
+            "version": "v3.1.14",
             "source": {
                 "type": "svn",
                 "url": "http://smarty-php.googlecode.com/svn",
-                "reference": "/tags/v3.1.13/@4699"
+                "reference": "/tags/v3.1.14/@4752"
             },
             "require": {
                 "php": ">=5.2"
@@ -569,7 +575,8 @@
             "autoload": {
                 "classmap": [
                     "distribution/libs/Smarty.class.php",
-                    "distribution/libs/SmartyBC.class.php"
+                    "distribution/libs/SmartyBC.class.php",
+                    "distribution/libs/sysplugins/smarty_security.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -595,7 +602,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-01-26 12:03:52"
+            "time": "2013-07-02 16:38:47"
         },
         {
             "name": "twig/twig",
