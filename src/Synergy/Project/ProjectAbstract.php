@@ -86,6 +86,8 @@ abstract class ProjectAbstract extends Object
             define('SYNERGY_LIBRARY_PATH', dirname(dirname(__FILE__)));
         }
 
+        Project::setObject($this);
+
         // Set our random logging ID using the log scope
         if (method_exists(Project::getLogger(), 'setTag')) {
             /** @noinspection PhpUndefinedMethodInspection */

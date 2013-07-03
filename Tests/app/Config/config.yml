@@ -4,3 +4,6 @@ imports:
 synergy:
     webproject:
         template_dir: %app_dir%/templates
+
+Tests:
+    somevalue: Chris Noden

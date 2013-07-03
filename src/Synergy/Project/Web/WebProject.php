@@ -176,7 +176,7 @@ final class WebProject extends ProjectAbstract
      *
      * @return void
      */
-    protected function handleWebTemplate(TemplateAbstract $template)
+    protected function handleWebTemplate(Template $template)
     {
         $template->setCacheDir($this->getTempDir() . DIRECTORY_SEPARATOR . 'cache');
         if (is_null($template->getTemplateDir()) && isset($this->_templateDir)) {

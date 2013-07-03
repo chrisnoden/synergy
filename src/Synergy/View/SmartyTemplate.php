@@ -27,6 +27,7 @@
 namespace Synergy\View;
 
 use Synergy\Exception\SynergyException;
+use Synergy\Project\ProjectAbstract;
 
 /**
  * Class SmartyTemplate
@@ -56,6 +57,7 @@ class SmartyTemplate extends TemplateAbstract
         $this->_loader = new \Smarty();
         $this->_loader->muteExpectedErrors();
         $this->_loader->setTemplateDir($this->templateDir);
+        $this->_loader->addPluginsDir(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'SmartyPlugins');
         $this->_initSmartyCache();
     }
 
@@ -125,7 +127,7 @@ class SmartyTemplate extends TemplateAbstract
             DIRECTORY_SEPARATOR .
             'templates_c' .
             DIRECTORY_SEPARATOR;
-        if (!is_dir(path) && $this->mkdir($path, false)) {
+        if (!is_dir($path) && $this->mkdir($path, false)) {
             $this->_loader->setCompileDir($path);
         }
 
@@ -135,7 +137,7 @@ class SmartyTemplate extends TemplateAbstract
             DIRECTORY_SEPARATOR .
             'cache' .
             DIRECTORY_SEPARATOR;
-        if (!is_dir(path) && $this->mkdir($path, false)) {
+        if (!is_dir($path) && $this->mkdir($path, false)) {
             $this->_loader->setCacheDir($path);
         }
 
@@ -145,7 +147,7 @@ class SmartyTemplate extends TemplateAbstract
             DIRECTORY_SEPARATOR .
             'configs' .
             DIRECTORY_SEPARATOR;
-        if (!is_dir(path) && $this->mkdir($path, false)) {
+        if (!is_dir($path) && $this->mkdir($path, false)) {
             $this->_loader->setConfigDir($path);
         }
 
