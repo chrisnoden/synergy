@@ -126,23 +126,23 @@ class Controller extends Object
     protected function matchTemplate($matchDir, $file)
     {
         $testfile = $matchDir . $file;
-        if (file_exists($testfile)) {
-            Logger::info('HTML: '.$file);
-            $template = new HtmlTemplate();
-            $template->setTemplateDir($matchDir);
-            $template->setTemplateFile($file);
-            return $template;
-        } else if (file_exists($testfile . '.tpl')) {
-            Logger::info('Smarty Template: '.$file.'.tpl');
+        if (file_exists($testfile . '.tpl') && class_exists('\Smarty')) {
+            Logger::info('Smarty Template: ' . $file . '.tpl');
             $template = new SmartyTemplate();
             $template->setTemplateDir(dirname($testfile));
             $template->setTemplateFile(basename($testfile) . '.tpl');
             return $template;
-        } else if (file_exists($testfile . '.twig')) {
-            Logger::info('Twig Template: '.$file.'.twig');
+        } else if (file_exists($testfile . '.twig') && class_exists('\Twig_Environment')) {
+            Logger::info('Twig Template: ' . $file . '.twig');
             $template = new TwigTemplate();
             $template->setTemplateDir(dirname($testfile));
             $template->setTemplateFile(basename($testfile) . '.twig');
+            return $template;
+        } else if (file_exists($testfile)) {
+            Logger::info('HTML: ' . $file);
+            $template = new HtmlTemplate();
+            $template->setTemplateDir($matchDir);
+            $template->setTemplateFile($file);
             return $template;
         }
     }
