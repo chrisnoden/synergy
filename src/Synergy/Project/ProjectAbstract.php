@@ -188,6 +188,16 @@ abstract class ProjectAbstract extends Object
                 'Unable to init Synergy library without config file'
             );
         }
+
+        if (!isset($this->temp_dir) && $this->getOption('synergy:temp_dir')) {
+            $this->setTempDir($this->getOption('synergy:temp_dir'));
+            Logger::info('Temp Dir: '.$this->temp_dir);
+        } else if (!$this->searchTempDir()) {
+            throw new SynergyException(
+                'Unable to init Synergy library without a temp (cache) directory'
+            );
+        }
+
     }
 
 
@@ -391,6 +401,33 @@ abstract class ProjectAbstract extends Object
                 }
                 $d->close();
             }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Try to find a temp_dir
+     *
+     * @param string $baseDir directory to look in for a temp dir
+     *
+     * @return bool true if a valid temp dir was found
+     */
+    protected function searchTempDir($baseDir = null)
+    {
+        if (is_null($baseDir) && isset($this->app_dir) && is_writable($this->app_dir)) {
+            $baseDir = $this->app_dir;
+        }
+
+        if (is_string($baseDir) && $this->isValidDirectory($baseDir) && is_writable($baseDir)) {
+            $this->setTempDir($baseDir . DIRECTORY_SEPARATOR . 'temp');
+            return true;
+        }
+
+        if (is_dir(DIRECTORY_SEPARATOR.'tmp') && is_writable(DIRECTORY_SEPARATOR.'tmp')) {
+            $this->setTempDir(DIRECTORY_SEPARATOR.'tmp');
+            return true;
         }
 
         return false;

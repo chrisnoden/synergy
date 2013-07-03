@@ -164,7 +164,7 @@ class Controller extends Object
                 header("Location: ".$path.'/');
                 exit;
             }
-            return $this->matchTemplate($rootDir, $path . DIRECTORY_SEPARATOR . 'index.html');
+            return $this->matchTemplate($rootDir, $path . 'index.html');
         }
 
         $response = $this->matchTemplate($rootDir, $path . '.html');
