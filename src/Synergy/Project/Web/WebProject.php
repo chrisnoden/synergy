@@ -183,7 +183,11 @@ final class WebProject extends ProjectAbstract
             $template->setTemplateDir($this->_templateDir);
         }
         $template->setDev($this->isDev);
-        $template->setParameters($this->controller->getParameters());
+        $templateParams = array_merge(
+            $this->controller->getParameters(),
+            $this->controller->getControllerParameters()
+        );
+        $template->setParameters($templateParams);
         $template->init();
         $response = $template->getWebResponse();
         if ($response instanceof WebResponse) {

@@ -56,9 +56,13 @@ class ControllerEntity extends Object
      */
     protected $methodName;
     /**
-     * @var array
+     * @var array params passed to the controller
      */
     protected $parameters = array();
+    /**
+     * @var array params the controller wishes to share
+     */
+    protected $controllerParameters = array();
     /**
      * @var string
      */
@@ -179,6 +183,17 @@ class ControllerEntity extends Object
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+
+    /**
+     * Parameters the controller wishes to share
+     *
+     * @return array
+     */
+    public function getControllerParameters()
+    {
+        return $this->controllerParameters;
     }
 
 
@@ -531,6 +546,10 @@ class ControllerEntity extends Object
                 break;
             default:
                 $response = call_user_func_array(array($className, $methodName), $parameters);
+        }
+
+        if (method_exists($object, 'getParameters')) {
+            $this->controllerParameters = $object->getParameters();
         }
 
         return $response;
