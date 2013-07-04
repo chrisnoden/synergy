@@ -105,7 +105,7 @@ final class WebProject extends ProjectAbstract
             }
             catch (InvalidArgumentException $ex) {
                 throw new SynergyException(
-                    'Unable to find or use your template directory'
+                    'Unable to find or use your template directory: '.$this->getOption('synergy:webproject:template_dir')
                 );
             }
         } else {
@@ -265,6 +265,9 @@ final class WebProject extends ProjectAbstract
         if (substr($dir, 0, 1) != DIRECTORY_SEPARATOR && defined('SYNERGY_ROOT_DIR')) {
             $dir = SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . $dir;
         }
+        Logger::debug(
+            'Trying template_dir: '.$dir
+        );
         if (!is_dir($dir)) {
             throw new InvalidArgumentException(
                 sprintf("Invalid directory, %s", $dir)
