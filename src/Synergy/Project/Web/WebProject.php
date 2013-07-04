@@ -105,7 +105,7 @@ final class WebProject extends ProjectAbstract
             }
             catch (InvalidArgumentException $ex) {
                 throw new SynergyException(
-                    'Unable to find a valid config file'
+                    'Unable to find or use your template directory'
                 );
             }
         } else {
