@@ -186,9 +186,9 @@ abstract class ProjectAbstract extends Object
         }
 
         if (!isset($this->configFilename) && !$this->searchConfigFile()) {
-            throw new SynergyException(
-                'Unable to init Synergy library without config file'
-            );
+//            throw new SynergyException(
+//                'Unable to init Synergy library without config file'
+//            );
         }
 
         if (!isset($this->temp_dir) && $this->getOption('synergy:temp_dir')) {
@@ -535,6 +535,10 @@ abstract class ProjectAbstract extends Object
      */
     public function getOption($keyname)
     {
+        if (!isset($this->configFilename)) {
+            return false;
+        }
+
         // iterate through our options for the specific key
         $arr = explode(':', $keyname);
         if (count($arr) > 1) {

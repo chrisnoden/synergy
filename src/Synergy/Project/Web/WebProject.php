@@ -90,10 +90,11 @@ final class WebProject extends ProjectAbstract
         parent::__destruct();
     }
 
+    
     /**
      * Checks everything is good with our project before we run it
      *
-     * @throws \Synergy\Exception\SynergyException
+     * @throws ProjectException
      */
     protected function checkEnv()
     {
@@ -105,16 +106,17 @@ final class WebProject extends ProjectAbstract
                 Logger::debug('Template Dir: '.$this->_templateDir);
             }
             catch (InvalidArgumentException $ex) {
-                throw new SynergyException(
+                throw new ProjectException(
                     'Unable to find or use your template directory: '.$this->getOption('synergy:webproject:template_dir')
                 );
             }
-        } else {
-            throw new SynergyException(
+        } else if (!$this->searchTemplateDir()) {
+            throw new ProjectException(
                 'Need to set a template_dir in the config'
             );
         }
     }
+
 
     /**
      * Our main method : let's go and run our web project
@@ -161,9 +163,7 @@ final class WebProject extends ProjectAbstract
         } else {
             $this->handleNotFoundException();
         }
-
     }
-
 
 
     /**
@@ -323,6 +323,99 @@ final class WebProject extends ProjectAbstract
         $option_value = parent::replaceOptionVariables($option_value);
 
         return $option_value;
+    }
+
+
+    /**
+     * Attempts to locate our template directory
+     *
+     * @param string $baseDir directory to search down from
+     *
+     * @return bool false if nothing found
+     */
+    protected function searchTemplateDir($baseDir = null)
+    {
+        if (!is_string($baseDir) && defined('SYNERGY_ROOT_DIR')) {
+            $baseDir = SYNERGY_ROOT_DIR;
+        }
+        if (is_string($baseDir)) {
+            $testfile = $baseDir . DIRECTORY_SEPARATOR . 'templates';
+            if ($this->isValidDirectory($testfile)) {
+                $this->setTemplateDir($testfile);
+                return true;
+            }
+            $testfile = $baseDir . DIRECTORY_SEPARATOR . 'Templates';
+            if ($this->isValidDirectory($testfile)) {
+                $this->setTemplateDir($testfile);
+                return true;
+            }
+        }
+
+        // test from 1 level up from script path
+        $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'templates';
+        if ($this->isValidDirectory($testfile)) {
+            $this->setTemplateDir($testfile);
+            return true;
+        }
+        $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'Templates';
+        if ($this->isValidDirectory($testfile)) {
+            $this->setTemplateDir($testfile);
+            return true;
+        }
+
+        // test in app dir
+        if (isset($this->app_dir)) {
+            $testfile = $this->app_dir . DIRECTORY_SEPARATOR . 'templates';
+            if ($this->isValidDirectory($testfile)) {
+                $this->setTemplateDir($testfile);
+                return true;
+            }
+            $testfile = $this->app_dir . DIRECTORY_SEPARATOR . 'Templates';
+            if ($this->isValidDirectory($testfile)) {
+                $this->setTemplateDir($testfile);
+                return true;
+            }
+        }
+
+        // test 3 levels up
+        $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'templates';
+        if ($this->isValidDirectory($testfile)) {
+            $this->setTemplateDir($testfile);
+            return true;
+        }
+        $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'Templates';
+        if ($this->isValidDirectory($testfile)) {
+            $this->setTemplateDir($testfile);
+            return true;
+        }
+
+        // test 6 levels up
+        $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'templates';
+        if ($this->isValidDirectory($testfile)) {
+            $this->setTemplateDir($testfile);
+            return true;
+        }
+        $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'Templates';
+        if ($this->isValidDirectory($testfile)) {
+            $this->setTemplateDir($testfile);
+            return true;
+        }
+
+        // fall through :
+
+        // test from script path
+        $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'templates';
+        if ($this->isValidDirectory($testfile)) {
+            $this->setTemplateDir($testfile);
+            return true;
+        }
+        $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'Templates';
+        if ($this->isValidDirectory($testfile)) {
+            $this->setTemplateDir($testfile);
+            return true;
+        }
+
+        return false;
     }
 
 }
