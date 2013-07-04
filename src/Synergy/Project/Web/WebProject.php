@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Synergy\Controller\ControllerEntity;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\NotFoundException;
+use Synergy\Exception\ProjectException;
 use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
 use Synergy\Project;
@@ -122,13 +123,21 @@ final class WebProject extends ProjectAbstract
      */
     protected function launch()
     {
-
         $router = new WebRouter($this->_request);
-        if (isset($this->app_dir)) {
+
+        // use the best routes config
+        if ($this->getOption('synergy:routes') && file_exists($this->getOption('synergy:routes'))) {
+            $filename = $this->getOption('synergy:routes');
+        } else if (isset($this->configFilename) && file_exists(dirname($this->configFilename) . DIRECTORY_SEPARATOR . 'routes.yml')) {
+            $filename = dirname($this->configFilename) . DIRECTORY_SEPARATOR . 'routes.yml';
+        } else if (isset($this->app_dir) && file_exists($this->app_dir . DIRECTORY_SEPARATOR . 'config'. DIRECTORY_SEPARATOR . 'routes.yml')) {
             $filename = $this->app_dir . DIRECTORY_SEPARATOR . 'config'. DIRECTORY_SEPARATOR . 'routes.yml';
-            if (file_exists($filename)) {
-                $router->setRouteCollectionFromFile($filename);
-            }
+        } else if (isset($this->app_dir) && file_exists($this->app_dir . DIRECTORY_SEPARATOR . 'Config'. DIRECTORY_SEPARATOR . 'routes.yml')) {
+            $filename = $this->app_dir . DIRECTORY_SEPARATOR . 'Config'. DIRECTORY_SEPARATOR . 'routes.yml';
+        }
+
+        if (isset($filename)) {
+            $router->setRouteCollectionFromFile($filename);
         }
         $router->match();
 

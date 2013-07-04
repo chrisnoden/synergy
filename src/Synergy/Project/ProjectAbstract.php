@@ -574,6 +574,9 @@ abstract class ProjectAbstract extends Object
         if (isset($this->temp_dir)) {
             $option_value = preg_replace('/%temp_dir%/', $this->temp_dir, $option_value);
         }
+        if (isset($this->configFilename)) {
+            $option_value = preg_replace('/%config_dir%/', dirname($this->configFilename), $option_value);
+        }
 
         return $option_value;
     }
