@@ -137,6 +137,9 @@ final class WebProject extends ProjectAbstract
         }
 
         if (isset($filename)) {
+            Logger::debug(
+                'RouteCollection from file: '.$filename
+            );
             $router->setRouteCollectionFromFile($filename);
         }
         $router->match();
