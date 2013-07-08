@@ -32,6 +32,7 @@ use Synergy\Exception\ProjectException;
 use Synergy\Object;
 use Synergy\Exception\InvalidControllerException;
 use Synergy\Project\ProjectAbstract;
+use Synergy\Project\Web\WebAsset;
 
 /**
  * Class ControllerEntity
@@ -515,10 +516,14 @@ class ControllerEntity extends Object
      */
     protected function launchAction($className, $methodName, Array $parameters)
     {
-        /**
-         * @var \Synergy\Controller\ControllerInterface $object
-         */
         $object = $this->instantiateObject($className);
+
+        if ($object instanceof SmartController) {
+            $response = $object->requestMatch($this->request);
+            if ($response instanceof WebAsset) {
+                $response->deliver();
+            }
+        }
 
         if (!is_null($this->request)) {
             $object->setRequest($this->request);

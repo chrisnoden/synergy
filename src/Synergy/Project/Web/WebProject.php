@@ -79,6 +79,10 @@ final class WebProject extends ProjectAbstract
         $this->_request = $request;
 
         parent::__construct();
+
+        Logger::debug(
+            sprintf('Web Request: %s', $request->getPathInfo())
+        );
     }
 
 
@@ -160,6 +164,8 @@ final class WebProject extends ProjectAbstract
             $this->handleWebResponse($response);
         } else if ($response instanceof TemplateAbstract) {
             $this->handleWebTemplate($response);
+        } else if ($response instanceof WebAsset) {
+            $response->deliver();
         } else {
             $this->handleNotFoundException();
         }

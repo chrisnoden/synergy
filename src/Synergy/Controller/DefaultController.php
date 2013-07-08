@@ -38,7 +38,7 @@ use Synergy\Project\Web\WebResponse;
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class DefaultController extends Controller
+class DefaultController extends SmartController
 {
 
     /**
