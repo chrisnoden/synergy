@@ -519,18 +519,18 @@ class ControllerEntity extends Object
     {
         $object = $this->instantiateObject($className);
 
+        if (!is_null($this->request)) {
+            $object->setRequest($this->request);
+        }
+
         if ($object instanceof SmartController) {
-            $response = $object->requestMatch($this->request);
+            $response = $object->requestMatch($object->getRequest());
             if ($response instanceof WebAsset) {
                 Logger::debug(
                     'Delivering asset: '.$response->getFilename()
                 );
                 $response->deliver();
             }
-        }
-
-        if (!is_null($this->request)) {
-            $object->setRequest($this->request);
         }
 
         // This is quicker than call_user_func_array
