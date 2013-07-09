@@ -262,4 +262,17 @@ class WebRequest extends Request
         return $this->templateDir;
     }
 
+
+    /**
+     * Set the value of pathInfo member
+     *
+     * @param string $pathInfo
+     *
+     * @return void
+     */
+    public function setPathInfo($pathInfo)
+    {
+        $this->pathInfo = $pathInfo;
+    }
+
 }
