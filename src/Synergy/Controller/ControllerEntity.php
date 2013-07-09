@@ -29,6 +29,7 @@ namespace Synergy\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\ProjectException;
+use Synergy\Logger\Logger;
 use Synergy\Object;
 use Synergy\Exception\InvalidControllerException;
 use Synergy\Project\ProjectAbstract;
@@ -521,6 +522,9 @@ class ControllerEntity extends Object
         if ($object instanceof SmartController) {
             $response = $object->requestMatch($this->request);
             if ($response instanceof WebAsset) {
+                Logger::debug(
+                    'Delivering asset: '.$response->getFilename()
+                );
                 $response->deliver();
             }
         }
