@@ -147,16 +147,19 @@ class CliProject extends ProjectAbstract
         /**
          * Get the ControllerEntity
          */
-        $this->controller = $router->getController();
-        // pass the parameters
-        $this->controller->setParameters($this->parameters);
-        // Call the action
-        $response = $this->controller->callControllerAction();
+        try {
+            $this->controller = $router->getController();
+            // pass the parameters
+            $this->controller->setParameters($this->parameters);
+            // Call the action
+            $response = $this->controller->callControllerAction();
+        }
+        catch (\Exception $ex) {
+            var_dump($ex);
+        }
 
         if (is_string($response)) {
             \Cli\line($response);
-        } else if ($response instanceof Object) {
-            \Cli\line($response->__toString());
         }
 
     }
