@@ -23,6 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link      https://github.com/chrisnoden
  */
+declare(ticks = 1);
 
 namespace Synergy\Project\Daemon;
 
@@ -48,8 +49,6 @@ class DaemonProject extends CliProject
      */
     public function launch()
     {
-        $this->sigHandler = new SignalHandler();
-
         parent::launch();
     }
 
