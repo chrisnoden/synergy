@@ -135,16 +135,18 @@ abstract class ProjectAbstract extends Object
      */
     protected function loadBootstrap($filename = null)
     {
-        if (is_null($filename)) {
+        if (is_null($filename) && isset($this->app_dir)) {
             $filename = $this->app_dir . DIRECTORY_SEPARATOR . 'bootstrap.php';
         }
-        if (file_exists($filename) && is_readable($filename)) {
+        if (!is_null($filename) && file_exists($filename) && is_readable($filename)) {
             @include_once($filename);
             Logger::debug(
                 sprintf('Bootstrap %s loaded',
                     str_ireplace(dirname($this->app_dir).DIRECTORY_SEPARATOR, '', $filename)
                 )
             );
+        } else {
+            Logger::debug('No bootstrap.php loaded from your app dir');
         }
     }
 
