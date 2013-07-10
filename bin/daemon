@@ -29,6 +29,13 @@ if (PHP_SAPI !== 'cli') {
  */
 set_time_limit(0);
 
+
+/**
+ * Synergy will base all relative files and paths on this root
+ * This should be your main project directory (where your composer.json lives)
+ */
+define('SYNERGY_ROOT_DIR', $_SERVER['PWD']);
+
 /**
  * Load composer autoload.php
  */
@@ -65,6 +72,6 @@ register_shutdown_function('Synergy\ExceptionHandler::ShutdownHandler');
 \Synergy\Project::setType(\Synergy\Project\ProjectType::DAEMON);
 $project = \Synergy\Project::getObject();
 $project->setDev(true);
-$project->setAppDir(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'app');
+$project->setAppDir(SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'app');
 $project->setTempDir('/tmp');
 $project->run();
