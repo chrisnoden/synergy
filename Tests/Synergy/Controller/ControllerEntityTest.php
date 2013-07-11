@@ -24,31 +24,41 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Test;
+namespace Synergy\Tests\Controller;
 
-use Synergy\Project\Cli\SignalHandler;
+use Synergy\Controller\ControllerEntity;
 
- /**
- * Class Test
+/**
+ * Class ControllerEntityTest
  *
- * @category Test
+ * @category Synergy\Tests\Controller
  * @package  Synergy MVC Library
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class Test 
+class ControllerEntityTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function defaultAction()
+    /**
+     * @var ControllerEntity
+     */
+    private static $_obj;
+
+    public function testObjectInstantiation()
     {
-        do
-        {
-            SignalHandler::$blockExit = true;
-            sleep(15);
-            echo "Loop\n";
-            SignalHandler::$blockExit = false;
-        } while (1);
+        self::$_obj = new ControllerEntity();
+        $this->assertInstanceOf('\Synergy\Controller\ControllerEntity', self::$_obj);
+        self::$_obj->setController('Test\\TestController');
+        $this->assertEquals('Test\TestController', self::$_obj->getClassName());
+        $this->assertEquals('defaultAction', self::$_obj->getMethodName());
     }
+
+    public function testControllerAction()
+    {
+        $this->setExpectedException('\Synergy\Exception\InvalidArgumentException', 'getParameters() method in Test\TestController must return array');
+        self::$_obj->callControllerAction();
+    }
+
 
 }

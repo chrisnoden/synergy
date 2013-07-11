@@ -26,10 +26,10 @@
 
 namespace Test;
 
-use Synergy\Project\Cli\SignalHandler;
+use Synergy\Controller\Controller;
 
- /**
- * Class Test
+/**
+ * Class TestController
  *
  * @category Test
  * @package  Synergy MVC Library
@@ -37,18 +37,19 @@ use Synergy\Project\Cli\SignalHandler;
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class Test 
+class TestController extends Controller
 {
+
+    public function getParameters()
+    {
+        // deliberately return the wrong thing
+        return false;
+    }
 
     public function defaultAction()
     {
-        do
-        {
-            SignalHandler::$blockExit = true;
-            sleep(15);
-            echo "Loop\n";
-            SignalHandler::$blockExit = false;
-        } while (1);
+
     }
+
 
 }

@@ -32,6 +32,7 @@ if (!is_file($autoloadFile)) {
 if (is_file($autoloadFile)) {
     $loader = include_once $autoloadFile;
     $loader->add('Synergy\Tests', __DIR__);
+    $loader->add('Test', __DIR__ . DIRECTORY_SEPARATOR . 'app');
 } else {
     throw new \LogicException('Run "composer install --dev" to create autoloader.');
 }
