@@ -31,6 +31,7 @@ use Synergy\Logger\Logger;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Object;
 use Synergy\Project;
+use Synergy\Project\Web\WebRequest;
 
 /**
  * Class Controller
@@ -45,7 +46,7 @@ class Controller extends Object
 {
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var WebRequest
      */
     protected $request;
     /**
@@ -67,17 +68,18 @@ class Controller extends Object
     /**
      * Set the value of request member
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param WebRequest $request
      *
      * @return void
+     * @throws InvalidArgumentException
      */
-    public function setRequest($request)
+    public function setRequest(WebRequest $request)
     {
-        if ($request instanceof \Symfony\Component\HttpFoundation\Request) {
+        if ($request instanceof WebRequest) {
             $this->request = $request;
         } else {
             throw new InvalidArgumentException(
-                '$request must be an instance of \Symfony\Component\HttpFoundation\Request'
+                '$request must be an instance of \Synergy\Project\Web\WebRequest'
             );
         }
     }
@@ -86,7 +88,7 @@ class Controller extends Object
     /**
      * Value of member request
      *
-     * @return \Symfony\Component\HttpFoundation\Request value of member
+     * @return WebRequest value of member
      */
     public function getRequest()
     {
