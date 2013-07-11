@@ -202,10 +202,13 @@ final class WebProject extends ProjectAbstract
         }
         $template->setDev($this->isDev);
         // merge the controller parameters
-        $templateParams = array_merge(
-            $this->controller->getParameters(),
-            $this->controller->getControllerParameters()
-        );
+        $controllerParams = $this->controller->getControllerParameters();
+        if (is_array($controllerParams)) {
+            $templateParams = array_merge(
+                $this->controller->getParameters(),
+                $controllerParams
+            );
+        }
         // and merge with any pre-existing template parameters
         $templateParams = array_merge($templateParams, $template->getParameters());
         // set the new params array as the template parameters
