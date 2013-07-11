@@ -200,6 +200,26 @@ class ControllerEntity extends Object
 
 
     /**
+     * Set the value of controllerParameters member
+     *
+     * @param array $controllerParameters
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function setControllerParameters($controllerParameters)
+    {
+        if (is_array($controllerParameters)) {
+            $this->controllerParameters = $controllerParameters;
+        } else {
+            throw new InvalidArgumentException(
+                __METHOD__ . ' expects array as argument'
+            );
+        }
+    }
+
+
+    /**
      * @param string $defaultClassName
      */
     public function setDefaultClassName($defaultClassName)
@@ -514,6 +534,7 @@ class ControllerEntity extends Object
      * @param array  $parameters associative array of params to pass
      *
      * @return mixed the response from the action
+     * @throws InvalidArgumentException
      */
     protected function launchAction($className, $methodName, Array $parameters)
     {
@@ -558,7 +579,15 @@ class ControllerEntity extends Object
         }
 
         if (method_exists($object, 'getParameters')) {
-            $this->controllerParameters = $object->getParameters();
+            try {
+                $this->setControllerParameters($object->getParameters());
+            }
+            catch (InvalidArgumentException $ex) {
+                throw new InvalidArgumentException(sprintf(
+                    'getParameters() method in %s must return array',
+                    $this->className
+                ));
+            }
         }
 
         return $response;
