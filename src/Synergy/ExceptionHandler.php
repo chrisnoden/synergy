@@ -113,7 +113,7 @@ class ExceptionHandler
      *
      * @var array
      */
-    private static $_aStopCodes = array(1, 2, 4, 16, 32, 64, 128, 256, 512);
+    private static $_aStopCodes = array(1, 4, 16, 32, 64, 128, 256, 512);
     /**
      * Array of codes and files that are ignored
      * Add to this list with a call to
@@ -304,8 +304,14 @@ class ExceptionHandler
                  * Convert the PHP error number to a Psr compatible LogLevel
                  */
                 switch (self::$errNum) {
+                    case 1:
+                    case 256:
+                        $dbgLevel = LogLevel::CRITICAL;
+                        break;
+
                     case 2:
-                        $dbgLevel = LogLevel::INFO;
+                    case 512:
+                        $dbgLevel = LogLevel::WARNING;
                         break;
 
                     case 8:
@@ -314,7 +320,8 @@ class ExceptionHandler
                         break;
 
                     case 2048:
-                        $dbgLevel = LogLevel::WARNING;
+                    case 8192:
+                        $dbgLevel = LogLevel::ALERT;
                         break;
 
                     case 16:
