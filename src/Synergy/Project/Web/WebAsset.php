@@ -27,6 +27,7 @@
 namespace Synergy\Project\Web;
 
 use Synergy\Exception\InvalidArgumentException;
+use Synergy\Exception\SynergyException;
 use Synergy\Object;
 use Synergy\Project;
 
@@ -46,6 +47,26 @@ class WebAsset extends Object
      * @var string
      */
     protected $filename;
+    /**
+     * @var string
+     */
+    protected $contents;
+    /**
+     * @var string
+     */
+    protected $extension;
+    /**
+     * @var string
+     */
+    protected $contentType;
+    /**
+     * @var array
+     */
+    protected $aHeaders = array();
+    /**
+     * @var string
+     */
+    protected $status = '200 OK';
 
 
     public function __construct($filename = null)
@@ -67,6 +88,14 @@ class WebAsset extends Object
     {
         if (is_readable($filename)) {
             $this->filename = $filename;
+            $extension = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
+            try {
+                $this->setExtension($extension);
+            }
+            catch (InvalidArgumentException $ex) {
+                $file = escapeshellarg($this->filename);
+                $this->contentType = shell_exec('file -bi ' . $file);
+            }
         } else {
             throw new InvalidArgumentException(
                 'Invalid asset filename '.$filename
@@ -87,14 +116,27 @@ class WebAsset extends Object
 
 
     /**
-     * Sends the asset straight to the browser and exits
+     * Set the value of contents member
+     *
+     * @param string $contents
      *
      * @return void
      */
-    public function deliver()
+    public function setContents($contents)
     {
-        $extension = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
+        $this->contents = $contents;
+    }
 
+
+    /**
+     * Set the value of extension member
+     *
+     * @param string $extension
+     *
+     * @return void
+     */
+    public function setExtension($extension)
+    {
         // Determine Content Type
         switch ($extension) {
             case 'pdf':
@@ -162,50 +204,105 @@ class WebAsset extends Object
             case 'eot':
                 $ctype = 'application/vnd.ms-fontobject';
                 break;
-            default:
-                if ($this->filename) {
-                    $file = escapeshellarg($this->filename);
-                    $ctype = shell_exec('file -bi ' . $file);
-                }
-                break;
         }
 
-        header($_SERVER['SERVER_PROTOCOL'] . ' 200 OK');
-        header('Status: 200 OK');
-        if (Project::isDev()) {
-            $aHeaders = array(
-                'Expires' => date('r', strtotime('Yesterday')),
-                'Cache-Control' => 'no-store, no-cache, max-age=0, must-revalidate',
-                'Pragma' => 'no-cache'
-            );
-        } else {
-            $aHeaders = array(
-                'Expires' => date('r', strtotime('+5 min')),
-                'Cache-Control' => 'private, max-age=300, must-revalidate',
-                'Pragma' => 'private'
-            );
-        }
-        // Important headers
-        $aHeaders['Last-Modified'] = date('r', filectime($this->filename));
-        $aHeaders['ETag'] = md5(filectime($this->filename));
-
-        // now, finally, we send the headers
-        foreach ($aHeaders AS $name => $value) {
-            if ($value === false) continue;
-            $hdr = sprintf('%s: %s', $name, $value);
-            header($hdr);
-        }
-        header('Content-Length: ' . filesize($this->filename));
         if (isset($ctype)) {
-            header('Content-Type: '.$ctype);
+            $this->contentType = $ctype;
+        } else {
+            throw new InvalidArgumentException(
+                'Unsupported extension '.$extension
+            );
         }
-        header('X-Filename: '. $this->filename);
-
-        $fp = fopen($this->filename, 'rb');
-        fpassthru($fp);
-
-        exit;
     }
 
+
+    /**
+     * Set the value of multiple headers
+     *
+     * @param array $aHeaders
+     */
+    public function setHeaders(Array $aHeaders)
+    {
+        $this->aHeaders = array_merge($this->aHeaders, $aHeaders);
+    }
+
+
+    /**
+     * Set the value of an individual header
+     *
+     * @param string $header
+     * @param string $value
+     */
+    public function addHeader($header, $value)
+    {
+        $this->aHeaders[$header] = $value;
+    }
+
+
+    /**
+     * Send the HTTP headers
+     */
+    protected function sendHeaders()
+    {
+        header($_SERVER['SERVER_PROTOCOL'] .' '. $this->status);
+        header('Status: '.$this->status);
+        foreach ($this->aHeaders AS $header=>$value)
+        {
+            if ($value === false) continue;
+            header(
+                sprintf('%s: %s', $header, $value)
+            );
+        }
+        header('Content-Type: '.$this->contentType);
+    }
+
+
+    /**
+     * Sends the asset straight to the browser and exits
+     *
+     * @return void
+     * @throws SynergyException
+     */
+    public function deliver()
+    {
+        if ((isset($this->filename) || isset($this->contents)) && isset($this->contentType)) {
+            if (Project::isDev()) {
+                $aHeaders = array(
+                    'Expires' => date('r', strtotime('Yesterday')),
+                    'Cache-Control' => 'no-store, no-cache, max-age=0, must-revalidate',
+                    'Pragma' => 'no-cache'
+                );
+            } else {
+                $aHeaders = array(
+                    'Expires' => date('r', strtotime('+5 min')),
+                    'Cache-Control' => 'private, max-age=300, must-revalidate',
+                    'Pragma' => 'private'
+                );
+            }
+            // Important headers
+            $aHeaders['Last-Modified'] = date('r', filectime($this->filename));
+            $aHeaders['ETag'] = md5(filectime($this->filename));
+            $aHeaders['Content-Length'] = filesize($this->filename);
+            if (isset($this->filename) && !isset($this->contents)) {
+                $aHeaders['X-Filename'] = $this->filename;
+            }
+
+            $this->setHeaders($aHeaders);
+            $this->sendHeaders();
+
+            if (isset($this->filename) && !isset($this->contents)) {
+                $fp = fopen($this->filename, 'rb');
+                fpassthru($fp);
+                exit;
+            } else {
+                die ($this->contents);
+            }
+        }
+
+        throw new SynergyException(
+            'Invalid init of WebAsset, unable to deliver'
+        );
+
+    }
 
 }
