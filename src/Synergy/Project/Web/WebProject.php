@@ -94,7 +94,7 @@ final class WebProject extends ProjectAbstract
         parent::__destruct();
     }
 
-    
+
     /**
      * Checks everything is good with our project before we run it
      *
@@ -166,8 +166,11 @@ final class WebProject extends ProjectAbstract
             $this->handleWebTemplate($response);
         } else if ($response instanceof WebAsset) {
             $response->deliver();
+        } else if (is_string($response)) {
+            $render = WebResponse::create($response);
+            $render->send();
         } else {
-            $this->handleNotFoundException();
+            $this->handleNotFoundException($response);
         }
     }
 
@@ -225,9 +228,11 @@ final class WebProject extends ProjectAbstract
     /**
      * Display a 404 error or similar
      *
+     * @param mixed $response any response we can work with
+     *
      * @throws \Synergy\Exception\NotFoundException
      */
-    protected function handleNotFoundException()
+    protected function handleNotFoundException($response = null)
     {
         $template = new HtmlTemplate();
         $template->setTemplateDir(SYNERGY_LIBRARY_PATH . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . '_synergy_');
