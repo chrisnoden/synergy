@@ -24,6 +24,10 @@
  * @link      https://github.com/chrisnoden
  */
 
+if (!ini_get('date.timezone')) {
+    date_default_timezone_set('Europe/London');
+}
+
 $autoloadFile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'autoload.php';
 if (!is_file($autoloadFile)) {
     $autoloadFile = __DIR__ . '/../vendor/autoload.php';
