@@ -174,7 +174,11 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
 
             // test the dir
             if (!is_dir($parts['dirname'])) {
-                Tools::mkdir($parts['dirname']);
+                if (!Tools::mkdir($parts['dirname'], true)) {
+                    throw new InvalidArgumentException(
+                        "filename must be an absolute filename in a writeable directory : $filename"
+                    );
+                }
             }
 
             // Test an existing file is writable
