@@ -153,6 +153,9 @@ class CliProject extends ProjectAbstract
             $this->controller->setParameters($this->parameters);
             // Call the action
             $response = $this->controller->callControllerAction();
+            if (is_string($response)) {
+                \Cli\line($response);
+            }
         }
         catch (\Exception $ex) {
             \Cli\line(

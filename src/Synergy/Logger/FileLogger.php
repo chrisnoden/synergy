@@ -96,7 +96,13 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
     {
         $level = strtolower($level);
         if ($this->isValidLogLevel($level)) {
-            $this->_write($message);
+            $this->_write(
+                sprintf('%s %s %s',
+                    date('Y-m-d H:i:s'),
+                    $level,
+                    $message
+                )
+            );
         }
     }
 
