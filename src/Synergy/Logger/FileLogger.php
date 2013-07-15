@@ -29,6 +29,7 @@ namespace Synergy\Logger;
 use Synergy\Logger\LoggerAbstract;
 use Synergy\Logger\LoggerInterface;
 use Synergy\Exception\InvalidArgumentException;
+use Synergy\Tools\Tools;
 
 /**
  * Class FileLogger
@@ -158,10 +159,10 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
         // close any open file resource before changing the filename
         $this->closeFH();
 
-        // check the filename is valid before setting
-        if (is_string($filename) && substr($filename, 0, 1) == DIRECTORY_SEPARATOR && is_dir(dirname($filename)) && is_writable(dirname($filename))) {
-            $filename = trim($filename);
+        $filename = trim($filename);
 
+        // check the filename is valid before setting
+        if (is_string($filename) && substr($filename, 0, 1) == DIRECTORY_SEPARATOR) {
             // split out the parts of the filename
             $parts = pathinfo($filename);
 
@@ -171,18 +172,25 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
                 $filename .= '.' . $parts['extension'];
             }
 
+            // test the dir
+            if (!is_dir($parts['dirname'])) {
+                Tools::mkdir($parts['dirname']);
+            }
+
             // Test an existing file is writable
             if (file_exists($filename) && !is_writable($filename)) {
                 $processUser = posix_getpwuid(posix_geteuid());
                 throw new InvalidArgumentException(
                     'logfile must be writeable by user: '.$processUser['name']
                 );
+            } else if (!file_exists($filename) && is_dir($parts['dirname']) && is_writable($parts['dirname'])) {
+                touch($filename);
             }
 
             $this->filename = $filename;
         } else {
             throw new InvalidArgumentException(
-                "filename must be an absolute filename in a writeable directory"
+                "filename must be an absolute filename in a writeable directory : $filename"
             );
         }
     }

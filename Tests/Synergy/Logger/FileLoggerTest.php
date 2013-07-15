@@ -76,7 +76,15 @@ class FileLoggerTest extends \PHPUnit_Framework_TestCase
         $obj->setFilename($this->_testFileName);
         $obj->error("Test message");
         $this->assertFileExists($this->_testFileName);
-        $this->assertStringEqualsFile($this->_testFileName, "Test message\n");
+        $this->assertStringEqualsFile(
+            $this->_testFileName,
+            sprintf(
+                "%s %s %s",
+                date('Y-m-d H:i:s'),
+                'error',
+                "Test message\n"
+            )
+        );
     }
 
 

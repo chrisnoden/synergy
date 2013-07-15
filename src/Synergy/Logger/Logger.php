@@ -100,15 +100,19 @@ class Logger extends Singleton
     }
 
 
+    /**
+     * Create a file logger fall-back
+     */
     private static function setFallbackLogger()
     {
         if (defined('SYNERGY_ROOT_DIR')) {
             // @todo replace with sensible default log filename
             self::$_logger = new FileLogger(
-                SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'project.log'
+                SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'project.log'
             );
         }
     }
+
 
     /**
      * System is unusable.
