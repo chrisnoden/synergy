@@ -49,7 +49,6 @@ class CliRouter extends RouterAbstract
         if (!isset($this->request)) {
             $this->request = $this->defaultClass;
         }
-        var_dump($this->request);
         $this->controller = $this->fetchControllerEntity($this->request);
     }
 

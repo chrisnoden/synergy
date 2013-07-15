@@ -8,11 +8,6 @@
 include('cli.php');
 
 \Synergy\Project::init();
-\Synergy\Project::setName('Daemon Test');
-\Synergy\Project::setDev(true);
 \Synergy\Project::setType(\Synergy\Project\ProjectType::DAEMON);
 $project = \Synergy\Project::getObject();
-$project->setDev(true);
-$project->setAppDir(SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'app');
-$project->setTempDir('/tmp');
 $project->run();

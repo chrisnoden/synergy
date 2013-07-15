@@ -155,11 +155,10 @@ class CliProject extends ProjectAbstract
             $response = $this->controller->callControllerAction();
         }
         catch (\Exception $ex) {
-            var_dump($ex);
-        }
-
-        if (is_string($response)) {
-            \Cli\line($response);
+            \Cli\line(
+                '%rERROR%n:'.
+                '%r'.$ex->getMessage().'%n'
+            );
         }
 
     }

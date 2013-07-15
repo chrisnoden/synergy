@@ -5,10 +5,16 @@
     "keywords": ["mvc", "framework", "symfony"],
     "homepage": "https://github.com/chrisnoden/synergy",
     "license": "Apache-2.0",
-    "version": "0.1.0-dev",
+    "version": "0.2.0-dev",
     "minimum-stability": "beta",
     "authors": [
         { "name": "Chris Noden", "email": "chris.noden@gmail.com", "homepage": "http://www.chrisnoden.com" }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/chrisnoden/Propel"
+        }
     ],
     "require": {
         "php": ">=5.3.21",
@@ -31,7 +37,7 @@
         "chrisnoden/talkback": "1.*",
         "mobiledetect/mobiledetectlib": "2.6.*",
         "smarty/smarty": "3.1.*",
-        "propel/propel1": "1.6.*",
+        "propel/propel1": "dev-master",
         "twig/twig": "v1.13.1"
     },
     "suggest": {

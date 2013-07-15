@@ -39,9 +39,9 @@ class ArgumentParser
 {
 
     /**
-     * Parses out all the command line arguments to find the arguments
-     * for the Symfony CliProject and the requested controller plus any
-     * arguments to pass to the controller
+     * Parses out all the command line to find the requested controller plus
+     * any arguments which are available to both Synergy framework
+     * classes and to the Controller class
      *
      * @param string $arguments line of args to be parsed (if null then taken from command line)
      *
@@ -60,7 +60,6 @@ class ArgumentParser
 
         $request = null;
         $requestArgs = array();
-        $systemArgs = array();
         $phase = 1;
         $script_filename = strtolower($_SERVER['SCRIPT_FILENAME']);
 
@@ -79,9 +78,9 @@ class ArgumentParser
                     break;
 
                 case 2:
-                    // look for any args for Symfony
+                    // look for any args for Synergy
                     if (substr($val, 0, 1) == '-') {
-                        $systemArgs[] = $val;
+                        $requestArgs[] = $val;
                     } else {
                         $phase = 3;
                         $request = $val;
@@ -94,8 +93,6 @@ class ArgumentParser
 
             }
         }
-
-//        $this->parseSystemArgs($systemArgs);
 
         $result = array(
             'request' => $request,

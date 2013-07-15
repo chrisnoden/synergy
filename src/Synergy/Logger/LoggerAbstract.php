@@ -45,38 +45,7 @@ abstract class LoggerAbstract extends AbstractLogger
     /**
      * @var array
      */
-    private $_aValidLogLevels = array();
-
-
-    /**
-     * Create a new LoggerAbstract object
-     *
-     * @param null $filename optional filename (path + filename)
-     *
-     * @throws \Synergy\Exception\InvalidArgumentException
-     */
-    public function __construct($filename = null)
-    {
-        /**
-         * Populate our valid log levels by Reflecting on the
-         * constants exposed in the Psr\Log\LogLevel class
-         */
-        $t = new LogLevel();
-        $r = new \ReflectionObject($t);
-        $this->_aValidLogLevels = $r->getConstants();
-
-        // Set our filename
-        if (!is_null($filename)) {
-            if (file_exists($filename) && !is_writable($filename)) {
-                $processUser = posix_getpwuid(posix_geteuid());
-                throw new InvalidArgumentException(
-                    'logfile must be writeable by user: '.$processUser['name']
-                );
-            }
-
-            $this->filename = $filename;
-        }
-    }
+    protected $aValidLogLevels = array();
 
 
     /**
@@ -88,10 +57,10 @@ abstract class LoggerAbstract extends AbstractLogger
      */
     protected function isValidLogLevel($level)
     {
-        if (!in_array($level, $this->_aValidLogLevels)) {
+        if (!in_array($level, $this->aValidLogLevels)) {
             $logLevels = implode(
                 ', \\Psr\\Log\\LogLevel::',
-                $this->_aValidLogLevels
+                $this->aValidLogLevels
             );
             throw new \Psr\Log\InvalidArgumentException(
                 'Invalid LogLevel ('.$level.', must be one of \Psr\Log\LogLevel::' . $logLevels);

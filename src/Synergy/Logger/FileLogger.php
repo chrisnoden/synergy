@@ -58,6 +58,29 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
 
 
     /**
+     * Create a new LoggerAbstract object
+     *
+     * @param null $filename optional filename (path + filename)
+     *
+     * @throws \Synergy\Exception\InvalidArgumentException
+     */
+    public function __construct($filename = null)
+    {
+        /**
+         * Populate our valid log levels by Reflecting on the
+         * constants exposed in the Psr\Log\LogLevel class
+         */
+        $t = new LogLevel();
+        $r = new \ReflectionObject($t);
+        $this->aValidLogLevels = $r->getConstants();
+
+        if (!is_null($filename)) {
+            $this->setFilename($filename);
+        }
+    }
+
+
+    /**
      * Logs to the File
      *
      * @todo do something sensible with the log context
@@ -92,7 +115,10 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
                     $this->fh = $fh;
                 } else {
                     throw new InvalidArgumentException(
-                        sprintf("Invalid filename, unable to open for append (%s)", $this->filename)
+                        sprintf(
+                            "Invalid filename, unable to open for append (%s)",
+                            $this->filename
+                        )
                     );
                 }
             } else {
@@ -139,9 +165,19 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
                 $filename .= '.' . $parts['extension'];
             }
 
+            // Test an existing file is writable
+            if (file_exists($filename) && !is_writable($filename)) {
+                $processUser = posix_getpwuid(posix_geteuid());
+                throw new InvalidArgumentException(
+                    'logfile must be writeable by user: '.$processUser['name']
+                );
+            }
+
             $this->filename = $filename;
         } else {
-            throw new InvalidArgumentException("filename must be an absolute filename in a writeable directory");
+            throw new InvalidArgumentException(
+                "filename must be an absolute filename in a writeable directory"
+            );
         }
     }
 

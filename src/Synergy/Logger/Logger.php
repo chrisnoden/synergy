@@ -64,11 +64,15 @@ class Logger extends Singleton
     public static function log($level, $message, array $context = array())
     {
         if (is_null(self::$_logger)) {
-            self::$_logger = new FileLogger('/tmp/synergy.log');
-            // @todo replace with sensible default log filename
+            self::setFallbackLogger();
         }
 
-        self::$_logger->log($level, $message, $context);
+        if (!is_null(self::$_logger)) {
+            self::$_logger->log($level, $message, $context);
+        } else {
+            // unable to log anywhere
+            echo $message;
+        }
     }
 
 
@@ -77,7 +81,7 @@ class Logger extends Singleton
      *
      * @param LoggerInterface $logger
      */
-    public static function setLogger(\Psr\Log\LoggerInterface $logger)
+    public static function setLogger(LoggerInterface $logger)
     {
         self::$_logger = $logger;
     }
@@ -89,12 +93,22 @@ class Logger extends Singleton
     public static function getLogger()
     {
         if (is_null(self::$_logger)) {
-            self::$_logger = new FileLogger('/tmp/synergy.log'); // @todo replace with sensible default log filename
+            self::setFallbackLogger();
         }
 
         return self::$_logger;
     }
 
+
+    private static function setFallbackLogger()
+    {
+        if (defined('SYNERGY_ROOT_DIR')) {
+            // @todo replace with sensible default log filename
+            self::$_logger = new FileLogger(
+                SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'project.log'
+            );
+        }
+    }
 
     /**
      * System is unusable.
