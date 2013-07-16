@@ -7,43 +7,7 @@
 
 include('cli.php');
 
-/**
- * Create a Talkback collection
- */
-$logger = \Talkback\Logger::getLogger('bundle logger');
-$logger
-    ->addChannel(
-        array(
-            \Psr\Log\LogLevel::ERROR,
-            \Psr\Log\LogLevel::CRITICAL,
-            \Psr\Log\LogLevel::ALERT,
-            \Psr\Log\LogLevel::EMERGENCY,
-            \Psr\Log\LogLevel::INFO,
-            \Psr\Log\LogLevel::NOTICE,
-            \Psr\Log\LogLevel::WARNING
-        ), \Talkback\Channel\ChannelFactory::File('/tmp/synergy.log'))
-    ->addChannel(
-        array(
-            \Psr\Log\LogLevel::ERROR,
-            \Psr\Log\LogLevel::CRITICAL,
-            \Psr\Log\LogLevel::ALERT,
-            \Psr\Log\LogLevel::EMERGENCY,
-            \Psr\Log\LogLevel::NOTICE,
-            \Psr\Log\LogLevel::INFO,
-            \Psr\Log\LogLevel::WARNING
-        ), \Talkback\Channel\ChannelFactory::Basic())
-    ->addChannel(\Psr\Log\LogLevel::INFO, \Talkback\Channel\ChannelFactory::Growl('Bundle'));
-
-/**
- * @var \Synergy\Project\Cli\CliProject $project
- */
-$project =
-    \Synergy\Project\ProjectFactory::build(
-        'Synergy Bundle',
-        \Synergy\Project\ProjectType::CLI,
-        $logger
-    );
-$project->setDev(true);
-$project->setAppDir(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'app');
-$project->setTempDir('/tmp');
+\Synergy\Project::init();
+\Synergy\Project::setType(\Synergy\Project\ProjectType::CLI);
+$project = \Synergy\Project::getObject();
 $project->run();

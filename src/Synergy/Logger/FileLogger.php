@@ -59,7 +59,7 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
 
 
     /**
-     * Create a new LoggerAbstract object
+     * Create a new FileLogger object
      *
      * @param null $filename optional filename (path + filename)
      *
@@ -67,14 +67,7 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
      */
     public function __construct($filename = null)
     {
-        /**
-         * Populate our valid log levels by Reflecting on the
-         * constants exposed in the Psr\Log\LogLevel class
-         */
-        $t = new LogLevel();
-        $r = new \ReflectionObject($t);
-        $this->aValidLogLevels = $r->getConstants();
-
+        parent::__construct();
         if (!is_null($filename)) {
             $this->setFilename($filename);
         }
@@ -85,7 +78,6 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
      * Logs to the File
      *
      * @todo do something sensible with the log context
-     * @todo filter the logs by level
      *
      * @param mixed  $level
      * @param string $message

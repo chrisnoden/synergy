@@ -28,6 +28,7 @@ declare(ticks = 1);
 namespace Synergy\Project\Cli;
 
 use Synergy\Exception\SynergyException;
+use Synergy\Logger\Logger;
 use Synergy\Object;
 use Synergy\Project\ProjectAbstract;
 
@@ -73,6 +74,8 @@ class CliProject extends ProjectAbstract
     {
         register_tick_function(array(&$this, "checkExit"));
 
+        parent::__construct();
+
         // Check this is coming from the CLI
         if (PHP_SAPI !== 'cli') {
             throw new SynergyException(
@@ -91,9 +94,17 @@ class CliProject extends ProjectAbstract
             $this->rawArguments = $result['arguments'];
         }
 
+        Logger::debug('CliProject started');
+
+        if (is_null($this->request)) {
+            Logger::emergency(
+                'No controller request provided'
+            );
+            exit(1);
+        }
+
         $this->registerSignalHandler();
 
-        parent::__construct();
     }
 
 
@@ -158,10 +169,11 @@ class CliProject extends ProjectAbstract
             }
         }
         catch (\Exception $ex) {
-            \Cli\line(
+            \Cli\err(
                 '%rERROR%n:'.
                 '%r'.$ex->getMessage().'%n'
             );
+            exit(1);
         }
 
     }

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * 
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,67 +17,71 @@
  * limitations under the License.
  *
  * @category  File
- * @package   Synergy
+ * @package   Synergy MVC Library
  * @author    Chris Noden <chris.noden@gmail.com>
- * @copyright 2009-2013 Chris Noden
+ * @copyright 2013 Chris Noden
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link      https://github.com/chrisnoden
  */
 
 namespace Synergy\Logger;
 
-use Psr\Log\AbstractLogger;
-use Synergy\Exception\InvalidArgumentException;
-
 /**
- * Class LoggerAbstract
+ * Class SynergyLogger
  *
  * @category Synergy\Logger
- * @package  Synergy
+ * @package  Synergy MVC Library
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-abstract class LoggerAbstract extends AbstractLogger
+class SynergyLogger extends LoggerAbstract implements LoggerInterface
 {
 
     /**
      * @var array
      */
-    protected $aValidLogLevels = array();
+    private $_aLoggers = array();
 
 
-    public function __construct()
+    /**
+     * Add a FileLogger
+     *
+     * @param $filename
+     */
+    public function addFileLogger($filename)
     {
-        /**
-         * Populate our valid log levels by Reflecting on the
-         * constants exposed in the Psr\Log\LogLevel class
-         */
-        $t = new LogLevel();
-        $r = new \ReflectionObject($t);
-        $this->aValidLogLevels = $r->getConstants();
+        $this->_aLoggers[] = new FileLogger($filename);
     }
 
 
     /**
-     * Tests the $level to ensure it's accepted under the Psr3 standard
-     *
-     * @param $level
-     * @return bool
-     * @throws \Psr\Log\InvalidArgumentException
+     * Add a CliLogger
      */
-    protected function isValidLogLevel($level)
+    public function addCliLogger()
     {
-        if (!in_array($level, $this->aValidLogLevels)) {
-            $logLevels = implode(
-                ', \\Psr\\Log\\LogLevel::',
-                $this->aValidLogLevels
-            );
-            throw new InvalidArgumentException(
-                'Invalid LogLevel ('.$level.', must be one of \Psr\Log\LogLevel::' . $logLevels);
-        }
+        $this->_aLoggers[] = new CliLogger();
+    }
 
-        return true;
+
+    /**
+     * Log to each sub-logger
+     *
+     * @param mixed  $level
+     * @param string $message
+     * @param array  $context
+     * @return null
+     * @throw InvalidArgumentException
+     */
+    public function log($level, $message, array $context = array())
+    {
+        /**
+         * @var LoggerAbstract $logger
+         */
+        foreach ($this->_aLoggers AS $logger)
+        {
+            $logger->log($level, $message, $context);
+        }
     }
 
 }
