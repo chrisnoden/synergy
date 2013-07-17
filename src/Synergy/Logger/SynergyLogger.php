@@ -45,6 +45,17 @@ class SynergyLogger extends LoggerAbstract implements LoggerInterface
 
 
     /**
+     * Value of member _aLoggers
+     *
+     * @return array value of member
+     */
+    public function getLoggers()
+    {
+        return $this->_aLoggers;
+    }
+
+
+    /**
      * Add a FileLogger
      *
      * @param $filename

@@ -54,9 +54,6 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
     /**
      * Logs to the File
      *
-     * @todo do something sensible with the log context
-     * @todo filter the logs by level
-     *
      * @param mixed  $level
      * @param string $message
      * @param array  $context
