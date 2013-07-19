@@ -339,7 +339,7 @@ class ExceptionHandler
             Logger::log(
                 $dbgLevel,
                 $text,
-                array('filename' => self::$fileName, 'linenum' => self::$lineNum, 'level' => self::$_aErrorTypes[self::$errNum])
+                array('filename' => self::$fileName, 'linenum' => self::$lineNum, 'level' => $dbgLevel)
             );
         }
     }

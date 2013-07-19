@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "c8826d1c9f4c38e1c54d0630007e8018",
+    "hash": "856c22871ab85f10db993917a2fab1c9",
     "packages": [
         {
             "name": "mustangostang/spyc",
@@ -92,17 +92,17 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.2.3",
+            "version": "v2.2.4",
             "target-dir": "Symfony/Component/Config",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "v2.2.3"
+                "reference": "v2.2.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/v2.2.3",
-                "reference": "v2.2.3",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/v2.2.4",
+                "reference": "v2.2.4",
                 "shasum": ""
             },
             "require": {
@@ -135,21 +135,21 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2013-05-10 18:08:31"
+            "time": "2013-07-10 14:03:01"
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v2.2.3",
+            "version": "v2.2.4",
             "target-dir": "Symfony/Component/HttpFoundation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "v2.2.3"
+                "reference": "v2.2.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/v2.2.3",
-                "reference": "v2.2.3",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/v2.2.4",
+                "reference": "v2.2.4",
                 "shasum": ""
             },
             "require": {
@@ -185,31 +185,31 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-06-13 12:48:26"
+            "time": "2013-07-15 12:12:07"
         },
         {
             "name": "symfony/routing",
-            "version": "v2.2.3",
+            "version": "v2.2.4",
             "target-dir": "Symfony/Component/Routing",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "v2.2.3"
+                "reference": "v2.2.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.3",
-                "reference": "v2.2.3",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.4",
+                "reference": "v2.2.4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "doctrine/common": ">=2.2,<3.0",
-                "psr/log": ">=1.0,<2.0",
+                "doctrine/common": "~2.2",
+                "psr/log": "~1.0",
                 "symfony/config": ">=2.2,<2.3-dev",
-                "symfony/yaml": ">=2.0,<3.0"
+                "symfony/yaml": "~2.0"
             },
             "suggest": {
                 "doctrine/common": "~2.2",
@@ -243,21 +243,21 @@
             ],
             "description": "Symfony Routing Component",
             "homepage": "http://symfony.com",
-            "time": "2013-05-10 16:49:00"
+            "time": "2013-06-23 06:56:04"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.2.3",
+            "version": "v2.2.4",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "v2.2.3"
+                "reference": "v2.2.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.2.3",
-                "reference": "v2.2.3",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.2.4",
+                "reference": "v2.2.4",
                 "shasum": ""
             },
             "require": {
@@ -290,7 +290,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-05-10 18:08:31"
+            "time": "2013-07-11 09:28:01"
         },
         {
             "name": "wp-cli/php-cli-tools",
@@ -502,21 +502,24 @@
         },
         {
             "name": "propel/propel1",
-            "version": "1.6.9",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/propelorm/Propel.git",
-                "reference": "1.6.9"
+                "url": "https://github.com/chrisnoden/Propel.git",
+                "reference": "3346775edcf60a36f3ed8c8f553934009736a6f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/propelorm/Propel/zipball/1.6.9",
-                "reference": "1.6.9",
+                "url": "https://api.github.com/repos/chrisnoden/Propel/zipball/3346775edcf60a36f3ed8c8f553934009736a6f6",
+                "reference": "3346775edcf60a36f3ed8c8f553934009736a6f6",
                 "shasum": ""
             },
             "require": {
-                "phing/phing": ">=2.4,<3.0",
+                "phing/phing": "~2.4",
                 "php": ">=5.2.4"
+            },
+            "require-dev": {
+                "pear-pear.php.net/pear_packagefilemanager2": "@stable"
             },
             "bin": [
                 "generator/bin/propel-gen",
@@ -525,7 +528,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.6-dev"
+                    "dev-master": "1.7-dev"
                 }
             },
             "autoload": {
@@ -534,7 +537,6 @@
                     "generator/lib"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "runtime/lib",
                 "generator/lib"
@@ -552,13 +554,16 @@
             "description": "Propel is an open-source Object-Relational Mapping (ORM) for PHP5.",
             "homepage": "http://www.propelorm.org/",
             "keywords": [
-                "Active Record",
+                "active record",
                 "database",
                 "mapping",
                 "orm",
                 "persistence"
             ],
-            "time": "2013-03-31 17:20:51"
+            "support": {
+                "source": "https://github.com/chrisnoden/Propel/tree/master"
+            },
+            "time": "2013-07-04 10:52:31"
         },
         {
             "name": "smarty/smarty",
@@ -658,9 +663,9 @@
 
     ],
     "minimum-stability": "beta",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "propel/propel1": 20
+    },
     "platform": {
         "php": ">=5.3.21",
         "ext-reflection": "*",

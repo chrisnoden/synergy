@@ -26,7 +26,7 @@
 
 namespace Synergy\Logger;
 
-use Synergy\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use Synergy\Singleton;
 use Synergy\Logger\LogLevel;
 
