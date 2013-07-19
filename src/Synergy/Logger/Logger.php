@@ -26,7 +26,6 @@
 
 namespace Synergy\Logger;
 
-use Psr\Log\LoggerInterface;
 use Synergy\Singleton;
 use Synergy\Logger\LogLevel;
 
@@ -79,9 +78,9 @@ class Logger extends Singleton
     /**
      * Assign the logger used for this Synergy project
      *
-     * @param LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public static function setLogger(LoggerInterface $logger)
+    public static function setLogger(\Psr\Log\LoggerInterface $logger)
     {
         self::$_logger = $logger;
     }
