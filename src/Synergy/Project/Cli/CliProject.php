@@ -53,13 +53,9 @@ class CliProject extends ProjectAbstract
      */
     protected $parameters = array();
     /**
-     * @var string
+     * @var ArgumentParser
      */
-    protected $rawArguments = '';
-    /**
-     * @var array arguments for the Symfony CliProject
-     */
-    protected $sysArgs = array();
+    protected $args;
 
 
     /**
@@ -74,8 +70,6 @@ class CliProject extends ProjectAbstract
     {
         register_tick_function(array(&$this, "checkExit"));
 
-        parent::__construct();
-
         // Check this is coming from the CLI
         if (PHP_SAPI !== 'cli') {
             throw new SynergyException(
@@ -88,15 +82,14 @@ class CliProject extends ProjectAbstract
         if (!is_null($request)) {
             $this->request = $request;
         } else {
-            $args = new ArgumentParser();
-            $result = $args->parseArguments();
-            $this->request = $result['request'];
-            $this->rawArguments = $result['arguments'];
+            $this->args = ArgumentParser::parseArguments();
+            $this->request = $this->args->getRequest();
         }
+        var_dump($this->request);
 
-        Logger::debug('CliProject started');
+        Logger::debug('CliProject started (pid='.getmypid().')');
 
-        if (is_null($this->request)) {
+        if (is_null($this->args->getRequest())) {
             Logger::emergency(
                 'No controller request provided'
             );
@@ -105,6 +98,15 @@ class CliProject extends ProjectAbstract
 
         $this->registerSignalHandler();
 
+        if ($this->args->arg('app')) {
+            $this->setAppDir($this->args->arg('app'));
+        }
+
+        if ($this->args->arg('conf')) {
+            $this->setConfigFilename($this->args->arg('conf'));
+        }
+
+        parent::__construct();
     }
 
 
@@ -115,6 +117,7 @@ class CliProject extends ProjectAbstract
     protected  function registerSignalHandler() {
         pcntl_signal(SIGTERM, array(&$this,"handleSignals"));
         pcntl_signal(SIGINT, array(&$this,"handleSignals"));
+        pcntl_signal(SIGABRT, array(&$this,"handleSignals"));
     }
 
 
@@ -152,6 +155,8 @@ class CliProject extends ProjectAbstract
      */
     protected function launch()
     {
+        var_dump($this->request);
+
         $router = new CliRouter($this->request);
         $router->match();
 

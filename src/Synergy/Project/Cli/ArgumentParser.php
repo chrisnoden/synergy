@@ -39,20 +39,28 @@ class ArgumentParser
 {
 
     /**
+     * @var string
+     */
+    protected $request;
+    /**
+     * @var string
+     */
+    protected $rawArgs;
+
+
+
+    /**
      * Parses out all the command line to find the requested controller plus
      * any arguments which are available to both Synergy framework
      * classes and to the Controller class
      *
      * @param string $arguments line of args to be parsed (if null then taken from command line)
      *
-     * @return array associative array of the request and the raw arguments for it
+     * @return ArgumentParser
      */
-    public function parseArguments($arguments = null)
+    public static function parseArguments($arguments = null)
     {
-        /**
-         * Store our parsed results here
-         */
-        $result = array();
+        $obj = new ArgumentParser();
 
         if (is_null($arguments)) {
             $arguments = join(' ', $_SERVER['argv']);
@@ -83,7 +91,7 @@ class ArgumentParser
                         $requestArgs[] = $val;
                     } else {
                         $phase = 3;
-                        $request = $val;
+                        $obj->setRequest($val);
                     }
                     break;
 
@@ -94,12 +102,74 @@ class ArgumentParser
             }
         }
 
-        $result = array(
-            'request' => $request,
-            'arguments' => join(' ', $requestArgs)
-        );
+        $obj->setRawArgs(join(' ', $requestArgs));
 
-        return $result;
+        return $obj;
+    }
+
+
+    public function arg($argName)
+    {
+        $elements = explode(' ', $this->rawArgs);
+        for ($item=0; $item<count($elements); $item++) {
+            $test = preg_replace('/^[\-]+/', '', $elements[$item]);
+            if (strpos($test, '=')) {
+                $arr = explode('=', $test, 2);
+                if (strtolower($arr[0]) == $argName) {
+                    return $arr[1];
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Value of member request
+     *
+     * @return string value of member
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+
+    /**
+     * Value of member rawArgs
+     *
+     * @return string value of member
+     */
+    public function getRawArgs()
+    {
+        return $this->rawArgs;
+    }
+
+
+    /**
+     * Set the value of rawArgs member
+     *
+     * @param string $rawArgs
+     *
+     * @return void
+     */
+    public function setRawArgs($rawArgs)
+    {
+        $this->rawArgs = $rawArgs;
+    }
+
+
+    /**
+     * Set the value of request member
+     *
+     * @param string $request
+     *
+     * @return void
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
     }
 
 }

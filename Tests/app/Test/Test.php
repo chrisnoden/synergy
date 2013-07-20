@@ -26,6 +26,7 @@
 
 namespace Test;
 
+use Synergy\Logger\Logger;
 use Synergy\Project\Cli\SignalHandler;
 
  /**
@@ -46,7 +47,7 @@ class Test
         {
             SignalHandler::$blockExit = true;
             sleep(15);
-            echo "Loop\n";
+            Logger::error('Daemon reporting in');
             SignalHandler::$blockExit = false;
         } while (1);
     }

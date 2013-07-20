@@ -27,6 +27,7 @@ declare(ticks = 1);
 
 namespace Synergy\Project\Daemon;
 
+use Synergy\Logger\Logger;
 use Synergy\Project\Cli\CliProject;
 use Synergy\Project\Cli\SignalHandler;
 
@@ -43,13 +44,87 @@ class DaemonProject extends CliProject
 {
 
     /**
+     * @var int
+     */
+    protected $process_pid;
+
+
+    public function __destruct()
+    {
+        if (isset($this->process_pid)) {
+            Logger::info(
+                'daemon process '.getmypid().' ended'
+            );
+        } else {
+            Logger::debug(
+                'parent process '.getmypid().' ended'
+            );
+        }
+
+        parent::__destruct();
+    }
+
+    /**
      * run our project
      *
      * @return void
      */
     public function launch()
     {
+        $this->fork_to_bg();
+
         parent::launch();
+    }
+
+
+    /**
+     * Daemonises the process
+     */
+    protected function fork_to_bg() {
+        $daemon_pid = pcntl_fork();
+        switch ($daemon_pid) {
+            case -1:
+                Logger::emergency(
+                    'Unable to fork daemon process'
+                );
+                exit(1); // fork failed
+            case 0:
+                // this child is our daemon
+                $this->process_pid = getmypid();
+                break;
+            default:
+                // we are the parent - the one from the FG command line
+                // return control to command line by exiting...
+                Logger::info(
+                    'Daemon process running : pid='.$daemon_pid
+                );
+                exit(0);
+        }
+
+        // promote the daemon process so it doesn't die because the parent has
+        if (posix_setsid() === -1) {
+            Logger::critical(
+                'Error creating daemon process'
+            );
+            exit(1);
+        }
+
+        fclose(STDIN);
+        fclose(STDOUT);
+        fclose(STDERR);
+
+        $stdIn = fopen('/dev/null', 'r'); // set fd/0
+        $stdOut = fopen('/dev/null', 'w'); // set fd/1
+        $stdErr = fopen('php://stdout', 'w'); // a hack to duplicate fd/1 to 2
+
+        pcntl_signal(SIGTSTP, SIG_IGN);
+        pcntl_signal(SIGTTOU, SIG_IGN);
+        pcntl_signal(SIGTTIN, SIG_IGN);
+        pcntl_signal(SIGHUP, SIG_IGN);
+
+        Logger::info(
+            'daemon process: '.getmypid()
+        );
     }
 
 
