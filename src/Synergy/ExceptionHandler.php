@@ -291,6 +291,9 @@ class ExceptionHandler
                 $text = sprintf("%s\n\nTrace:\n\n", self::$errMsg);
                 foreach (self::$trace AS $traceItem) {
                     foreach ($traceItem AS $key => $val) {
+                        if ($key == 'file' && defined('SYNERGY_ROOT_DIR')) {
+                            $val = str_ireplace(realpath(SYNERGY_ROOT_DIR) . DIRECTORY_SEPARATOR, '', $val);
+                        }
                         $text .= sprintf("\t[%s] => %s\n", $key, $val);
                     }
                     $text .= "\n";

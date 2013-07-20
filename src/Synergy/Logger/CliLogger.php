@@ -70,7 +70,7 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
                 case LogLevel::ERROR:
                 case LogLevel::ALERT:
                     \Cli\err(sprintf(
-                        "%11s %s",
+                        "%%r%11s%%n %s",
                         $level,
                         $message
                     ));
