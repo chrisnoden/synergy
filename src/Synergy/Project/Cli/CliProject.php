@@ -85,7 +85,6 @@ class CliProject extends ProjectAbstract
             $this->args = ArgumentParser::parseArguments();
             $this->request = $this->args->getRequest();
         }
-        var_dump($this->request);
 
         Logger::debug('CliProject started (pid='.getmypid().')');
 
@@ -155,8 +154,6 @@ class CliProject extends ProjectAbstract
      */
     protected function launch()
     {
-        var_dump($this->request);
-
         $router = new CliRouter($this->request);
         $router->match();
 
