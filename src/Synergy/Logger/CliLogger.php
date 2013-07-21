@@ -26,6 +26,8 @@
 
 namespace Synergy\Logger;
 
+use Synergy\Project\Cli\ArgumentParser;
+
 /**
  * Class CliLogger
  * a simple fall-back logger to output to the CLI for daemon and console
@@ -44,6 +46,10 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
      * @var bool
      */
     private $_silent = false;
+    /**
+     * @var int
+     */
+    private $_verbosity = 0;
 
 
     /**
@@ -54,6 +60,15 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
     public function __construct()
     {
         parent::__construct();
+
+        if (PHP_SAPI == 'cli') {
+            $arg = ArgumentParser::parseArguments();
+            if ($arg->hasSwitch('v')) {
+                $this->_verbosity = 1;
+            } else if ($arg->hasSwitch('vv')) {
+                $this->_verbosity = 2;
+            }
+        }
     }
 
 
@@ -109,19 +124,23 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
                         ));
                         break;
                     case LogLevel::INFO:
-                        \Cli\err(sprintf(
-                            "%%y%11s%%n %s",
-                            $level,
-                            $message
-                        ));
+                        if ($this->_verbosity >= 1) {
+                            \Cli\err(sprintf(
+                                "%%y%11s%%n %s",
+                                $level,
+                                $message
+                            ));
+                        }
                         break;
 
                     default:
-                        \Cli\line(sprintf(
-                            "%%n%11s %s",
-                            $level,
-                            $message
-                        ));
+                        if ($this->_verbosity >= 2) {
+                            \Cli\line(sprintf(
+                                "%%n%11s %s",
+                                $level,
+                                $message
+                            ));
+                        }
                 }
             }
         }

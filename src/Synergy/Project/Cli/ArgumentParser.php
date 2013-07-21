@@ -126,6 +126,27 @@ class ArgumentParser
 
 
     /**
+     * Tests for a switch (eg -v -vv -S) in the command line arguments
+     *
+     * @param $switch
+     *
+     * @return bool
+     */
+    public function hasSwitch($switch)
+    {
+        $elements = explode(' ', $this->rawArgs);
+        for ($item=0; $item<count($elements); $item++) {
+            $test = $elements[$item];
+            if (substr($test, 0, 1) == '-' && substr($test, 1) == $switch) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
      * Value of member request
      *
      * @return string value of member

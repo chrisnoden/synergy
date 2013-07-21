@@ -116,7 +116,7 @@ class Logger extends Singleton
 
         if (defined('SYNERGY_ROOT_DIR')) {
             $logFile = SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'project.log';
-            self::debug('log file: '.'logs' . DIRECTORY_SEPARATOR . 'project.log');
+            self::info('log file: '.'logs' . DIRECTORY_SEPARATOR . 'project.log');
             // @todo replace with sensible default log filename
             self::$_logger->addFileLogger($logFile);
         }
