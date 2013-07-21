@@ -116,7 +116,7 @@ class DaemonProject extends CliProject
         // promote the daemon process so it doesn't die because the parent has
         if (posix_setsid() === -1) {
             Logger::critical(
-                'Error creating daemon process'
+                'Error creating daemon as session leader'
             );
             exit(1);
         }
