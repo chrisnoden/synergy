@@ -107,8 +107,8 @@ class DaemonProject extends CliProject
             default:
                 // we are the parent - the one from the FG command line
                 // return control to command line by exiting...
-                Logger::info(
-                    'Daemon process running : pid='.$daemon_pid
+                \Cli\line(
+                    'Daemon process running : pid=%y'.$daemon_pid.'%n'
                 );
                 exit(0);
         }
