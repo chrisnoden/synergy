@@ -137,7 +137,7 @@ class ArgumentParser
         $elements = explode(' ', $this->rawArgs);
         for ($item=0; $item<count($elements); $item++) {
             $test = $elements[$item];
-            if (substr($test, 0, 1) == '-' && substr($test, 1) == $switch) {
+            if (substr($test, 0, 1) == '-' && substr($test, 1) == $switch && !strpos($test, '=')) {
                 return true;
             }
         }
