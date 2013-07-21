@@ -46,7 +46,7 @@ class Test
         do
         {
             SignalHandler::$blockExit = true;
-            sleep(15);
+            sleep(10);
             Logger::error('Daemon reporting in');
             SignalHandler::$blockExit = false;
         } while (1);

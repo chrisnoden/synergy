@@ -129,11 +129,6 @@ class DaemonProject extends CliProject
         $this->_stdOut = fopen('/dev/null', 'w'); // set fd/1
         $this->_stdErr = fopen('php://stdout', 'w'); // a hack to duplicate fd/1 to 2
 
-        pcntl_signal(SIGTSTP, SIG_IGN);
-        pcntl_signal(SIGTTOU, SIG_IGN);
-        pcntl_signal(SIGTTIN, SIG_IGN);
-        pcntl_signal(SIGHUP, SIG_IGN);
-
         // Silence any console output from the logger
         Logger::setSilentConsole(true);
 

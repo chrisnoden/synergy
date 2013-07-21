@@ -56,6 +56,39 @@ class CliProject extends ProjectAbstract
      * @var ArgumentParser
      */
     protected $args;
+    /**
+     * @var array
+     */
+    protected $signals = array(
+        'UNKNOWN' => 0,
+        'SIGHUP' => SIGHUP,
+        'SIGINT' => SIGINT,
+        'SIGQUIT' => SIGQUIT,
+        'SIGILL' => SIGILL,
+        'SIGTRAP' => SIGTRAP,
+        'SIGABRT' => SIGABRT,
+        'SIGBUS' => SIGBUS,
+        'SIGFPE' => SIGFPE,
+        'SIGUSR1' => SIGUSR1,
+        'SIGSEGV' => SIGSEGV,
+        'SIGUSR2' => SIGUSR2,
+        'SIGPIPE' => SIGPIPE,
+        'SIGALRM' => SIGALRM,
+        'SIGTERM' => SIGTERM,
+        'SIGCHLD' => SIGCHLD,
+        'SIGCONT' => SIGCONT,
+        'SIGTSTP' => SIGTSTP,
+        'SIGTTIN' => SIGTTIN,
+        'SIGTTOU' => SIGTTOU,
+        'SIGURG' => SIGURG,
+        'SIGXCPU' => SIGXCPU,
+        'SIGXFSZ' => SIGXFSZ,
+        'SIGVTALRM' => SIGVTALRM,
+        'SIGPROF' => SIGPROF,
+        'SIGWINCH' => SIGWINCH,
+        'SIGIO' => SIGIO,
+        'SIGSYS' => SIGSYS,
+    );
 
 
     /**
@@ -114,6 +147,11 @@ class CliProject extends ProjectAbstract
      * to any kill signals
      */
     protected  function registerSignalHandler() {
+        pcntl_signal(SIGTSTP, SIG_IGN);
+        pcntl_signal(SIGTTOU, SIG_IGN);
+        pcntl_signal(SIGTTIN, SIG_IGN);
+        pcntl_signal(SIGHUP, SIG_IGN);
+
         pcntl_signal(SIGTERM, array(&$this,"handleSignals"));
         pcntl_signal(SIGINT, array(&$this,"handleSignals"));
         pcntl_signal(SIGABRT, array(&$this,"handleSignals"));
@@ -127,6 +165,13 @@ class CliProject extends ProjectAbstract
      */
     public function handleSignals($signal)
     {
+        $signame = array_search($signal, $this->signals);
+        if (!$signame) {
+            $signame = 'UNKNOWN';
+        }
+        Logger::alert(
+            sprintf('%s signal received', $signame)
+        );
         if (!SignalHandler::$blockExit) {
             exit;
         } else {
