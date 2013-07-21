@@ -160,24 +160,14 @@ class CliProject extends ProjectAbstract
         /**
          * Get the ControllerEntity
          */
-        try {
-            $this->controller = $router->getController();
-            // pass the parameters
-            $this->controller->setParameters($this->parameters);
-            // Call the action
-            $response = $this->controller->callControllerAction();
-            if (is_string($response)) {
-                \Cli\line($response);
-            }
-        }
-        catch (\Exception $ex) {
-            \Cli\err(
-                '%rERROR%n:'.
-                '%r'.$ex->getMessage().'%n'
-            );
-            exit(1);
-        }
-
+        $this->controller = $router->getController();
+        Logger::notice(
+            'Calling: '.$this->controller->getClassName().'::'.$this->controller->getMethodName()
+        );
+        // pass the parameters
+        $this->controller->setParameters($this->parameters);
+        // Call the action
+        $response = $this->controller->callControllerAction();
     }
 
 
