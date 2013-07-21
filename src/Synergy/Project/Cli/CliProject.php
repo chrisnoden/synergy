@@ -147,11 +147,12 @@ class CliProject extends ProjectAbstract
      * to any kill signals
      */
     protected  function registerSignalHandler() {
+        // ignore these signals
         pcntl_signal(SIGTSTP, SIG_IGN);
         pcntl_signal(SIGTTOU, SIG_IGN);
         pcntl_signal(SIGTTIN, SIG_IGN);
         pcntl_signal(SIGHUP, SIG_IGN);
-
+        // trap these signals
         pcntl_signal(SIGTERM, array(&$this,"handleSignals"));
         pcntl_signal(SIGINT, array(&$this,"handleSignals"));
         pcntl_signal(SIGABRT, array(&$this,"handleSignals"));
@@ -169,12 +170,15 @@ class CliProject extends ProjectAbstract
         if (!$signame) {
             $signame = 'UNKNOWN';
         }
-        Logger::alert(
-            sprintf('%s signal received', $signame)
-        );
         if (!SignalHandler::$blockExit) {
+            Logger::alert(
+                sprintf('Exiting : %s signal received', $signame)
+            );
             exit;
         } else {
+            Logger::alert(
+                sprintf('%s signal received : Exit queued', $signame)
+            );
             SignalHandler::$forceExit = true;
         }
     }
