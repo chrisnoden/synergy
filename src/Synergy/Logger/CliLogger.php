@@ -76,7 +76,7 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
                     case LogLevel::EMERGENCY:
                     case LogLevel::CRITICAL:
                         \Cli\err(sprintf(
-                            "%%r%11s%%n %s",
+                            "%s %s",
                             $level,
                             $message
                         ));
@@ -86,6 +86,12 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
                 switch ($level) {
                     case LogLevel::EMERGENCY:
                     case LogLevel::CRITICAL:
+                        \Cli\err(sprintf(
+                            "%%R%11s%%n %s",
+                            $level,
+                            $message
+                        ));
+                        break;
                     case LogLevel::ERROR:
                     case LogLevel::ALERT:
                         \Cli\err(sprintf(
@@ -94,10 +100,25 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
                             $message
                         ));
                         break;
+                    case LogLevel::WARNING:
+                    case LogLevel::NOTICE:
+                        \Cli\err(sprintf(
+                            "%%c%11s%%n %s",
+                            $level,
+                            $message
+                        ));
+                        break;
+                    case LogLevel::INFO:
+                        \Cli\err(sprintf(
+                            "%%y%11s%%n %s",
+                            $level,
+                            $message
+                        ));
+                        break;
 
                     default:
                         \Cli\line(sprintf(
-                            "%%y%11s%%n %s",
+                            "%%n%11s %s",
                             $level,
                             $message
                         ));

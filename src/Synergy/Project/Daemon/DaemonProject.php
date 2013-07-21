@@ -64,8 +64,8 @@ class DaemonProject extends CliProject
     public function __destruct()
     {
         if (isset($this->process_pid)) {
-            Logger::info(
-                'daemon process '.getmypid().' ended'
+            Logger::alert(
+                'Daemon process '.getmypid().' ended'
             );
         } else {
             Logger::debug(
@@ -137,8 +137,8 @@ class DaemonProject extends CliProject
         // Silence any console output from the logger
         Logger::setSilentConsole(true);
 
-        Logger::info(
-            'daemon process: '.getmypid()
+        Logger::notice(
+            'Daemon process running : pid='.getmypid()
         );
     }
 

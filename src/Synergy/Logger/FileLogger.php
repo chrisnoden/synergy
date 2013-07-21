@@ -93,7 +93,9 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
                 case LogLevel::EMERGENCY:
                 case LogLevel::CRITICAL:
                 case LogLevel::ERROR:
+                case LogLevel::WARNING:
                 case LogLevel::ALERT:
+                case LogLevel::NOTICE:
                     $this->_write(
                         sprintf('%s %s %s',
                             date('Y-m-d H:i:s'),

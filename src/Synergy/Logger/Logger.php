@@ -109,15 +109,16 @@ class Logger extends Singleton
     private static function setFallbackLogger()
     {
         self::$_logger = new SynergyLogger();
-        if (defined('SYNERGY_ROOT_DIR')) {
-            // @todo replace with sensible default log filename
-            self::$_logger->addFileLogger(
-                SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'project.log'
-            );
-        }
 
         if (PHP_SAPI == 'cli') {
             self::$_logger->addCliLogger();
+        }
+
+        if (defined('SYNERGY_ROOT_DIR')) {
+            $logFile = SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'project.log';
+            self::debug('log file: '.'logs' . DIRECTORY_SEPARATOR . 'project.log');
+            // @todo replace with sensible default log filename
+            self::$_logger->addFileLogger($logFile);
         }
     }
 
