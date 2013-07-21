@@ -108,6 +108,13 @@ class ArgumentParser
     }
 
 
+    /**
+     * Look in the command line args for the argument and return the value if found
+     *
+     * @param $argName
+     *
+     * @return mixed|bool
+     */
     public function arg($argName)
     {
         $elements = explode(' ', $this->rawArgs);
