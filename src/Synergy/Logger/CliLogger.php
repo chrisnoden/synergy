@@ -41,6 +41,12 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
 {
 
     /**
+     * @var bool
+     */
+    private $_silent = false;
+
+
+    /**
      * Create a new FileLogger object
      *
      * @throws \Synergy\Exception\InvalidArgumentException
@@ -63,29 +69,59 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
     public function log($level, $message, array $context = array())
     {
         $level = strtolower($level);
+
         if ($this->isValidLogLevel($level)) {
-            switch ($level) {
-                case LogLevel::EMERGENCY:
-                case LogLevel::CRITICAL:
-                case LogLevel::ERROR:
-                case LogLevel::ALERT:
-                    \Cli\err(sprintf(
-                        "%%r%11s%%n %s",
-                        $level,
-                        $message
-                    ));
-                    break;
+            if ($this->_silent === true) {
+                switch ($level) {
+                    case LogLevel::EMERGENCY:
+                    case LogLevel::CRITICAL:
+                        \Cli\err(sprintf(
+                            "%%r%11s%%n %s",
+                            $level,
+                            $message
+                        ));
+                        break;
+                }
+            }  else {
+                switch ($level) {
+                    case LogLevel::EMERGENCY:
+                    case LogLevel::CRITICAL:
+                    case LogLevel::ERROR:
+                    case LogLevel::ALERT:
+                        \Cli\err(sprintf(
+                            "%%r%11s%%n %s",
+                            $level,
+                            $message
+                        ));
+                        break;
 
-                default:
-                    \Cli\line(sprintf(
-                        "%%y%11s%%n %s",
-                        $level,
-                        $message
-                    ));
+                    default:
+                        \Cli\line(sprintf(
+                            "%%y%11s%%n %s",
+                            $level,
+                            $message
+                        ));
+                }
             }
-
         }
+
     }
 
+
+    /**
+     * Silence any stdout or normal console output
+     *
+     * @param bool $silentConsole silence the console
+     *
+     * @return void
+     */
+    public function setSilentConsole($silentConsole)
+    {
+        if ($silentConsole === true) {
+            $this->_silent = true;
+        } else {
+            $this->_silent = false;
+        }
+    }
 
 }

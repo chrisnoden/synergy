@@ -47,6 +47,18 @@ class DaemonProject extends CliProject
      * @var int
      */
     protected $process_pid;
+    /**
+     * @var resource
+     */
+    private $_stdIn;
+    /**
+     * @var resource
+     */
+    private $_stdOut;
+    /**
+     * @var resource
+     */
+    private $_stdErr;
 
 
     public function __destruct()
@@ -113,14 +125,17 @@ class DaemonProject extends CliProject
         fclose(STDOUT);
         fclose(STDERR);
 
-        $stdIn = fopen('/dev/null', 'r'); // set fd/0
-        $stdOut = fopen('/dev/null', 'w'); // set fd/1
-        $stdErr = fopen('php://stdout', 'w'); // a hack to duplicate fd/1 to 2
+        $this->_stdIn  = fopen('/dev/null', 'r'); // set fd/0
+        $this->_stdOut = fopen('/dev/null', 'w'); // set fd/1
+        $this->_stdErr = fopen('php://stdout', 'w'); // a hack to duplicate fd/1 to 2
 
         pcntl_signal(SIGTSTP, SIG_IGN);
         pcntl_signal(SIGTTOU, SIG_IGN);
         pcntl_signal(SIGTTIN, SIG_IGN);
         pcntl_signal(SIGHUP, SIG_IGN);
+
+        // Silence any console output from the logger
+        Logger::setSilentConsole(true);
 
         Logger::info(
             'daemon process: '.getmypid()

@@ -95,4 +95,25 @@ class SynergyLogger extends LoggerAbstract implements LoggerInterface
         }
     }
 
+
+    /**
+     * Set the value of silentConsole member
+     *
+     * @param boolean $silentConsole
+     *
+     * @return void
+     */
+    public function setSilentConsole($silentConsole)
+    {
+        foreach ($this->_aLoggers AS $logger) {
+            if ($logger instanceof CliLogger) {
+                if ($silentConsole === true) {
+                    $logger->setSilentConsole(true);
+                } else {
+                    $logger->setSilentConsole(false);
+                }
+            }
+        }
+    }
+
 }

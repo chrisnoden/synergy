@@ -541,7 +541,6 @@ abstract class ProjectAbstract extends Object
             return false;
         }
 
-
         // iterate through our options for the specific key
         $arr = explode(':', $keyname);
         if (count($arr) > 1) {

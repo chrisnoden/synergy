@@ -49,6 +49,10 @@ class Logger extends Singleton
      * @var LoggerInterface
      */
     private static $_logger;
+    /**
+     * @var bool should any console output be silenced
+     */
+    protected static $silentConsole = false;
 
 
     /**
@@ -238,4 +242,24 @@ class Logger extends Singleton
     {
         self::log(LogLevel::DEBUG, $message, $context);
     }
+
+
+    /**
+     * Set the value of silentConsole member
+     *
+     * @param boolean $silentConsole
+     *
+     * @return void
+     */
+    public static function setSilentConsole($silentConsole)
+    {
+        if ($silentConsole === true && method_exists(self::$_logger, 'setSilentConsole')) {
+            self::$_logger->setSilentConsole(true);
+        } else if (method_exists(self::$_logger, 'setSilentConsole')) {
+            self::$_logger->setSilentConsole(false);
+        }
+        self::$silentConsole = $silentConsole;
+    }
+
+
 }
