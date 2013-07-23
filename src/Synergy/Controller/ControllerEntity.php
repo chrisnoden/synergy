@@ -66,7 +66,7 @@ class ControllerEntity extends Object
      */
     protected $controllerParameters = array();
     /**
-     * @var string
+     * @var ControllerEntity
      */
     protected $controller;
     /**
@@ -544,13 +544,11 @@ class ControllerEntity extends Object
             $object->setRequest($this->request);
         }
 
+        // quick delivery of WebAsset files
         if ($object instanceof SmartController) {
             $response = $object->requestMatch($object->getRequest());
             if ($response instanceof WebAsset) {
-                Logger::debug(
-                    'Delivering asset: '.$response->getFilename()
-                );
-                $response->deliver();
+                return $response;
             }
         }
 

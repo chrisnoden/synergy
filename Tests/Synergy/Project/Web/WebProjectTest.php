@@ -27,6 +27,7 @@
 namespace Synergy\Tests\Project\Web;
 
 use Synergy\Project\Web\WebProject;
+use Synergy\Project\Web\WebRequest;
 use Synergy\Project;
 
 /**
@@ -66,7 +67,7 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
 
     public function testDefaultWebResponse()
     {
-        $request = Project\Web\WebRequest::create('/');
+        $request = WebRequest::create('/');
         $obj = new WebProject($request);
         $this->hasOutput();
         $obj->run();
@@ -90,6 +91,26 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->fail('Cache dir not created');
         }
+    }
+
+
+    public function testInternalSynergyRoute()
+    {
+        // This GET request should fail
+        $request = WebRequest::create(
+            '/_synergy_/css/bootstrap.min.css',
+            'GET'
+        );
+        $request->overrideGlobals();
+        $this->hasOutput();
+        $obj = new WebProject($request);
+        $obj->setDeliverResponse(false);
+        $obj->run();
+        $response = $obj->getResponse();
+        $this->assertInstanceOf('Synergy\Project\Web\WebAsset', $response);
+        $filename = $response->getFilename();
+        $filename = str_replace(dirname(SYNERGY_ROOT_DIR), '', $filename);
+        $this->assertSame('/src/Synergy/View/_synergy_/css/bootstrap.min.css', $filename);
     }
 
 }

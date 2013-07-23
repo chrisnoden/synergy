@@ -27,6 +27,8 @@
 namespace Synergy\Project\Web;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 use Synergy\Controller\ControllerEntity;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\NotFoundException;
@@ -54,11 +56,19 @@ final class WebProject extends ProjectAbstract
     /**
      * @var WebRequest
      */
-    private $_request;
+    protected $request;
     /**
      * @var string location of the view templates
      */
-    private $_templateDir;
+    protected $templateDir;
+    /**
+     * @var mixed response from the controller
+     */
+    protected $response;
+    /**
+     * @var bool shall we automatically deliver the response to the browser
+     */
+    protected $deliverResponse = true;
 
 
     /**
@@ -76,7 +86,7 @@ final class WebProject extends ProjectAbstract
             $request = WebRequest::createFromGlobals();
         }
         // Store the request
-        $this->_request = $request;
+        $this->request = $request;
 
         parent::__construct();
 
@@ -104,10 +114,10 @@ final class WebProject extends ProjectAbstract
     {
         parent::checkEnv();
 
-        if (!isset($this->_templateDir) && $this->getOption('synergy:webproject:template_dir')) {
+        if (!isset($this->templateDir) && $this->getOption('synergy:webproject:template_dir')) {
             try {
                 $this->setTemplateDir($this->getOption('synergy:webproject:template_dir'));
-                Logger::debug('Template Dir: '.$this->_templateDir);
+                Logger::debug('Template Dir: '.$this->templateDir);
             }
             catch (InvalidArgumentException $ex) {
                 throw new ProjectException(
@@ -129,7 +139,10 @@ final class WebProject extends ProjectAbstract
      */
     protected function launch()
     {
-        $router = new WebRouter($this->_request);
+        /**
+         * @var WebRouter $router
+         */
+        $router = new WebRouter($this->request);
 
         // use the best routes config
         if ($this->getOption('synergy:routes') && file_exists($this->getOption('synergy:routes'))) {
@@ -148,6 +161,11 @@ final class WebProject extends ProjectAbstract
             );
             $router->setRouteCollectionFromFile($filename);
         }
+
+        // add our _synergy_ route
+        $router = $this->addSynergyRoute($router);
+
+        // Match the route
         $router->match();
 
         /**
@@ -155,23 +173,43 @@ final class WebProject extends ProjectAbstract
          */
         $this->controller = $router->getController();
         $this->controller->setProject($this);
-        $this->controller->setRequest($this->_request);
+        $this->controller->setRequest($this->request);
         // Call the action
         $response = $this->controller->callControllerAction();
+        $this->response = $response;
 
-        // Deal with any response object that was returned
-        if ($response instanceof WebResponse) {
-            $this->handleWebResponse($response);
-        } else if ($response instanceof TemplateAbstract) {
-            $this->handleWebTemplate($response);
-        } else if ($response instanceof WebAsset) {
-            $response->deliver();
-        } else if (is_string($response)) {
-            $render = WebResponse::create($response);
-            $render->send();
-        } else {
-            $this->handleNotFoundException($response);
+        if ($this->deliverResponse === true) {
+            // Deal with any response object that was returned
+            if ($response instanceof WebResponse) {
+                $this->handleWebResponse($response);
+            } else if ($response instanceof TemplateAbstract) {
+                $this->handleWebTemplate($response);
+            } else if ($response instanceof WebAsset) {
+                $response->deliver();
+            } else if (is_string($response)) {
+                $render = WebResponse::create($response);
+                $render->send();
+            } else {
+                $this->handleNotFoundException($response);
+            }
         }
+    }
+
+
+    /**
+     * Add the internal synergy route
+     *
+     * @param WebRouter $router
+     *
+     * @return mixed
+     */
+    protected function addSynergyRoute(WebRouter $router)
+    {
+        $route  = new Route('/_synergy_', array('controller' => 'Synergy\\Controller\\DefaultController:default'));
+        $routeCollection = $router->getRouteCollection();
+        $routeCollection->add('synergyroute', $route);
+        $router->setRouteCollection($routeCollection);
+        return $router;
     }
 
 
@@ -185,7 +223,7 @@ final class WebProject extends ProjectAbstract
     protected function handleWebResponse(WebResponse $response)
     {
         $response
-            ->prepare($this->_request)
+            ->prepare($this->request)
             ->send();
     }
 
@@ -200,8 +238,8 @@ final class WebProject extends ProjectAbstract
     protected function handleWebTemplate(TemplateAbstract $template)
     {
         $template->setCacheDir($this->getTempDir() . DIRECTORY_SEPARATOR . 'cache');
-        if (is_null($template->getTemplateDir()) && isset($this->_templateDir)) {
-            $template->setTemplateDir($this->_templateDir);
+        if (is_null($template->getTemplateDir()) && isset($this->templateDir)) {
+            $template->setTemplateDir($this->templateDir);
         }
         $template->setDev($this->isDev);
         // merge the controller parameters
@@ -279,7 +317,7 @@ final class WebProject extends ProjectAbstract
      */
     public function getWebRequest()
     {
-        return $this->_request;
+        return $this->request;
     }
 
 
@@ -308,8 +346,8 @@ final class WebProject extends ProjectAbstract
                 sprintf("Directory %s not readable", $dir)
             );
         } else {
-            $this->_request->setTemplateDir($dir);
-            $this->_templateDir = $dir;
+            $this->request->setTemplateDir($dir);
+            $this->templateDir = $dir;
         }
     }
 
@@ -321,7 +359,7 @@ final class WebProject extends ProjectAbstract
      */
     public function getTemplateDir()
     {
-        return $this->_templateDir;
+        return $this->templateDir;
     }
 
 
@@ -334,8 +372,8 @@ final class WebProject extends ProjectAbstract
      */
     protected function replaceOptionVariables($option_value)
     {
-        if (isset($this->_templateDir)) {
-            $option_value = preg_replace('/%template_dir%/', $this->_templateDir, $option_value);
+        if (isset($this->templateDir)) {
+            $option_value = preg_replace('/%template_dir%/', $this->templateDir, $option_value);
         }
 
         // run any parent substitutions
@@ -435,6 +473,34 @@ final class WebProject extends ProjectAbstract
         }
 
         return false;
+    }
+
+
+    /**
+     * Value of member response
+     *
+     * @return mixed response from the controller
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+
+    /**
+     * Set the value of deliverResponse member
+     *
+     * @param boolean $deliverResponse
+     *
+     * @return void
+     */
+    public function setDeliverResponse($deliverResponse)
+    {
+        if ($deliverResponse === false) {
+            $this->deliverResponse = false;
+        } else {
+            $this->deliverResponse = true;
+        }
     }
 
 }

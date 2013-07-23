@@ -27,6 +27,7 @@
 namespace Test;
 
 use Synergy\Controller\Controller;
+use Synergy\View\SmartyTemplate;
 
 /**
  * Class TestController
@@ -48,7 +49,9 @@ class TestController extends Controller
 
     public function defaultAction()
     {
-
+        $template = new SmartyTemplate();
+        $template->setTemplateFile('foo.html.tpl');
+        return $template;
     }
 
 

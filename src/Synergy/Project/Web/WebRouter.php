@@ -27,7 +27,6 @@
 namespace Synergy\Project\Web;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Synergy\Controller\Parser;
 use Synergy\Logger\Logger;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Synergy\Router\RouterAbstract;
