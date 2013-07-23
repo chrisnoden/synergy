@@ -119,6 +119,27 @@ class Tools
         return false;
     }
 
+
+    /**
+     * A Signal safe equivalent to sleep
+     * If a POSIX signal is received while pausing then the pause is resumed
+     *
+     * @param int $seconds
+     */
+    public static function pause($seconds = 1)
+    {
+        if (!is_int($seconds)) {
+            return;
+        }
+        $microseconds = intval($seconds*1000000);
+        $start = microtime(true);
+        $diff = $microseconds;
+        do {
+            usleep($diff);
+            $actual = intval((microtime(true) - $start)*1000000);
+            $diff = $microseconds - $actual;
+        } while ($diff > 10000);
+    }
 }
 
 
