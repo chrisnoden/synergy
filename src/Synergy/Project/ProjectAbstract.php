@@ -74,6 +74,10 @@ abstract class ProjectAbstract extends Object
      * @var array project configuration settings
      */
     protected $options = array();
+    /**
+     * @var \DateTime
+     */
+    protected $projectLaunchTime;
 
 
     /**
@@ -87,6 +91,9 @@ abstract class ProjectAbstract extends Object
         }
 
         Project::setObject($this);
+
+        // record when this object was instantiated
+        $this->projectLaunchTime = new \DateTime();
 
         // Set our random logging ID using the log scope
         if (method_exists(Project::getLogger(), 'setTag')) {

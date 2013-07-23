@@ -27,6 +27,7 @@ declare(ticks = 1);
 
 namespace Synergy\Project\Cli;
 
+use Synergy\Controller\ControllerEntity;
 use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
 use Synergy\Object;
@@ -151,8 +152,8 @@ class CliProject extends ProjectAbstract
         pcntl_signal(SIGTSTP, SIG_IGN);
         pcntl_signal(SIGTTOU, SIG_IGN);
         pcntl_signal(SIGTTIN, SIG_IGN);
-        pcntl_signal(SIGHUP, SIG_IGN);
         // trap these signals
+        pcntl_signal(SIGHUP, array(&$this,"handleHupSignal"));
         pcntl_signal(SIGTERM, array(&$this,"handleSignals"));
         pcntl_signal(SIGINT, array(&$this,"handleSignals"));
         pcntl_signal(SIGABRT, array(&$this,"handleSignals"));
@@ -171,15 +172,32 @@ class CliProject extends ProjectAbstract
             $signame = 'UNKNOWN';
         }
         if (!SignalHandler::$blockExit) {
-            Logger::alert(
+            Logger::critical(
                 sprintf('Exiting : %s signal received', $signame)
             );
             exit;
         } else {
-            Logger::alert(
+            Logger::warning(
                 sprintf('%s signal received : Exit queued', $signame)
             );
             SignalHandler::$forceExit = true;
+        }
+    }
+
+
+    /**
+     * a SIGHUP results in the CliProject announcing itself
+     *
+     * @param $signal
+     */
+    public function handleHupSignal($signal)
+    {
+        if ($this->controller instanceof ControllerEntity) {
+            Logger::notice(sprintf(
+                '%s running since %s',
+                $this->controller->getClassName().'::'.$this->controller->getMethodName().'()',
+                $this->projectLaunchTime->format('r')
+            ));
         }
     }
 
