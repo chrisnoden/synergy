@@ -205,10 +205,24 @@ final class WebProject extends ProjectAbstract
      */
     protected function addSynergyRoute(WebRouter $router)
     {
-        $route  = new Route('/_synergy_', array('controller' => 'Synergy\\Controller\\DefaultController:default'));
+        // find the stub (absolute part of the URL)
+//        $arr = explode('.', $_SERVER['PHP_SELF'], 2);
+//        $stub = substr($arr[0], 0, strrpos($arr[0], '/'));
+        $route  = new Route(
+            '/_synergy_/{suffix}',
+            array('controller' => 'Synergy\\Controller\\DefaultController:default'),
+            array('suffix' => '.*')
+        );
         $routeCollection = $router->getRouteCollection();
-        $routeCollection->add('synergyroute', $route);
-        $router->setRouteCollection($routeCollection);
+        $routes = $routeCollection->all();
+
+        $newCollection = new RouteCollection();
+        $newCollection->add('synergyroute', $route);
+        // add the original route collection
+        foreach ($routes AS $name=>$route) {
+            $newCollection->add($name, $route);
+        }
+        $router->setRouteCollection($newCollection);
         return $router;
     }
 
