@@ -85,63 +85,68 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
     {
         $level = strtolower($level);
 
-        if ($this->isValidLogLevel($level)) {
-            if ($this->_silent === true) {
-                switch ($level) {
-                    case LogLevel::EMERGENCY:
-                    case LogLevel::CRITICAL:
+        if ($this->_silent === false && $this->isValidLogLevel($level)) {
+            switch ($level) {
+                case LogLevel::EMERGENCY:
+                    \Cli\err(sprintf(
+                        "%%1%11s%%n %s",
+                        $level,
+                        $message
+                    ));
+                    break;
+                case LogLevel::ALERT:
+                    \Cli\err(sprintf(
+                        "%%5%11s%%n %s",
+                        $level,
+                        $message
+                    ));
+                    break;
+                case LogLevel::CRITICAL:
+                    \Cli\err(sprintf(
+                        "%%R%11s%%n %s",
+                        $level,
+                        $message
+                    ));
+                    break;
+                case LogLevel::ERROR:
+                    \Cli\err(sprintf(
+                        "%%r%11s%%n %s",
+                        $level,
+                        $message
+                    ));
+                    break;
+                case LogLevel::WARNING:
+                    \Cli\err(sprintf(
+                        "%%m%11s%%n %s",
+                        $level,
+                        $message
+                    ));
+                    break;
+                case LogLevel::NOTICE:
+                    \Cli\err(sprintf(
+                        "%%c%11s%%n %s",
+                        $level,
+                        $message
+                    ));
+                    break;
+                case LogLevel::INFO:
+                    if ($this->_verbosity >= 1) {
                         \Cli\err(sprintf(
-                            "%s %s",
+                            "%%y%11s%%n %s",
                             $level,
                             $message
                         ));
-                        break;
-                }
-            }  else {
-                switch ($level) {
-                    case LogLevel::EMERGENCY:
-                    case LogLevel::CRITICAL:
-                        \Cli\err(sprintf(
-                            "%%R%11s%%n %s",
-                            $level,
-                            $message
-                        ));
-                        break;
-                    case LogLevel::ERROR:
-                    case LogLevel::ALERT:
-                        \Cli\err(sprintf(
-                            "%%r%11s%%n %s",
-                            $level,
-                            $message
-                        ));
-                        break;
-                    case LogLevel::WARNING:
-                    case LogLevel::NOTICE:
-                        \Cli\err(sprintf(
-                            "%%c%11s%%n %s",
-                            $level,
-                            $message
-                        ));
-                        break;
-                    case LogLevel::INFO:
-                        if ($this->_verbosity >= 1) {
-                            \Cli\err(sprintf(
-                                "%%y%11s%%n %s",
-                                $level,
-                                $message
-                            ));
-                        }
-                        break;
+                    }
+                    break;
 
-                    default:
-                        if ($this->_verbosity >= 2) {
-                            \Cli\line(sprintf(
-                                "%%n%11s %s",
-                                $level,
-                                $message
-                            ));
-                        }
-                }
+                default:
+                    if ($this->_verbosity >= 2) {
+                        \Cli\line(sprintf(
+                            "%%n%11s %s",
+                            $level,
+                            $message
+                        ));
+                    }
             }
         }
 

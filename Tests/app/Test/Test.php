@@ -43,6 +43,14 @@ class Test
 
     public function defaultAction()
     {
+        Logger::debug('Test Log 1');
+        Logger::info('Test Log 2');
+        Logger::notice('Test Log 3');
+        Logger::warning('Test Log 4');
+        Logger::error('Test Log 5');
+        Logger::critical('Test Log 6');
+        Logger::alert('Test Log 7');
+        Logger::emergency('Test Log 8');
         do
         {
             SignalHandler::$blockExit = true;
