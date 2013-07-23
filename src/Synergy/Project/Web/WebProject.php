@@ -69,6 +69,10 @@ final class WebProject extends ProjectAbstract
      * @var bool shall we automatically deliver the response to the browser
      */
     protected $deliverResponse = true;
+    /**
+     * @var string
+     */
+    protected $absoluteStubUrl = '';
 
 
     /**
@@ -139,6 +143,8 @@ final class WebProject extends ProjectAbstract
      */
     protected function launch()
     {
+        $this->setAbsoluteStubUrl();
+
         /**
          * @var WebRouter $router
          */
@@ -205,9 +211,6 @@ final class WebProject extends ProjectAbstract
      */
     protected function addSynergyRoute(WebRouter $router)
     {
-        // find the stub (absolute part of the URL)
-//        $arr = explode('.', $_SERVER['PHP_SELF'], 2);
-//        $stub = substr($arr[0], 0, strrpos($arr[0], '/'));
         $route  = new Route(
             '/_synergy_/{suffix}',
             array('controller' => 'Synergy\\Controller\\DefaultController:default'),
@@ -256,7 +259,30 @@ final class WebProject extends ProjectAbstract
             $template->setTemplateDir($this->templateDir);
         }
         $template->setDev($this->isDev);
+
+        // set the template parameters
+        $template->setParameters($this->getTemplateParameters($template));
+
+        // prepare the template render
+        $template->init();
+        $response = $template->getWebResponse();
+        if ($response instanceof WebResponse) {
+            $this->handleWebResponse($response);
+        }
+    }
+
+
+    /**
+     * Pull together all the parameters for the template
+     *
+     * @param TemplateAbstract $template
+     *
+     * @return array
+     */
+    protected function getTemplateParameters(TemplateAbstract $template)
+    {
         // merge the controller parameters
+        $templateParams = array();
         $controllerParams = $this->controller->getControllerParameters();
         if (is_array($controllerParams)) {
             $templateParams = array_merge(
@@ -266,14 +292,12 @@ final class WebProject extends ProjectAbstract
         }
         // and merge with any pre-existing template parameters
         $templateParams = array_merge($templateParams, $template->getParameters());
-        // set the new params array as the template parameters
-        $template->setParameters($templateParams);
-        // prepare the template render
-        $template->init();
-        $response = $template->getWebResponse();
-        if ($response instanceof WebResponse) {
-            $this->handleWebResponse($response);
-        }
+
+        // local params to pass
+        $params = array(
+            'absoluteStubUrl' => $this->absoluteStubUrl
+        );
+        return (array_merge($templateParams, $params));
     }
 
 
@@ -289,6 +313,10 @@ final class WebProject extends ProjectAbstract
         $template = new HtmlTemplate();
         $template->setTemplateDir(SYNERGY_LIBRARY_PATH . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . '_synergy_');
         $template->setTemplateFile('404.html');
+
+        // set the template parameters
+        $template->setParameters($this->getTemplateParameters($template));
+
         $template->init();
         $response = $template->getWebResponse();
         $response->setStatusCode(404);
@@ -487,6 +515,25 @@ final class WebProject extends ProjectAbstract
         }
 
         return false;
+    }
+
+
+    /**
+     * Deduce the absolute URL stub
+     *
+     * @param string $stub (optional)
+     */
+    protected function setAbsoluteStubUrl($stub = null)
+    {
+        if (is_null($stub)) {
+            if (isset($_SERVER['PHP_SELF'])) {
+                // find the stub (absolute part of the URL)
+                $arr = explode('.', $_SERVER['PHP_SELF'], 2);
+                $this->absoluteStubUrl = substr($arr[0], 0, strrpos($arr[0], '/'));
+            }
+        } else {
+            $this->absoluteStubUrl = $stub;
+        }
     }
 
 

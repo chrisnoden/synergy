@@ -61,6 +61,10 @@ class HtmlTemplate extends TemplateAbstract
         $filename = $this->templateDir . DIRECTORY_SEPARATOR . $this->templateFile;
         if (file_exists($filename) && is_readable($filename)) {
             $render = file_get_contents($filename);
+            foreach ($this->parameters AS $name=>$value) {
+                $regex = '/\{\$'.$name.'\}/';
+                $render = preg_replace($regex, $value, $render);
+            }
             return $render;
         } else {
             throw new SynergyException(
