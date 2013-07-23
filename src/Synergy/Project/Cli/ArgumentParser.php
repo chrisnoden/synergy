@@ -62,8 +62,10 @@ class ArgumentParser
     {
         $obj = new ArgumentParser();
 
-        if (is_null($arguments)) {
+        if (is_null($arguments) && isset($_SERVER['argv'])) {
             $arguments = join(' ', $_SERVER['argv']);
+        } else if (is_null($arguments)) {
+            return $obj;
         }
 
         $request = null;
