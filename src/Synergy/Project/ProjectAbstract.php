@@ -30,7 +30,9 @@ use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Synergy\AutoLoader\SplClassLoader;
+use Synergy\Exception\CriticalLaunchException;
 use Synergy\Exception\InvalidArgumentException;
+use Synergy\Exception\ProjectException;
 use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
 use Synergy\Object;
@@ -178,24 +180,24 @@ abstract class ProjectAbstract extends Object
             if ($this->isValidDirectory($testroot)) {
                 define('SYNERGY_ROOT_DIR', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
             } else {
-                throw new SynergyException(
+                throw new CriticalLaunchException(
                     'Please define your project root directory as SYNERGY_ROOT_DIR'
                 );
             }
         } else if (!is_dir(SYNERGY_ROOT_DIR)) {
-            throw new SynergyException(
+            throw new CriticalLaunchException(
                 'SYNERGY_ROOT_DIR must point to a valid directory at the root of your project'
             );
         }
 
         if (!isset($this->app_dir) && !$this->searchAppDir()) {
-            throw new SynergyException(
+            throw new CriticalLaunchException(
                 'Unable to init Synergy library without an app directory'
             );
         }
 
         if (!isset($this->configFilename) && !$this->searchConfigFile()) {
-            throw new SynergyException(
+            throw new CriticalLaunchException(
                 'Unable to init Synergy library without config file'
             );
         }
@@ -203,7 +205,7 @@ abstract class ProjectAbstract extends Object
         if (!isset($this->temp_dir) && $this->getOption('synergy:temp_dir')) {
             $this->setTempDir($this->getOption('synergy:temp_dir'));
         } else if (!$this->searchTempDir()) {
-            throw new SynergyException(
+            throw new CriticalLaunchException(
                 'Unable to init Synergy library without a temp (cache) directory'
             );
         }
@@ -300,50 +302,15 @@ abstract class ProjectAbstract extends Object
         if (!is_string($baseDir) && defined('SYNERGY_ROOT_DIR')) {
                 $baseDir = SYNERGY_ROOT_DIR;
         }
-        if (!is_string($baseDir)) {
-
-            // test from 1 level up from script path
-            $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'app';
-            if ($this->isValidDirectory($testfile)) {
-                $this->app_dir = $testfile;
-                return true;
-            }
-            $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'App';
-            if ($this->isValidDirectory($testfile)) {
-                $this->app_dir = $testfile;
-                return true;
-            }
-
-            // test 3 levels up
-            $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'app';
-            if ($this->isValidDirectory($testfile)) {
-                $this->app_dir = $testfile;
-                return true;
-            }
-            $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'App';
-            if ($this->isValidDirectory($testfile)) {
-                $this->app_dir = $testfile;
-                return true;
-            }
-
-            // test 6 levels up
-            $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'app';
-            if ($this->isValidDirectory($testfile)) {
-                $this->app_dir = $testfile;
-                return true;
-            }
-            $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'App';
-            if ($this->isValidDirectory($testfile)) {
-                $this->app_dir = $testfile;
-                return true;
-            }
-        } else {
+        if (is_string($baseDir)) {
             $testfile = $baseDir . DIRECTORY_SEPARATOR . 'app';
+            Logger::debug('Test: '.$testfile);
             if ($this->isValidDirectory($testfile)) {
                 $this->app_dir = $testfile;
                 return true;
             }
             $testfile = $baseDir . DIRECTORY_SEPARATOR . 'App';
+            Logger::debug('Test: '.$testfile);
             if ($this->isValidDirectory($testfile)) {
                 $this->app_dir = $testfile;
                 return true;
@@ -351,6 +318,42 @@ abstract class ProjectAbstract extends Object
         }
 
         // fall through :
+
+        // test from 1 level up from script path
+        $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'app';
+        if ($this->isValidDirectory($testfile)) {
+            $this->app_dir = $testfile;
+            return true;
+        }
+        $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'App';
+        if ($this->isValidDirectory($testfile)) {
+            $this->app_dir = $testfile;
+            return true;
+        }
+
+        // test 3 levels up
+        $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'app';
+        if ($this->isValidDirectory($testfile)) {
+            $this->app_dir = $testfile;
+            return true;
+        }
+        $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'App';
+        if ($this->isValidDirectory($testfile)) {
+            $this->app_dir = $testfile;
+            return true;
+        }
+
+        // test 6 levels up
+        $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'app';
+        if ($this->isValidDirectory($testfile)) {
+            $this->app_dir = $testfile;
+            return true;
+        }
+        $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'App';
+        if ($this->isValidDirectory($testfile)) {
+            $this->app_dir = $testfile;
+            return true;
+        }
 
         // test from script path
         $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'app';

@@ -27,6 +27,7 @@
 namespace Synergy;
 
 use Psr\Log\LogLevel;
+use Synergy\Exception\CriticalLaunchException;
 use Synergy\Logger\Logger;
 
 /**
@@ -245,7 +246,11 @@ class ExceptionHandler
         self::$errMsg   = $e->getMessage();
         self::$fileName = $e->getFile();
         self::$lineNum  = $e->getLine();
-        self::$trace    = $e->getTrace();
+        if (!$e instanceof CriticalLaunchException) {
+            self::$trace = $e->getTrace();
+        } else {
+            self::$trace = null;
+        }
 
         // process the error
         self::handler(LogLevel::CRITICAL);
