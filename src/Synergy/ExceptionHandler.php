@@ -246,10 +246,10 @@ class ExceptionHandler
         self::$errMsg   = $e->getMessage();
         self::$fileName = $e->getFile();
         self::$lineNum  = $e->getLine();
-        if (!$e instanceof CriticalLaunchException) {
-            self::$trace = $e->getTrace();
-        } else {
+        if ($e instanceof CriticalLaunchException) {
             self::$trace = null;
+        } else {
+            self::$trace = $e->getTrace();
         }
 
         // process the error
