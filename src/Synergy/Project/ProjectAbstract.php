@@ -129,9 +129,9 @@ abstract class ProjectAbstract extends Object
      */
     public function run()
     {
-        $this->loadBootstrap();
-
         $this->checkEnv();
+
+        $this->loadBootstrap();
 
         $this->launch();
     }
