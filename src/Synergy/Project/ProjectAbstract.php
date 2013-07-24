@@ -303,67 +303,41 @@ abstract class ProjectAbstract extends Object
                 $baseDir = SYNERGY_ROOT_DIR;
         }
         if (is_string($baseDir)) {
-            $testfile = $baseDir . DIRECTORY_SEPARATOR . 'app';
-            Logger::debug('Test: '.$testfile);
-            if ($this->isValidDirectory($testfile)) {
-                $this->app_dir = $testfile;
+            $testdir = $baseDir . DIRECTORY_SEPARATOR . 'app';
+            if ($this->isValidDirectory($testdir)) {
+                $this->app_dir = $testdir;
                 return true;
             }
-            $testfile = $baseDir . DIRECTORY_SEPARATOR . 'App';
-            Logger::debug('Test: '.$testfile);
-            if ($this->isValidDirectory($testfile)) {
-                $this->app_dir = $testfile;
+            $testdir = $baseDir . DIRECTORY_SEPARATOR . 'App';
+            if ($this->isValidDirectory($testdir)) {
+                $this->app_dir = $testdir;
                 return true;
             }
         }
 
         // fall through :
 
-        // test from 1 level up from script path
-        $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'app';
-        if ($this->isValidDirectory($testfile)) {
-            $this->app_dir = $testfile;
-            return true;
-        }
-        $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'App';
-        if ($this->isValidDirectory($testfile)) {
-            $this->app_dir = $testfile;
-            return true;
-        }
-
         // test 3 levels up
-        $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'app';
-        if ($this->isValidDirectory($testfile)) {
-            $this->app_dir = $testfile;
+        $testdir = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'app';
+        if ($this->isValidDirectory($testdir)) {
+            $this->app_dir = $testdir;
             return true;
         }
-        $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'App';
-        if ($this->isValidDirectory($testfile)) {
-            $this->app_dir = $testfile;
+        $testdir = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'App';
+        if ($this->isValidDirectory($testdir)) {
+            $this->app_dir = $testdir;
             return true;
         }
 
         // test 6 levels up
-        $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'app';
-        if ($this->isValidDirectory($testfile)) {
-            $this->app_dir = $testfile;
+        $testdir = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'app';
+        if ($this->isValidDirectory($testdir)) {
+            $this->app_dir = $testdir;
             return true;
         }
-        $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'App';
-        if ($this->isValidDirectory($testfile)) {
-            $this->app_dir = $testfile;
-            return true;
-        }
-
-        // test from script path
-        $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'app';
-        if ($this->isValidDirectory($testfile)) {
-            $this->app_dir = $testfile;
-            return true;
-        }
-        $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'App';
-        if ($this->isValidDirectory($testfile)) {
-            $this->app_dir = $testfile;
+        $testdir = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'App';
+        if ($this->isValidDirectory($testdir)) {
+            $this->app_dir = $testdir;
             return true;
         }
 
