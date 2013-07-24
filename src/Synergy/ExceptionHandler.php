@@ -28,6 +28,7 @@ namespace Synergy;
 
 use Psr\Log\LogLevel;
 use Synergy\Exception\CriticalLaunchException;
+use Synergy\Exception\InvalidControllerException;
 use Synergy\Logger\Logger;
 
 /**
@@ -246,7 +247,7 @@ class ExceptionHandler
         self::$errMsg   = $e->getMessage();
         self::$fileName = $e->getFile();
         self::$lineNum  = $e->getLine();
-        if ($e instanceof CriticalLaunchException) {
+        if ($e instanceof CriticalLaunchException || $e instanceof InvalidControllerException) {
             self::$trace = null;
         } else {
             self::$trace = $e->getTrace();
