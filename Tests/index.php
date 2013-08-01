@@ -44,7 +44,14 @@ setlocale(LC_ALL, 'en_GB');
 /**
  * Load composer autoload.php
  */
-require_once('../vendor/autoload.php');
+$autoloadFile = '../vendor/autoload.php';
+if (is_file($autoloadFile)) {
+    $loader = include_once $autoloadFile;
+    $loader->add('Synergy\Tests', __DIR__);
+    $loader->add('Test', __DIR__ . DIRECTORY_SEPARATOR . 'app');
+} else {
+    throw new \LogicException('Run "composer install --dev" to create autoloader.');
+}
 
 /**
  * Synergy will base all relative files and paths on this root
