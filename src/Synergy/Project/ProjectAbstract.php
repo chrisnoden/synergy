@@ -317,6 +317,20 @@ abstract class ProjectAbstract extends Object
 
         // fall through :
 
+        // test script dir
+        if (isset($_SERVER['SCRIPT_FILENAME'])) {
+            $testdir = dirname($_SERVER['SCRIPT_FILENAME']) . DIRECTORY_SEPARATOR . 'app';
+            if ($this->isValidDirectory($testdir)) {
+                $this->app_dir = $testdir;
+                return true;
+            }
+            $testdir = dirname($_SERVER['SCRIPT_FILENAME']) . DIRECTORY_SEPARATOR . 'app';
+            if ($this->isValidDirectory($testdir)) {
+                $this->app_dir = $testdir;
+                return true;
+            }
+        }
+
         // test 3 levels up
         $testdir = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'app';
         if ($this->isValidDirectory($testdir)) {
