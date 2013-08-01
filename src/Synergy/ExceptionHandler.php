@@ -29,6 +29,7 @@ namespace Synergy;
 use Psr\Log\LogLevel;
 use Synergy\Exception\CriticalLaunchException;
 use Synergy\Exception\InvalidControllerException;
+use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
 
 /**
@@ -124,6 +125,14 @@ class ExceptionHandler
      * @var array
      */
     private static $_aIgnoreCombos = array();
+    /**
+     * Files that cause the trace iterator to break
+     *
+     * @var array
+     */
+    private static $_aBreakFiles = array(
+        'src/Synergy/Controller/ControllerEntity.php'
+    );
 
 
     /**
@@ -241,13 +250,16 @@ class ExceptionHandler
             return true;
         }
 
-//        $ref = new \ReflectionObject($e);
-
         self::$errNum   = $e->getCode();
         self::$errMsg   = $e->getMessage();
-        self::$fileName = $e->getFile();
+        // make the filename relative to the SYNERGY_ROOT_DIR
+        if (defined('SYNERGY_ROOT_DIR')) {
+            self::$fileName = str_ireplace(realpath(SYNERGY_ROOT_DIR) . DIRECTORY_SEPARATOR, '', $e->getFile());
+        } else {
+            self::$fileName = $e->getFile();
+        }
         self::$lineNum  = $e->getLine();
-        if ($e instanceof CriticalLaunchException || $e instanceof InvalidControllerException) {
+        if ($e instanceof CriticalLaunchException || $e instanceof InvalidControllerException || $e instanceof SynergyException) {
             self::$trace = null;
         } else {
             self::$trace = $e->getTrace();
@@ -294,13 +306,23 @@ class ExceptionHandler
     {
         if (isset(self::$errNum)) {
             if (isset(self::$trace)) {
-                $text = sprintf("%s\n\nTrace:\n\n", self::$errMsg);
+                $text = '';
                 foreach (self::$trace AS $traceItem) {
                     foreach ($traceItem AS $key => $val) {
                         if ($key == 'file' && defined('SYNERGY_ROOT_DIR')) {
                             $val = str_ireplace(realpath(SYNERGY_ROOT_DIR) . DIRECTORY_SEPARATOR, '', $val);
                         }
-                        $text .= sprintf("\t[%s] => %s\n", $key, $val);
+                        // Look for a BREAK file
+                        if (
+                            self::$trace[count(self::$trace)-1]['class'] == 'Synergy\\Project\\ProjectAbstract' &&
+                            in_array($val, self::$_aBreakFiles)
+                        ) {
+                            break(2);
+                        }
+                        $text .= sprintf(" [%s] => %s\n", $key, $val);
+                    }
+                    if ($text != '') {
+                        $text = sprintf("%s\n\nTrace:\n\n", self::$errMsg) . $text;
                     }
                     $text .= "\n";
                 }
