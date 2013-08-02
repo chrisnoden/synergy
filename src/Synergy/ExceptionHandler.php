@@ -131,7 +131,7 @@ class ExceptionHandler
      * @var array
      */
     private static $_aBreakFiles = array(
-        'src/Synergy/Controller/ControllerEntity.php'
+        'Controller/ControllerEntity.php'
     );
 
 
@@ -219,7 +219,12 @@ class ExceptionHandler
 
         self::$errNum   = $errNum;
         self::$errMsg   = $errMsg;
-        self::$fileName = $fileName;
+        // make the filename relative to the SYNERGY_ROOT_DIR
+        if (defined('SYNERGY_ROOT_DIR')) {
+            self::$fileName = str_ireplace(realpath(SYNERGY_ROOT_DIR) . DIRECTORY_SEPARATOR, '', $fileName);
+        } else {
+            self::$fileName = $fileName;
+        }
         self::$lineNum  = $lineNum;
         self::$trace    = null;
 
@@ -289,7 +294,12 @@ class ExceptionHandler
         if ($last_error['type'] === E_ERROR) {
             self::$errMsg   = $last_error['message'];
             self::$errNum   = $last_error['type'];
-            self::$fileName = $last_error['file'];
+            // make the filename relative to the SYNERGY_ROOT_DIR
+            if (defined('SYNERGY_ROOT_DIR')) {
+                self::$fileName = str_ireplace(realpath(SYNERGY_ROOT_DIR) . DIRECTORY_SEPARATOR, '', $last_error['file']);
+            } else {
+                self::$fileName = $last_error['file'];
+            }
             self::$lineNum  = $last_error['line'];
             self::$trace    = null;
             self::handler();
@@ -305,27 +315,41 @@ class ExceptionHandler
     protected static function handler($LogLevel = null)
     {
         if (isset(self::$errNum)) {
+            $text = '';
             if (isset(self::$trace)) {
-                $text = '';
                 foreach (self::$trace AS $traceItem) {
-                    foreach ($traceItem AS $key => $val) {
-                        if ($key == 'file' && defined('SYNERGY_ROOT_DIR')) {
-                            $val = str_ireplace(realpath(SYNERGY_ROOT_DIR) . DIRECTORY_SEPARATOR, '', $val);
-                        }
-                        // Look for a BREAK file
+
+                    // Look for a BREAK file
+                    if (
+                    (self::$trace[count(self::$trace)-1]['class'] == 'Synergy\\Project\\ProjectAbstract' ||
+                        self::$trace[count(self::$trace)-2]['class'] == 'Synergy\\Project\\ProjectAbstract')
+                    ) {
                         if (
-                            (self::$trace[count(self::$trace)-1]['class'] == 'Synergy\\Project\\ProjectAbstract' ||
-                                self::$trace[count(self::$trace)-2]['class'] == 'Synergy\\Project\\ProjectAbstract') &&
-                            in_array($val, self::$_aBreakFiles)
+                            defined('SYNERGY_LIBRARY_PATH') &&
+                            isset($traceItem['file']) &&
+                            $file = str_ireplace(realpath(SYNERGY_LIBRARY_PATH) . DIRECTORY_SEPARATOR, '', $traceItem['file'])
                         ) {
-                            break(2);
+                            if (in_array($file, self::$_aBreakFiles)) {
+                                break; // stop iterating through the trace
+                            }
+                        }
+                    }
+
+                    // Clean up the filename to make it relative
+                    if (defined('SYNERGY_ROOT_DIR') && isset($traceItem['file'])) {
+                        $traceItem['file'] = str_ireplace(realpath(SYNERGY_ROOT_DIR) . DIRECTORY_SEPARATOR, '', $traceItem['file']);
+                    }
+                    foreach ($traceItem AS $key => $val) {
+                        if ($key == 'type' && ($val == '::' || $val == '->')) {
+                            continue;
                         }
                         $text .= sprintf(" [%s] => %s\n", $key, $val);
                     }
-                    if ($text != '') {
-                        $text = sprintf("%s\n\nTrace:\n\n", self::$errMsg) . $text;
-                    }
+
                     $text .= "\n";
+                }
+                if ($text != '') {
+                    $text = sprintf("%s\n\nTrace:\n\n", self::$errMsg) . $text;
                 }
             } else {
                 $text = sprintf("%s", self::$errMsg);
