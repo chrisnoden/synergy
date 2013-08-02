@@ -327,7 +327,9 @@ class ExceptionHandler
                         if (
                             defined('SYNERGY_LIBRARY_PATH') &&
                             isset($traceItem['file']) &&
-                            $file = str_ireplace(realpath(SYNERGY_LIBRARY_PATH) . DIRECTORY_SEPARATOR, '', $traceItem['file'])
+                            $file = str_ireplace(
+                                realpath(SYNERGY_LIBRARY_PATH) . DIRECTORY_SEPARATOR, '', $traceItem['file']
+                            )
                         ) {
                             if (in_array($file, self::$_aBreakFiles)) {
                                 break; // stop iterating through the trace
@@ -337,7 +339,9 @@ class ExceptionHandler
 
                     // Clean up the filename to make it relative
                     if (defined('SYNERGY_ROOT_DIR') && isset($traceItem['file'])) {
-                        $traceItem['file'] = str_ireplace(realpath(SYNERGY_ROOT_DIR) . DIRECTORY_SEPARATOR, '', $traceItem['file']);
+                        $traceItem['file'] = str_ireplace(
+                            realpath(SYNERGY_ROOT_DIR) . DIRECTORY_SEPARATOR, '', $traceItem['file']
+                        );
                     }
                     foreach ($traceItem AS $key => $val) {
                         if ($key == 'type' && ($val == '::' || $val == '->')) {

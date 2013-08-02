@@ -26,6 +26,7 @@
 
 namespace Synergy\Project\Cli;
 
+use Synergy\Exception\SynergyException;
 use Synergy\Object;
 
 /**
@@ -42,6 +43,17 @@ use Synergy\Object;
 class CliObject extends Object
 {
 
+    public function __construct()
+    {
+        // Check this is coming from the CLI
+        if (PHP_SAPI !== 'cli') {
+            throw new SynergyException(
+                sprintf('%s must be run from command line project', __CLASS__)
+            );
+        }
+    }
+
+    
     /**
      * waits for input from the user (terminated by a carriage-return / newline)
      *
