@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "856c22871ab85f10db993917a2fab1c9",
+    "hash": "0bd0e3b7d01e4def64653e6960181766",
     "packages": [
         {
             "name": "mustangostang/spyc",
@@ -92,7 +92,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.2.4",
+            "version": "2.2.x-dev",
             "target-dir": "Symfony/Component/Config",
             "source": {
                 "type": "git",
@@ -139,17 +139,17 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v2.2.4",
+            "version": "2.2.x-dev",
             "target-dir": "Symfony/Component/HttpFoundation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "v2.2.4"
+                "reference": "d756d7c9e1d005f9afa36a9ab64b1c98b060e985"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/v2.2.4",
-                "reference": "v2.2.4",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/d756d7c9e1d005f9afa36a9ab64b1c98b060e985",
+                "reference": "d756d7c9e1d005f9afa36a9ab64b1c98b060e985",
                 "shasum": ""
             },
             "require": {
@@ -185,21 +185,21 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-07-15 12:12:07"
+            "time": "2013-07-28 18:26:16"
         },
         {
             "name": "symfony/routing",
-            "version": "v2.2.4",
+            "version": "2.2.x-dev",
             "target-dir": "Symfony/Component/Routing",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "v2.2.4"
+                "reference": "afb45f91aad9563d97fb433a7d0f4f540d2edec1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.4",
-                "reference": "v2.2.4",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/afb45f91aad9563d97fb433a7d0f4f540d2edec1",
+                "reference": "afb45f91aad9563d97fb433a7d0f4f540d2edec1",
                 "shasum": ""
             },
             "require": {
@@ -243,11 +243,11 @@
             ],
             "description": "Symfony Routing Component",
             "homepage": "http://symfony.com",
-            "time": "2013-06-23 06:56:04"
+            "time": "2013-07-28 18:26:16"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.2.4",
+            "version": "2.2.x-dev",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
@@ -294,16 +294,16 @@
         },
         {
             "name": "wp-cli/php-cli-tools",
-            "version": "v0.9.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/php-cli-tools.git",
-                "reference": "v0.9.4"
+                "reference": "d351fa71c7425427c041c0308c820e94cbd9cd51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/v0.9.4",
-                "reference": "v0.9.4",
+                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/d351fa71c7425427c041c0308c820e94cbd9cd51",
+                "reference": "d351fa71c7425427c041c0308c820e94cbd9cd51",
                 "shasum": ""
             },
             "require": {
@@ -335,7 +335,7 @@
                 "cli",
                 "console"
             ],
-            "time": "2013-06-17 19:40:15"
+            "time": "2013-06-26 09:23:20"
         }
     ],
     "packages-dev": [
@@ -404,16 +404,16 @@
         },
         {
             "name": "mobiledetect/mobiledetectlib",
-            "version": "2.6.3",
+            "version": "2.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "2.6.3"
+                "reference": "2.6.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/2.6.3",
-                "reference": "2.6.3",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/2.6.4",
+                "reference": "2.6.4",
                 "shasum": ""
             },
             "require": {
@@ -446,7 +446,7 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2013-07-03 16:20:06"
+            "time": "2013-07-28 13:14:05"
         },
         {
             "name": "phing/phing",
@@ -662,8 +662,9 @@
     "aliases": [
 
     ],
-    "minimum-stability": "beta",
+    "minimum-stability": "dev",
     "stability-flags": {
+        "wp-cli/php-cli-tools": 20,
         "propel/propel1": 20
     },
     "platform": {
