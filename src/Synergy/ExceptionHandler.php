@@ -314,7 +314,8 @@ class ExceptionHandler
                         }
                         // Look for a BREAK file
                         if (
-                            in_array('Synergy\\Project\\ProjectAbstract', self::$trace) &&
+                            (self::$trace[count(self::$trace)-1]['class'] == 'Synergy\\Project\\ProjectAbstract' ||
+                                self::$trace[count(self::$trace)-2]['class'] == 'Synergy\\Project\\ProjectAbstract') &&
                             in_array($val, self::$_aBreakFiles)
                         ) {
                             break(2);
