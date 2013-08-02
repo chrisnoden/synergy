@@ -116,22 +116,24 @@ class CliLogger extends LoggerAbstract implements LoggerInterface
                     ));
                     break;
                 case LogLevel::WARNING:
-                    \Cli\err(sprintf(
+                    \Cli\line(sprintf(
                         "%%m%11s%%n %s",
                         $level,
                         $message
                     ));
                     break;
                 case LogLevel::NOTICE:
-                    \Cli\err(sprintf(
-                        "%%c%11s%%n %s",
-                        $level,
-                        $message
-                    ));
+                    if ($this->_verbosity >= 1) {
+                        \Cli\line(sprintf(
+                            "%%c%11s%%n %s",
+                            $level,
+                            $message
+                        ));
+                    }
                     break;
                 case LogLevel::INFO:
                     if ($this->_verbosity >= 1) {
-                        \Cli\err(sprintf(
+                        \Cli\line(sprintf(
                             "%%y%11s%%n %s",
                             $level,
                             $message
