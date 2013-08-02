@@ -30,7 +30,6 @@ namespace Synergy\Project\Cli;
 use Synergy\Controller\ControllerEntity;
 use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
-use Synergy\Object;
 use Synergy\Project\ProjectAbstract;
 
 /**
