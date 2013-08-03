@@ -80,6 +80,10 @@ abstract class ProjectAbstract extends Object
      * @var \DateTime
      */
     protected $projectLaunchTime;
+    /**
+     * @var string
+     */
+    protected $projectName;
 
 
     /**
@@ -118,6 +122,10 @@ abstract class ProjectAbstract extends Object
      */
     public function __toString()
     {
+        if (isset($this->projectName)) {
+            return $this->projectName;
+        }
+
         return Project::getName();
     }
 

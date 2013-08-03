@@ -63,6 +63,10 @@ class CliObject extends Object
      * @var array
      */
     private $_pid = array();
+    /**
+     * @var string
+     */
+    protected $projectName;
 
 
     public function __construct()
@@ -92,6 +96,15 @@ class CliObject extends Object
                 posix_kill($child_pid, SIGTERM);
             }
         }
+
+        if (isset($this->projectName)) {
+            Logger::notice(sprintf(
+                '%s : PROJECT TERMINATED',
+                $this->projectName
+            ));
+        } else {
+            Logger::notice('TERMINATED');
+        }
     }
 
 
@@ -114,8 +127,12 @@ class CliObject extends Object
 
     /**
      * Fork the process into two
+     *
+     * @param bool $daemonize kill the parent (original) process and let the new child run
+     *
+     * @return void
      */
-    protected function fork() {
+    protected function fork($daemonize = false) {
         if ($this->_node !== 0) {
             return false;
         }
@@ -136,13 +153,16 @@ class CliObject extends Object
                     \Cli\line(
                         'Child node : pid=%y%s%n', $pid
                     );
+                    if ($daemonize) {
+                        exit;
+                    }
                     $this->_pid[] = $pid;
                     return;
                 }
         }
 
         // promote the daemon process so it doesn't die because the parent has
-        if (posix_setsid() === -1) {
+        if ($daemonize && posix_setsid() === -1) {
             Logger::critical(
                 'Error creating daemon as session leader'
             );
@@ -172,6 +192,30 @@ class CliObject extends Object
         if ($this->_node == 0) {
             return true;
         }
+    }
+
+
+    /**
+     * Set the value of projectName member
+     *
+     * @param string $projectName
+     *
+     * @return void
+     */
+    protected function setProjectName($projectName)
+    {
+        $this->projectName = $projectName;
+    }
+
+
+    /**
+     * Value of member projectName
+     *
+     * @return string value of member
+     */
+    protected function getProjectName()
+    {
+        return $this->projectName;
     }
 
 }

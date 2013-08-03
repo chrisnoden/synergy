@@ -45,7 +45,7 @@ class Test extends CliObject
 
     public function defaultAction()
     {
-        $this->fork();
+        $this->fork(true);
 
         if ($this->isParent()) {
             Logger::debug('Test Log 1');
@@ -58,6 +58,7 @@ class Test extends CliObject
             Logger::alert('Test Log 7');
             Logger::emergency('Test Log 8');
         }
+        $count = 1;
         do
         {
             SignalHandler::$blockExit = true;
@@ -68,7 +69,7 @@ class Test extends CliObject
                 Logger::error('Child reporting in');
             }
             SignalHandler::$blockExit = false;
-        } while (1);
+        } while ($count++ < 7);
     }
 
 }
