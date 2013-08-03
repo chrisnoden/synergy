@@ -27,6 +27,7 @@
 namespace Synergy\Project\Cli;
 
 use Synergy\Exception\SynergyException;
+use Synergy\Logger\Logger;
 use Synergy\Object;
 
 /**
@@ -42,6 +43,27 @@ use Synergy\Object;
  */
 class CliObject extends Object
 {
+    /**
+     * @var resource
+     */
+    private $_stdIn;
+    /**
+     * @var resource
+     */
+    private $_stdOut;
+    /**
+     * @var resource
+     */
+    private $_stdErr;
+    /**
+     * @var int what position are we in the process hierarchy
+     */
+    private $_node = 0;
+    /**
+     * @var array
+     */
+    private $_pid = array();
+
 
     public function __construct()
     {
@@ -51,9 +73,28 @@ class CliObject extends Object
                 sprintf('%s must be run from command line project', __CLASS__)
             );
         }
+        // save the pid of this process
+        $this->_pid[$this->_node] = getmypid();
     }
 
-    
+
+    public function __destruct()
+    {
+        if ($this->_node == 0) {
+            foreach ($this->_pid AS $child_pid) {
+                if ($child_pid == getmypid()) {
+                    continue;
+                }
+                Logger::notice(sprintf(
+                    'TERM signal sent to child pid: %s',
+                    $child_pid
+                ));
+                posix_kill($child_pid, SIGTERM);
+            }
+        }
+    }
+
+
     /**
      * waits for input from the user (terminated by a carriage-return / newline)
      *
@@ -70,5 +111,67 @@ class CliObject extends Object
         return trim($line);
     }
 
+
+    /**
+     * Fork the process into two
+     */
+    protected function fork() {
+        if ($this->_node !== 0) {
+            return false;
+        }
+        $pid = pcntl_fork();
+        switch ($pid) {
+            case -1:
+                Logger::emergency(
+                    'Unable to fork process'
+                );
+                return;
+            case 0:
+                // this is the child
+                $this->_node++;
+                break;
+            default:
+                // we are the original process
+                if ($this->_node == 0) {
+                    \Cli\line(
+                        'Child node : pid=%y%s%n', $pid
+                    );
+                    $this->_pid[] = $pid;
+                    return;
+                }
+        }
+
+        // promote the daemon process so it doesn't die because the parent has
+        if (posix_setsid() === -1) {
+            Logger::critical(
+                'Error creating daemon as session leader'
+            );
+            exit(1);
+        }
+
+        fclose(STDIN);
+        fclose(STDOUT);
+        fclose(STDERR);
+
+        $this->_stdIn  = fopen('/dev/null', 'r'); // set fd/0
+        $this->_stdOut = fopen('/dev/null', 'w'); // set fd/1
+        $this->_stdErr = fopen('php://stdout', 'w'); // a hack to duplicate fd/1 to 2
+
+        // Silence any console output from the logger
+        Logger::setSilentConsole(true);
+    }
+
+
+    /**
+     * Is this the parent (original) process
+     *
+     * @return bool
+     */
+    protected function isParent()
+    {
+        if ($this->_node == 0) {
+            return true;
+        }
+    }
 
 }

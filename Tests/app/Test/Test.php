@@ -27,6 +27,7 @@
 namespace Test;
 
 use Synergy\Logger\Logger;
+use Synergy\Project\Cli\CliObject;
 use Synergy\Project\Cli\SignalHandler;
 use Synergy\Tools\Tools;
 
@@ -39,24 +40,33 @@ use Synergy\Tools\Tools;
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class Test 
+class Test extends CliObject
 {
 
     public function defaultAction()
     {
-        Logger::debug('Test Log 1');
-        Logger::info('Test Log 2');
-        Logger::notice('Test Log 3');
-        Logger::warning('Test Log 4');
-        Logger::error('Test Log 5');
-        Logger::critical('Test Log 6');
-        Logger::alert('Test Log 7');
-        Logger::emergency('Test Log 8');
+        $this->fork();
+
+        if ($this->isParent()) {
+            Logger::debug('Test Log 1');
+            Logger::info('Test Log 2');
+            Logger::notice('Test Log 3');
+            Logger::warning('Test Log 4');
+        } else {
+            Logger::error('Test Log 5');
+            Logger::critical('Test Log 6');
+            Logger::alert('Test Log 7');
+            Logger::emergency('Test Log 8');
+        }
         do
         {
             SignalHandler::$blockExit = true;
             Tools::pause(5);
-            Logger::error('Daemon reporting in');
+            if ($this->isParent()) {
+                Logger::error('Parent reporting in');
+            } else {
+                Logger::error('Child reporting in');
+            }
             SignalHandler::$blockExit = false;
         } while (1);
     }

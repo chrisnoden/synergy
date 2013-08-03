@@ -76,6 +76,7 @@ class DaemonProject extends CliProject
         parent::__destruct();
     }
 
+
     /**
      * run our project
      *
