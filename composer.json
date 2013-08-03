@@ -14,6 +14,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/chrisnoden/Propel"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/chrisnoden/php-cli-tools"
         }
     ],
     "require": {

@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "0bd0e3b7d01e4def64653e6960181766",
+    "hash": "72b0abfcc4b8ce03c41cf6be2c385b73",
     "packages": [
         {
             "name": "mustangostang/spyc",
@@ -194,12 +194,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "afb45f91aad9563d97fb433a7d0f4f540d2edec1"
+                "reference": "f2265e3500f121ac69409138eebd70f0467f5a30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/afb45f91aad9563d97fb433a7d0f4f540d2edec1",
-                "reference": "afb45f91aad9563d97fb433a7d0f4f540d2edec1",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/f2265e3500f121ac69409138eebd70f0467f5a30",
+                "reference": "f2265e3500f121ac69409138eebd70f0467f5a30",
                 "shasum": ""
             },
             "require": {
@@ -243,7 +243,7 @@
             ],
             "description": "Symfony Routing Component",
             "homepage": "http://symfony.com",
-            "time": "2013-07-28 18:26:16"
+            "time": "2013-07-30 11:22:46"
         },
         {
             "name": "symfony/yaml",
@@ -404,20 +404,23 @@
         },
         {
             "name": "mobiledetect/mobiledetectlib",
-            "version": "2.6.4",
+            "version": "2.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "2.6.4"
+                "reference": "2.6.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/2.6.4",
-                "reference": "2.6.4",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/2.6.6",
+                "reference": "2.6.6",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
             },
             "type": "library",
             "autoload": {
@@ -446,7 +449,7 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2013-07-28 13:14:05"
+            "time": "2013-08-03 13:07:23"
         },
         {
             "name": "phing/phing",
