@@ -29,7 +29,7 @@ namespace Synergy\AutoLoader;
 use Synergy\Exception\SynergyException;
 
 /**
- * SplClassLoader implementation that implements the technical interoperability
+ * SplClassLoader implements the technical interoperability
  * standards for PHP 5.3 namespaces and class names.
  *
  * @category Synergy\Project
@@ -40,9 +40,9 @@ use Synergy\Exception\SynergyException;
  */
 class SplClassLoader
 {
-    private $_fileExtension = '.php';
-    private $_includePath;
-    private $_namespaceSeparator = '\\';
+    private $fileExtension = '.php';
+    private $includePath;
+    private $namespaceSeparator = '\\';
 
 
     /**
@@ -53,7 +53,7 @@ class SplClassLoader
      */
     public function __construct($includePath)
     {
-        $this->_includePath = $includePath;
+        $this->includePath = $includePath;
     }
 
 
@@ -64,7 +64,7 @@ class SplClassLoader
      */
     public function setNamespaceSeparator($sep)
     {
-        $this->_namespaceSeparator = $sep;
+        $this->namespaceSeparator = $sep;
     }
 
 
@@ -75,7 +75,7 @@ class SplClassLoader
      */
     public function getNamespaceSeparator()
     {
-        return $this->_namespaceSeparator;
+        return $this->namespaceSeparator;
     }
 
 
@@ -86,7 +86,7 @@ class SplClassLoader
      */
     public function setIncludePath($includePath)
     {
-        $this->_includePath = $includePath;
+        $this->includePath = $includePath;
     }
 
 
@@ -97,7 +97,7 @@ class SplClassLoader
      */
     public function getIncludePath()
     {
-        return $this->_includePath;
+        return $this->includePath;
     }
 
 
@@ -108,7 +108,7 @@ class SplClassLoader
      */
     public function setFileExtension($fileExtension)
     {
-        $this->_fileExtension = $fileExtension;
+        $this->fileExtension = $fileExtension;
     }
 
 
@@ -119,7 +119,7 @@ class SplClassLoader
      */
     public function getFileExtension()
     {
-        return $this->_fileExtension;
+        return $this->fileExtension;
     }
 
 
@@ -152,9 +152,9 @@ class SplClassLoader
     public function loadClass($className)
     {
         // Parse the requested className
-        $aParts = explode($this->_namespaceSeparator, $className);
+        $aParts = explode($this->namespaceSeparator, $className);
         // Build our expected filename
-        $fileName = $this->_includePath . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $aParts) . $this->_fileExtension;
+        $fileName = $this->includePath . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $aParts) . $this->fileExtension;
         if (file_exists($fileName)) {
             if (!is_readable($fileName)) {
                 throw new SynergyException(

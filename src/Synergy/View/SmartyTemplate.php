@@ -45,7 +45,7 @@ class SmartyTemplate extends TemplateAbstract
     /**
      * @var \Smarty
      */
-    private $_loader;
+    private $loader;
 
 
     /**
@@ -55,12 +55,12 @@ class SmartyTemplate extends TemplateAbstract
      */
     protected function initTemplateEngine()
     {
-        $this->_loader = new \Smarty();
-        $this->_loader->muteExpectedErrors();
-        $this->_loader->setTemplateDir($this->templateDir);
-        $this->_loader->addPluginsDir(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'SmartyPlugins');
+        $this->loader = new \Smarty();
+        $this->loader->muteExpectedErrors();
+        $this->loader->setTemplateDir($this->templateDir);
+        $this->loader->addPluginsDir(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'SmartyPlugins');
         $this->_initSmartyCache();
-        Logger::debug("Smarty Cache: ".$this->_loader->getCacheDir());
+        Logger::debug("Smarty Cache: ".$this->loader->getCacheDir());
     }
 
 
@@ -74,7 +74,7 @@ class SmartyTemplate extends TemplateAbstract
     {
         if (isset($this->templateFile)) {
             $this->assignSmartyVariables();
-            $render = $this->_loader->fetch($this->templateFile);
+            $render = $this->loader->fetch($this->templateFile);
             return $render;
         } else {
             throw new SynergyException(
@@ -94,7 +94,7 @@ class SmartyTemplate extends TemplateAbstract
      */
     protected function assignSmartyVariables()
     {
-        $this->_loader->assign($this->parameters);
+        $this->loader->assign($this->parameters);
     }
 
 
@@ -133,7 +133,7 @@ class SmartyTemplate extends TemplateAbstract
         if (!is_dir($path)) {
             $this->mkdir($path, false);
         }
-        $this->_loader->setCompileDir($path);
+        $this->loader->setCompileDir($path);
 
         // cache dir
         $path
@@ -144,7 +144,7 @@ class SmartyTemplate extends TemplateAbstract
         if (!is_dir($path)) {
             $this->mkdir($path, false);
         }
-        $this->_loader->setCacheDir($path);
+        $this->loader->setCacheDir($path);
 
         // configs dir
         $path
@@ -155,7 +155,7 @@ class SmartyTemplate extends TemplateAbstract
         if (!is_dir($path)) {
             $this->mkdir($path, false);
         }
-        $this->_loader->setConfigDir($path);
+        $this->loader->setConfigDir($path);
 
     }
 

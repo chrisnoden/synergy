@@ -56,16 +56,6 @@ class Controller extends Object
 
 
     /**
-     * Default action to be inherited by your own controller code
-     *
-     * @return void
-     */
-    public function defaultAction()
-    {
-    }
-
-
-    /**
      * Set the value of request member
      *
      * @param WebRequest $request

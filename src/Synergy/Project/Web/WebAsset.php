@@ -67,7 +67,9 @@ class WebAsset extends Object
      * @var string
      */
     protected $status = '200 OK';
-
+    /**
+     * @var array content-type values matched to file extensions
+     */
     protected $aContentTypes = array(
         '3dm'     => 'x-world/x-3dmf',
         '3dmf'    => 'x-world/x-3dmf',
@@ -521,6 +523,7 @@ class WebAsset extends Object
         'zsh'     => 'text/x-script.zsh',
     );
 
+
     public function __construct($filename = null)
     {
         if (!is_null($filename)) {
@@ -535,6 +538,7 @@ class WebAsset extends Object
      * @param string $filename
      *
      * @return void
+     * @throws InvalidArgumentException
      */
     public function setFilename($filename)
     {

@@ -36,7 +36,7 @@ use Synergy\Project\Web\WebRequest;
  *
  * @package Synergy\Tests\Project\Web
  */
-class RouterTest extends \PHPUnit_Framework_TestCase
+class WebRouterTest extends \PHPUnit_Framework_TestCase
 {
 
     /**

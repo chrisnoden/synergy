@@ -42,8 +42,7 @@ class FileLoggerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp() {
         $this->_testFileName = '/private/tmp/test.log';
-        $this->_invalidFileName = DIRECTORY_SEPARATOR . 'invalidpath' .
-            DIRECTORY_SEPARATOR . 'file.log';
+        $this->_invalidFileName = '/private/invalid_dir/file.log';
     }
 
 

@@ -175,12 +175,14 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
             }
 
             // test the dir
-            if (!is_dir($parts['dirname'])) {
-                if (!Tools::mkdir($parts['dirname'], true)) {
-                    throw new InvalidArgumentException(
-                        "filename must be an absolute filename in a writeable directory : $filename"
-                    );
-                }
+            if (!is_dir($parts['dirname']) && !is_writable(dirname($parts['dirname']))) {
+                throw new InvalidArgumentException(
+                    "filename must be an absolute filename in a writeable directory : $filename"
+                );
+            } else if (!Tools::mkdir($parts['dirname'], true)) {
+                throw new InvalidArgumentException(
+                    "filename must be an absolute filename in a writeable directory : $filename"
+                );
             }
 
             // Test an existing file is writable
@@ -189,7 +191,7 @@ class FileLogger extends LoggerAbstract implements LoggerInterface
                 throw new InvalidArgumentException(
                     'logfile must be writeable by user: '.$processUser['name']
                 );
-            } else if (!file_exists($filename) && is_dir($parts['dirname']) && is_writable($parts['dirname'])) {
+            } else if (!file_exists($filename)) {
                 touch($filename);
             }
 
