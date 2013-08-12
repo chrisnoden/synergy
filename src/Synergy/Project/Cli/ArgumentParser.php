@@ -165,7 +165,7 @@ class ArgumentParser
      */
     public function hasSwitch($switch)
     {
-        foreach ($this->aSwitches as $argName) {
+        foreach ($this->aSwitches as $argName => $argValue) {
             if (strtolower($argName) == strtolower($switch)) {
                 return true;
             }
