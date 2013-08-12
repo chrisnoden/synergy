@@ -43,10 +43,13 @@ class ArgumentParser
      */
     protected $request;
     /**
-     * @var string
+     * @var array
      */
-    protected $rawArgs;
-
+    protected $aArgs = array();
+    /**
+     * @var array
+     */
+    protected $aSwitches = array();
 
 
     /**
@@ -63,8 +66,10 @@ class ArgumentParser
         $obj = new ArgumentParser();
 
         if (is_null($arguments) && isset($_SERVER['argv'])) {
-            $arguments = join(' ', $_SERVER['argv']);
-        } else if (is_null($arguments)) {
+            $aArgs = $_SERVER['argv'];
+        } elseif (is_array($arguments)) {
+            $aArgs = $arguments;
+        } else {
             return $obj;
         }
 
@@ -72,8 +77,6 @@ class ArgumentParser
         $requestArgs = array();
         $phase = 1;
         $script_filename = strtolower($_SERVER['SCRIPT_FILENAME']);
-
-        $aArgs = explode(' ', $arguments);
 
         foreach ($aArgs AS $val)
         {
@@ -104,29 +107,48 @@ class ArgumentParser
             }
         }
 
-        $obj->setRawArgs(join(' ', $requestArgs));
+        if (is_array($requestArgs)) {
+            $obj->setElements($requestArgs);
+        }
 
         return $obj;
     }
 
 
     /**
+     * Set our project args and switches
+     *
+     * @param array $requestArgs
+     *
+     * @return void
+     */
+    private function setElements($requestArgs)
+    {
+        foreach ($requestArgs as $element) {
+            $arr = explode('=', $element, 2);
+            $name = preg_replace('/^[\-]+/', '', $arr[0]);
+            if (isset($arr[1])) {
+                $value = $arr[1];
+                $this->aArgs[$name] = $value;
+            } else {
+                $this->aSwitches[$name] = true;
+            }
+        }
+    }
+
+
+    /**
      * Look in the command line args for the argument and return the value if found
      *
-     * @param $argName
+     * @param string $name
      *
      * @return mixed|bool
      */
-    public function arg($argName)
+    public function arg($name)
     {
-        $elements = explode(' ', $this->rawArgs);
-        for ($item=0; $item<count($elements); $item++) {
-            $test = preg_replace('/^[\-]+/', '', $elements[$item]);
-            if (strpos($test, '=')) {
-                $arr = explode('=', $test, 2);
-                if (strtolower($arr[0]) == $argName) {
-                    return $arr[1];
-                }
+        foreach ($this->aArgs as $argName => $argValue) {
+            if (strtolower($argName) == strtolower($name)) {
+                return $argValue;
             }
         }
 
@@ -137,16 +159,14 @@ class ArgumentParser
     /**
      * Tests for a switch (eg -v -vv -S) in the command line arguments
      *
-     * @param $switch
+     * @param string $switch
      *
      * @return bool
      */
     public function hasSwitch($switch)
     {
-        $elements = explode(' ', $this->rawArgs);
-        for ($item=0; $item<count($elements); $item++) {
-            $test = $elements[$item];
-            if (substr($test, 0, 1) == '-' && substr($test, 1) == $switch && !strpos($test, '=')) {
+        foreach ($this->aSwitches as $argName) {
+            if (strtolower($argName) == strtolower($switch)) {
                 return true;
             }
         }
@@ -163,30 +183,6 @@ class ArgumentParser
     public function getRequest()
     {
         return $this->request;
-    }
-
-
-    /**
-     * Value of member rawArgs
-     *
-     * @return string value of member
-     */
-    public function getRawArgs()
-    {
-        return $this->rawArgs;
-    }
-
-
-    /**
-     * Set the value of rawArgs member
-     *
-     * @param string $rawArgs
-     *
-     * @return void
-     */
-    public function setRawArgs($rawArgs)
-    {
-        $this->rawArgs = $rawArgs;
     }
 
 
