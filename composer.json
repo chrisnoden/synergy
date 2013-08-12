@@ -38,11 +38,11 @@
         "wp-cli/php-cli-tools": "dev-master"
     },
     "require-dev": {
-        "chrisnoden/talkback": "1.*",
-        "mobiledetect/mobiledetectlib": "2.6.*",
+        "chrisnoden/talkback": "dev-master",
+        "mobiledetect/mobiledetectlib": "dev-master",
         "smarty/smarty": "3.1.*",
         "propel/propel1": "dev-master",
-        "twig/twig": "v1.13.1"
+        "twig/twig": "1.13.*"
     },
     "suggest": {
         "chrisnoden/talkback": ">=1.0.1",

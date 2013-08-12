@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "72b0abfcc4b8ce03c41cf6be2c385b73",
+    "hash": "9d20897088a64e966659ff8635126d4a",
     "packages": [
         {
             "name": "mustangostang/spyc",
@@ -97,12 +97,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "v2.2.4"
+                "reference": "v2.2.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/v2.2.4",
-                "reference": "v2.2.4",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/v2.2.5",
+                "reference": "v2.2.5",
                 "shasum": ""
             },
             "require": {
@@ -135,7 +135,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2013-07-10 14:03:01"
+            "time": "2013-08-06 02:31:28"
         },
         {
             "name": "symfony/http-foundation",
@@ -144,12 +144,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "d756d7c9e1d005f9afa36a9ab64b1c98b060e985"
+                "reference": "78a80bd3bba45007ea3e1fa91ef040f9680cdb10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/d756d7c9e1d005f9afa36a9ab64b1c98b060e985",
-                "reference": "d756d7c9e1d005f9afa36a9ab64b1c98b060e985",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/78a80bd3bba45007ea3e1fa91ef040f9680cdb10",
+                "reference": "78a80bd3bba45007ea3e1fa91ef040f9680cdb10",
                 "shasum": ""
             },
             "require": {
@@ -185,7 +185,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-07-28 18:26:16"
+            "time": "2013-08-08 12:01:00"
         },
         {
             "name": "symfony/routing",
@@ -194,12 +194,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "f2265e3500f121ac69409138eebd70f0467f5a30"
+                "reference": "v2.2.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/f2265e3500f121ac69409138eebd70f0467f5a30",
-                "reference": "f2265e3500f121ac69409138eebd70f0467f5a30",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.5",
+                "reference": "v2.2.5",
                 "shasum": ""
             },
             "require": {
@@ -252,12 +252,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "v2.2.4"
+                "reference": "v2.2.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.2.4",
-                "reference": "v2.2.4",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.2.5",
+                "reference": "v2.2.5",
                 "shasum": ""
             },
             "require": {
@@ -341,16 +341,16 @@
     "packages-dev": [
         {
             "name": "chrisnoden/talkback",
-            "version": "v1.0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chrisnoden/talkback.git",
-                "reference": "v1.0.1"
+                "reference": "53615301f95896a7698bcbdb3609417bf8d5969c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chrisnoden/talkback/zipball/v1.0.1",
-                "reference": "v1.0.1",
+                "url": "https://api.github.com/repos/chrisnoden/talkback/zipball/53615301f95896a7698bcbdb3609417bf8d5969c",
+                "reference": "53615301f95896a7698bcbdb3609417bf8d5969c",
                 "shasum": ""
             },
             "require": {
@@ -365,7 +365,7 @@
             },
             "require-dev": {
                 "wp-cli/php-cli-tools": "dev-master",
-                "xenji/prowlphp": "1.*"
+                "xenji/prowlphp": "dev-master"
             },
             "suggest": {
                 "wp-cli/php-cli-tools": "dev-master",
@@ -400,11 +400,11 @@
                 "prowl",
                 "psr-3"
             ],
-            "time": "2013-07-03 16:24:56"
+            "time": "2013-08-09 12:09:58"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
-            "version": "2.6.6",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
@@ -614,16 +614,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.13.1",
+            "version": "v1.13.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "v1.13.1"
+                "reference": "v1.13.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/v1.13.1",
-                "reference": "v1.13.1",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/v1.13.2",
+                "reference": "v1.13.2",
                 "shasum": ""
             },
             "require": {
@@ -642,7 +642,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -659,7 +659,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-06-06 06:06:01"
+            "time": "2013-08-03 15:35:31"
         }
     ],
     "aliases": [
@@ -668,6 +668,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "wp-cli/php-cli-tools": 20,
+        "chrisnoden/talkback": 20,
+        "mobiledetect/mobiledetectlib": 20,
         "propel/propel1": 20
     },
     "platform": {
