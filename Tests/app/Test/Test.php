@@ -45,7 +45,7 @@ class Test extends CliObject
 
     public function defaultAction()
     {
-        $this->fork(true);
+        $this->fork(true); // daemonize
 
         if ($this->isParent()) {
             Logger::debug('Test Log 1');
@@ -69,7 +69,19 @@ class Test extends CliObject
                 Logger::error('Child reporting in');
             }
             SignalHandler::$blockExit = false;
-        } while ($count++ < 7);
+        } while ($count++ < 5);
+    }
+
+
+    protected function preFork()
+    {
+        Logger::alert('preFork() method has been called');
+    }
+
+
+    protected function postFork()
+    {
+        Logger::alert('postFork() method has been called');
     }
 
 }

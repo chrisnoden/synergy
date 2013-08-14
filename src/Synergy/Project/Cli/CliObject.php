@@ -127,6 +127,9 @@ class CliObject extends Object
 
     /**
      * Fork the process into two
+     * You can create an optional method called preFork() which is called before the fork
+     * Also an optional method called postFork() which is called after the fork on any remaining processes
+     * (ie if you choose to daemonize then the original foreground process will not call the postFork() method)
      *
      * @param bool $daemonize kill the parent (original) process and let the new child run
      *
@@ -136,6 +139,17 @@ class CliObject extends Object
         if ($this->_node !== 0) {
             return false;
         }
+
+        // call any user created preFork method
+        if (method_exists($this, 'preFork')) {
+            $this->preFork();
+        }
+
+        // force Propel to close connections so that it will reconnect on next query
+        if (class_exists('\Propel')) {
+            \Propel::close();
+        }
+
         $pid = pcntl_fork();
         switch ($pid) {
             case -1:
@@ -179,6 +193,11 @@ class CliObject extends Object
 
         // Silence any console output from the logger
         Logger::setSilentConsole(true);
+
+        // call any user created postFork method
+        if (method_exists($this, 'postFork')) {
+            $this->postFork();
+        }
     }
 
 
