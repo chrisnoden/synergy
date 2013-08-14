@@ -194,12 +194,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "v2.2.5"
+                "reference": "b5833b92276fd3ab746bfeeb478836e73b0f0e37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/v2.2.5",
-                "reference": "v2.2.5",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/b5833b92276fd3ab746bfeeb478836e73b0f0e37",
+                "reference": "b5833b92276fd3ab746bfeeb478836e73b0f0e37",
                 "shasum": ""
             },
             "require": {
@@ -243,7 +243,7 @@
             ],
             "description": "Symfony Routing Component",
             "homepage": "http://symfony.com",
-            "time": "2013-07-30 11:22:46"
+            "time": "2013-08-13 19:56:24"
         },
         {
             "name": "symfony/yaml",
@@ -345,12 +345,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chrisnoden/talkback.git",
-                "reference": "53615301f95896a7698bcbdb3609417bf8d5969c"
+                "reference": "2c2848d4f7aff794a514c400c46394c719291b0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chrisnoden/talkback/zipball/53615301f95896a7698bcbdb3609417bf8d5969c",
-                "reference": "53615301f95896a7698bcbdb3609417bf8d5969c",
+                "url": "https://api.github.com/repos/chrisnoden/talkback/zipball/2c2848d4f7aff794a514c400c46394c719291b0a",
+                "reference": "2c2848d4f7aff794a514c400c46394c719291b0a",
                 "shasum": ""
             },
             "require": {
@@ -400,7 +400,7 @@
                 "prowl",
                 "psr-3"
             ],
-            "time": "2013-08-09 12:09:58"
+            "time": "2013-08-14 10:12:30"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
