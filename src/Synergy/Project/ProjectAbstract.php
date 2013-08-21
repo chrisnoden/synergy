@@ -158,8 +158,9 @@ abstract class ProjectAbstract extends Object
         if (!is_null($filename) && file_exists($filename) && is_readable($filename)) {
             @include_once($filename);
             Logger::debug(
-                sprintf('Bootstrap %s loaded',
-                    str_ireplace(dirname($this->app_dir).DIRECTORY_SEPARATOR, '', $filename)
+                sprintf(
+                    'Bootstrap %s loaded',
+                    str_ireplace(dirname($this->app_dir) . DIRECTORY_SEPARATOR, '', $filename)
                 )
             );
         } else {
@@ -192,10 +193,12 @@ abstract class ProjectAbstract extends Object
                     'Please define your project root directory as SYNERGY_ROOT_DIR'
                 );
             }
-        } else if (!is_dir(SYNERGY_ROOT_DIR)) {
-            throw new CriticalLaunchException(
-                'SYNERGY_ROOT_DIR must point to a valid directory at the root of your project'
-            );
+        } else {
+            if (!is_dir(SYNERGY_ROOT_DIR)) {
+                throw new CriticalLaunchException(
+                    'SYNERGY_ROOT_DIR must point to a valid directory at the root of your project'
+                );
+            }
         }
 
         if (!isset($this->app_dir) && !$this->searchAppDir()) {
@@ -212,12 +215,14 @@ abstract class ProjectAbstract extends Object
 
         if (!isset($this->temp_dir) && $this->getOption('synergy:temp_dir')) {
             $this->setTempDir($this->getOption('synergy:temp_dir'));
-        } else if (!$this->searchTempDir()) {
-            throw new CriticalLaunchException(
-                'Unable to init Synergy library without a temp (cache) directory'
-            );
+        } else {
+            if (!$this->searchTempDir()) {
+                throw new CriticalLaunchException(
+                    'Unable to init Synergy library without a temp (cache) directory'
+                );
+            }
         }
-        Logger::debug('Temp Dir: '.$this->temp_dir);
+        Logger::debug('Temp Dir: ' . $this->temp_dir);
 
     }
 
@@ -236,16 +241,20 @@ abstract class ProjectAbstract extends Object
             throw new InvalidArgumentException(
                 sprintf("Invalid temp directory, %s", $dir)
             );
-        } else if (!is_readable($dir)) {
-            throw new InvalidArgumentException(
-                sprintf("Temp Directory %s not readable", $dir)
-            );
-        } else if (!is_writable($dir)) {
-            throw new InvalidArgumentException(
-                sprintf("Temp Directory %s not writable", $dir)
-            );
         } else {
-            $this->temp_dir = $dir;
+            if (!is_readable($dir)) {
+                throw new InvalidArgumentException(
+                    sprintf("Temp Directory %s not readable", $dir)
+                );
+            } else {
+                if (!is_writable($dir)) {
+                    throw new InvalidArgumentException(
+                        sprintf("Temp Directory %s not writable", $dir)
+                    );
+                } else {
+                    $this->temp_dir = $dir;
+                }
+            }
         }
     }
 
@@ -275,14 +284,16 @@ abstract class ProjectAbstract extends Object
             throw new InvalidArgumentException(
                 sprintf("Invalid App directory, %s", $dir)
             );
-        } else if (!is_readable($dir)) {
-            throw new InvalidArgumentException(
-                sprintf("App Directory %s not readable", $dir)
-            );
         } else {
-            $this->app_dir = $dir;
-            $classLoader = new SplClassLoader($dir);
-            $classLoader->register();
+            if (!is_readable($dir)) {
+                throw new InvalidArgumentException(
+                    sprintf("App Directory %s not readable", $dir)
+                );
+            } else {
+                $this->app_dir = $dir;
+                $classLoader   = new SplClassLoader($dir);
+                $classLoader->register();
+            }
         }
     }
 
@@ -308,7 +319,7 @@ abstract class ProjectAbstract extends Object
     protected function searchAppDir($baseDir = null)
     {
         if (!is_string($baseDir) && defined('SYNERGY_ROOT_DIR')) {
-                $baseDir = SYNERGY_ROOT_DIR;
+            $baseDir = SYNERGY_ROOT_DIR;
         }
         if (is_string($baseDir)) {
             $testdir = $baseDir . DIRECTORY_SEPARATOR . 'app';
@@ -352,12 +363,16 @@ abstract class ProjectAbstract extends Object
         }
 
         // test 6 levels up
-        $testdir = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'app';
+        $testdir = dirname(
+                dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))
+            ) . DIRECTORY_SEPARATOR . 'app';
         if ($this->isValidDirectory($testdir)) {
             $this->app_dir = $testdir;
             return true;
         }
-        $testdir = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'App';
+        $testdir = dirname(
+                dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))
+            ) . DIRECTORY_SEPARATOR . 'App';
         if ($this->isValidDirectory($testdir)) {
             $this->app_dir = $testdir;
             return true;
@@ -378,8 +393,10 @@ abstract class ProjectAbstract extends Object
     {
         if (is_null($baseDir) && isset($this->app_dir)) {
             $baseDir = $this->app_dir;
-        } else if (is_null($baseDir) && defined('SYNERGY_ROOT_DIR')) {
-            $baseDir = SYNERGY_ROOT_DIR;
+        } else {
+            if (is_null($baseDir) && defined('SYNERGY_ROOT_DIR')) {
+                $baseDir = SYNERGY_ROOT_DIR;
+            }
         }
         if (is_string($baseDir) && is_dir($baseDir)) {
             $testfile = $baseDir . DIRECTORY_SEPARATOR . 'config';
@@ -435,8 +452,8 @@ abstract class ProjectAbstract extends Object
             return true;
         }
 
-        if (is_dir(DIRECTORY_SEPARATOR.'tmp') && is_writable(DIRECTORY_SEPARATOR.'tmp')) {
-            $this->setTempDir(DIRECTORY_SEPARATOR.'tmp');
+        if (is_dir(DIRECTORY_SEPARATOR . 'tmp') && is_writable(DIRECTORY_SEPARATOR . 'tmp')) {
+            $this->setTempDir(DIRECTORY_SEPARATOR . 'tmp');
             return true;
         }
 
@@ -475,23 +492,25 @@ abstract class ProjectAbstract extends Object
             throw new InvalidArgumentException(
                 sprintf("Missing file %s", $filename)
             );
-        } else if (!is_readable($filename)) {
-            throw new InvalidArgumentException(
-                sprintf("File %s not readable", $filename)
-            );
         } else {
-            $extension = pathinfo($filename, PATHINFO_EXTENSION);
-            switch (strtolower($extension)) {
-                case 'yml':
-                    $this->configFilename = $filename;
-                    $this->options = \Spyc::YAMLLoad($filename);
-                    Logger::debug('Config file: '.$filename);
-                    break;
+            if (!is_readable($filename)) {
+                throw new InvalidArgumentException(
+                    sprintf("File %s not readable", $filename)
+                );
+            } else {
+                $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                switch (strtolower($extension)) {
+                    case 'yml':
+                        $this->configFilename = $filename;
+                        $this->options        = \Spyc::YAMLLoad($filename);
+                        Logger::debug('Config file: ' . $filename);
+                        break;
 
-                default:
-                    throw new InvalidArgumentException(
-                        sprintf("Config file format is not supported", $filename)
-                    );
+                    default:
+                        throw new InvalidArgumentException(
+                            sprintf("Config file format is not supported", $filename)
+                        );
+                }
             }
         }
     }
@@ -551,8 +570,7 @@ abstract class ProjectAbstract extends Object
         $arr = explode(':', $keyname);
         if (count($arr) > 1) {
             $testArr = $this->options;
-            foreach ($arr AS $testkey)
-            {
+            foreach ($arr AS $testkey) {
                 if ($this->isArrayKeyAnArray($testArr, $testkey)) {
                     $testArr = $testArr[$testkey];
                 }
@@ -561,8 +579,8 @@ abstract class ProjectAbstract extends Object
             $testArr = $this->options;
         }
 
-        if (isset($testArr[$arr[count($arr)-1]])) {
-            $value = $testArr[$arr[count($arr)-1]];
+        if (isset($testArr[$arr[count($arr) - 1]])) {
+            $value = $testArr[$arr[count($arr) - 1]];
             $value = $this->replaceOptionVariables($value);
             return $value;
         }

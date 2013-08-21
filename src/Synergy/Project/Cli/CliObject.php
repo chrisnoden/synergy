@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using JetBrains PhpStorm.
- * 
+ *
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,7 @@ namespace Synergy\Project\Cli;
 use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
 use Synergy\Object;
+use Synergy\Project;
 
 /**
  * Class CliObject
@@ -43,26 +44,27 @@ use Synergy\Object;
  */
 class CliObject extends Object
 {
+
     /**
      * @var resource
      */
-    private $_stdIn;
+    private $stdIn;
     /**
      * @var resource
      */
-    private $_stdOut;
+    private $stdOut;
     /**
      * @var resource
      */
-    private $_stdErr;
+    private $stdErr;
     /**
      * @var int what position are we in the process hierarchy
      */
-    private $_node = 0;
+    private $node = 0;
     /**
      * @var array
      */
-    private $_pid = array();
+    private $pid = array();
     /**
      * @var string
      */
@@ -78,30 +80,34 @@ class CliObject extends Object
             );
         }
         // save the pid of this process
-        $this->_pid[$this->_node] = getmypid();
+        $this->pid[$this->node] = getmypid();
     }
 
 
     public function __destruct()
     {
-        if ($this->_node == 0) {
-            foreach ($this->_pid AS $child_pid) {
+        if ($this->node == 0) {
+            foreach ($this->pid AS $child_pid) {
                 if ($child_pid == getmypid()) {
                     continue;
                 }
-                Logger::notice(sprintf(
-                    'TERM signal sent to child pid: %s',
-                    $child_pid
-                ));
+                Logger::notice(
+                    sprintf(
+                        'TERM signal sent to child pid: %s',
+                        $child_pid
+                    )
+                );
                 posix_kill($child_pid, SIGTERM);
             }
         }
 
         if (isset($this->projectName)) {
-            Logger::notice(sprintf(
-                '%s : PROJECT TERMINATED',
-                $this->projectName
-            ));
+            Logger::notice(
+                sprintf(
+                    '%s : PROJECT TERMINATED',
+                    $this->projectName
+                )
+            );
         } else {
             Logger::notice('TERMINATED');
         }
@@ -118,8 +124,8 @@ class CliObject extends Object
     protected function getInput($prompt = '>')
     {
         \cli\out('%s: ', $prompt);
-        $handle = fopen ("php://stdin","r");
-        $line = fgets($handle);
+        $handle = fopen("php://stdin", "r");
+        $line   = fgets($handle);
         fclose($handle);
         return trim($line);
     }
@@ -135,8 +141,9 @@ class CliObject extends Object
      *
      * @return void
      */
-    protected function fork($daemonize = false) {
-        if ($this->_node !== 0) {
+    protected function fork($daemonize = false)
+    {
+        if ($this->node !== 0) {
             return false;
         }
 
@@ -159,18 +166,19 @@ class CliObject extends Object
                 return;
             case 0:
                 // this is the child
-                $this->_node++;
+                $this->node++;
                 break;
             default:
                 // we are the original process
-                if ($this->_node == 0) {
+                if ($this->node == 0) {
                     \Cli\line(
-                        'Child node : pid=%y%s%n', $pid
+                        'Child node : pid=%y%s%n',
+                        $pid
                     );
                     if ($daemonize) {
                         exit;
                     }
-                    $this->_pid[] = $pid;
+                    $this->pid[] = $pid;
                     return;
                 }
         }
@@ -187,9 +195,9 @@ class CliObject extends Object
         fclose(STDOUT);
         fclose(STDERR);
 
-        $this->_stdIn  = fopen('/dev/null', 'r'); // set fd/0
-        $this->_stdOut = fopen('/dev/null', 'w'); // set fd/1
-        $this->_stdErr = fopen('php://stdout', 'w'); // a hack to duplicate fd/1 to 2
+        $this->stdIn  = fopen('/dev/null', 'r'); // set fd/0
+        $this->stdOut = fopen('/dev/null', 'w'); // set fd/1
+        $this->stdErr = fopen('php://stdout', 'w'); // a hack to duplicate fd/1 to 2
 
         // Silence any console output from the logger
         Logger::setSilentConsole(true);
@@ -202,13 +210,35 @@ class CliObject extends Object
 
 
     /**
+     * Exits this process if there is already one running (this one makes 2)
+     *
+     * @return void
+     */
+    protected function thereCanBeOnlyOne()
+    {
+        $controller = $this->__toString();
+        $parts      = preg_split('/[^a-zA-Z0-9]{1,}/', $controller);
+        $regex      = join('[^a-zA-Z0-9]{1,2}', $parts);
+
+        $cmd = 'ps ax | grep -v grep | egrep -c "' . $regex . '"';
+        $res = `$cmd`;
+        if (intval($res) > 1) {
+            Logger::critical(
+                'Unable to launch : Process already running'
+            );
+            exit(1);
+        }
+    }
+
+
+    /**
      * Is this the parent (original) process
      *
      * @return bool
      */
     protected function isParent()
     {
-        if ($this->_node == 0) {
+        if ($this->node == 0) {
             return true;
         }
     }

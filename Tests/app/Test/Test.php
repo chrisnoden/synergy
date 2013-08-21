@@ -45,6 +45,8 @@ class Test extends CliObject
 
     public function defaultAction()
     {
+        $this->thereCanBeOnlyOne();
+
         $this->fork(true); // daemonize
 
         if ($this->isParent()) {
