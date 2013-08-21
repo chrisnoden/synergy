@@ -3,8 +3,55 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9d20897088a64e966659ff8635126d4a",
+    "hash": "735891f1d59e02dc6bebf8ab03e6a607",
     "packages": [
+        {
+            "name": "jlogsdon/cli",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chrisnoden/php-cli-tools.git",
+                "reference": "99fae1b9e3ea19adf07b71ccdd9f342f893b1532"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chrisnoden/php-cli-tools/zipball/99fae1b9e3ea19adf07b71ccdd9f342f893b1532",
+                "reference": "99fae1b9e3ea19adf07b71ccdd9f342f893b1532",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "cli": "lib/"
+                },
+                "files": [
+                    "lib/cli/cli.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Logsdon",
+                    "email": "jlogsdon@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Console utilities for PHP",
+            "homepage": "http://github.com/jlogsdon/php-cli-tools",
+            "keywords": [
+                "cli",
+                "console"
+            ],
+            "support": {
+                "source": "https://github.com/chrisnoden/php-cli-tools/tree/master"
+            },
+            "time": "2013-08-21 14:14:18"
+        },
         {
             "name": "mustangostang/spyc",
             "version": "0.5.1",
@@ -97,12 +144,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "v2.2.5"
+                "reference": "4ab8ad0c0f4bb52b0e7fb12d63b81892fb7f697a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/v2.2.5",
-                "reference": "v2.2.5",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/4ab8ad0c0f4bb52b0e7fb12d63b81892fb7f697a",
+                "reference": "4ab8ad0c0f4bb52b0e7fb12d63b81892fb7f697a",
                 "shasum": ""
             },
             "require": {
@@ -144,12 +191,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "78a80bd3bba45007ea3e1fa91ef040f9680cdb10"
+                "reference": "b8d1fff578f7f38212de030e7d9096dd72c0da57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/78a80bd3bba45007ea3e1fa91ef040f9680cdb10",
-                "reference": "78a80bd3bba45007ea3e1fa91ef040f9680cdb10",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/b8d1fff578f7f38212de030e7d9096dd72c0da57",
+                "reference": "b8d1fff578f7f38212de030e7d9096dd72c0da57",
                 "shasum": ""
             },
             "require": {
@@ -185,7 +232,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-08-08 12:01:00"
+            "time": "2013-08-19 10:17:50"
         },
         {
             "name": "symfony/routing",
@@ -291,51 +338,6 @@
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
             "time": "2013-07-11 09:28:01"
-        },
-        {
-            "name": "wp-cli/php-cli-tools",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wp-cli/php-cli-tools.git",
-                "reference": "d351fa71c7425427c041c0308c820e94cbd9cd51"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/d351fa71c7425427c041c0308c820e94cbd9cd51",
-                "reference": "d351fa71c7425427c041c0308c820e94cbd9cd51",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">= 5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "cli": "lib/"
-                },
-                "files": [
-                    "lib/cli/cli.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "James Logsdon",
-                    "email": "jlogsdon@php.net",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Console utilities for PHP",
-            "homepage": "http://github.com/jlogsdon/php-cli-tools",
-            "keywords": [
-                "cli",
-                "console"
-            ],
-            "time": "2013-06-26 09:23:20"
         }
     ],
     "packages-dev": [
@@ -345,12 +347,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chrisnoden/talkback.git",
-                "reference": "2c2848d4f7aff794a514c400c46394c719291b0a"
+                "reference": "061dffa90765db845a72301e1fdb713bb9d0bea5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chrisnoden/talkback/zipball/2c2848d4f7aff794a514c400c46394c719291b0a",
-                "reference": "2c2848d4f7aff794a514c400c46394c719291b0a",
+                "url": "https://api.github.com/repos/chrisnoden/talkback/zipball/061dffa90765db845a72301e1fdb713bb9d0bea5",
+                "reference": "061dffa90765db845a72301e1fdb713bb9d0bea5",
                 "shasum": ""
             },
             "require": {
@@ -400,7 +402,7 @@
                 "prowl",
                 "psr-3"
             ],
-            "time": "2013-08-14 10:12:30"
+            "time": "2013-08-17 23:24:41"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -408,12 +410,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "2.6.6"
+                "reference": "b760f1cea0973a866b51ca391eded7b7c77a387c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/2.6.6",
-                "reference": "2.6.6",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/b760f1cea0973a866b51ca391eded7b7c77a387c",
+                "reference": "b760f1cea0973a866b51ca391eded7b7c77a387c",
                 "shasum": ""
             },
             "require": {
@@ -426,7 +428,10 @@
             "autoload": {
                 "classmap": [
                     "Mobile_Detect.php"
-                ]
+                ],
+                "psr-0": {
+                    "Detection": "namespaced/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -449,20 +454,20 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2013-08-03 13:07:23"
+            "time": "2013-08-21 14:05:51"
         },
         {
             "name": "phing/phing",
-            "version": "2.5.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "2.5.0"
+                "reference": "5500c5012520203523fd4ea05dabf1f51c331267"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/2.5.0",
-                "reference": "2.5.0",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/5500c5012520203523fd4ea05dabf1f51c331267",
+                "reference": "5500c5012520203523fd4ea05dabf1f51c331267",
                 "shasum": ""
             },
             "require": {
@@ -501,7 +506,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2013-02-16 14:23:57"
+            "time": "2013-08-21 08:31:44"
         },
         {
             "name": "propel/propel1",
@@ -667,7 +672,7 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "wp-cli/php-cli-tools": 20,
+        "jlogsdon/cli": 20,
         "chrisnoden/talkback": 20,
         "mobiledetect/mobiledetectlib": 20,
         "propel/propel1": 20
