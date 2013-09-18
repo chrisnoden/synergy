@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by Chris Noden using JetBrains PhpStorm.
+ * Created by Chris Noden using PhpStorm.
  * 
  * PHP version 5
  *
@@ -24,35 +24,49 @@
  * @link      https://github.com/chrisnoden
  */
 
-namespace Test;
-
-use Synergy\Controller\Controller;
-use Synergy\View\SmartyTemplate;
+namespace Synergy\Common;
 
 /**
- * Class TestController
+ * Class Enum
+ * Represents an enumerable set of values
  *
- * @category Test
+ * @category Synergy\Common
  * @package  Synergy MVC Library
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class TestController extends Controller
+abstract class Enum
 {
+    /**
+     * @var array A cache of all enum values to increase performance
+     */
+    protected static $cache = array();
 
-    public function getParameters()
+    /**
+     * Returns the names (or keys) of all of constants in the enum
+     *
+     * @return array
+     */
+    public static function keys()
     {
-        // deliberately return the wrong thing
-        return false;
+        return array_keys(static::values());
     }
 
-    public function defaultAction()
+    /**
+     * Return the names and values of all the constants in the enum
+     *
+     * @return array
+     */
+    public static function values()
     {
-        $template = new SmartyTemplate();
-        $template->setTemplateFile('foo.html.tpl');
-        return $template;
+        $class = get_called_class();
+
+        if (!isset(self::$cache[$class])) {
+            $reflected = new \ReflectionClass($class);
+            self::$cache[$class] = $reflected->getConstants();
+        }
+
+        return self::$cache[$class];
     }
-
-
 }

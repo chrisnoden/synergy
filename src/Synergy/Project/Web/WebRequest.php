@@ -121,33 +121,36 @@ class WebRequest extends Request
         $server = array(),
         $content = null
     ) {
-        $server = array_replace(array(
-            'SERVER_NAME'          => 'localhost',
-            'SERVER_PORT'          => 80,
-            'HTTP_HOST'            => 'localhost',
-            'HTTP_USER_AGENT'      => 'Symfony/2.X',
-            'HTTP_ACCEPT'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'HTTP_ACCEPT_LANGUAGE' => 'en-us,en;q=0.5',
-            'HTTP_ACCEPT_CHARSET'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
-            'REMOTE_ADDR'          => '127.0.0.1',
-            'SCRIPT_NAME'          => '',
-            'SCRIPT_FILENAME'      => '',
-            'SERVER_PROTOCOL'      => 'HTTP/1.1',
-            'REQUEST_TIME'         => time(),
-        ), $server);
+        $server = array_replace(
+            array(
+                'SERVER_NAME'          => 'localhost',
+                'SERVER_PORT'          => 80,
+                'HTTP_HOST'            => 'localhost',
+                'HTTP_USER_AGENT'      => 'Symfony/2.X',
+                'HTTP_ACCEPT'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'HTTP_ACCEPT_LANGUAGE' => 'en-us,en;q=0.5',
+                'HTTP_ACCEPT_CHARSET'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+                'REMOTE_ADDR'          => '127.0.0.1',
+                'SCRIPT_NAME'          => '',
+                'SCRIPT_FILENAME'      => '',
+                'SERVER_PROTOCOL'      => 'HTTP/1.1',
+                'REQUEST_TIME'         => time(),
+            ),
+            $server
+        );
 
-        $server['PATH_INFO'] = '';
+        $server['PATH_INFO']      = '';
         $server['REQUEST_METHOD'] = strtoupper($method);
 
         $components = parse_url($uri);
         if (isset($components['host'])) {
             $server['SERVER_NAME'] = $components['host'];
-            $server['HTTP_HOST'] = $components['host'];
+            $server['HTTP_HOST']   = $components['host'];
         }
 
         if (isset($components['scheme'])) {
             if ('https' === $components['scheme']) {
-                $server['HTTPS'] = 'on';
+                $server['HTTPS']       = 'on';
                 $server['SERVER_PORT'] = 443;
             } else {
                 unset($server['HTTPS']);
@@ -157,7 +160,7 @@ class WebRequest extends Request
 
         if (isset($components['port'])) {
             $server['SERVER_PORT'] = $components['port'];
-            $server['HTTP_HOST'] = $server['HTTP_HOST'].':'.$components['port'];
+            $server['HTTP_HOST']   = $server['HTTP_HOST'] . ':' . $components['port'];
         }
 
         if (isset($components['user'])) {
@@ -181,11 +184,11 @@ class WebRequest extends Request
                 }
             case 'PATCH':
                 $request = $parameters;
-                $query = array();
+                $query   = array();
                 break;
             default:
                 $request = array();
-                $query = $parameters;
+                $query   = $parameters;
                 break;
         }
 
@@ -195,7 +198,7 @@ class WebRequest extends Request
         }
         $queryString = http_build_query($query, '', '&');
 
-        $server['REQUEST_URI'] = $components['path'].('' !== $queryString ? '?'.$queryString : '');
+        $server['REQUEST_URI']  = $components['path'] . ('' !== $queryString ? '?' . $queryString : '');
         $server['QUERY_STRING'] = $queryString;
 
         return new static($query, $request, array(), $cookies, $files, $server, $content);
@@ -238,16 +241,20 @@ class WebRequest extends Request
             throw new InvalidArgumentException(
                 sprintf("Invalid directory, %s", $dir)
             );
-        } else if (!is_readable($dir)) {
-            throw new InvalidArgumentException(
-                sprintf("Directory %s not readable", $dir)
-            );
-        } else if (!is_writable($dir)) {
-            throw new InvalidArgumentException(
-                sprintf("Directory %s not writable", $dir)
-            );
         } else {
-            $this->templateDir = $dir;
+            if (!is_readable($dir)) {
+                throw new InvalidArgumentException(
+                    sprintf("Directory %s not readable", $dir)
+                );
+            } else {
+                if (!is_writable($dir)) {
+                    throw new InvalidArgumentException(
+                        sprintf("Directory %s not writable", $dir)
+                    );
+                } else {
+                    $this->templateDir = $dir;
+                }
+            }
         }
     }
 

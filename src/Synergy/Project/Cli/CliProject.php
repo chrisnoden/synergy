@@ -60,41 +60,41 @@ class CliProject extends ProjectAbstract
      * @var array
      */
     protected $signals = array(
-        'UNKNOWN' => 0,
-        'SIGHUP' => SIGHUP,
-        'SIGINT' => SIGINT,
-        'SIGQUIT' => SIGQUIT,
-        'SIGILL' => SIGILL,
-        'SIGTRAP' => SIGTRAP,
-        'SIGABRT' => SIGABRT,
-        'SIGBUS' => SIGBUS,
-        'SIGFPE' => SIGFPE,
-        'SIGUSR1' => SIGUSR1,
-        'SIGSEGV' => SIGSEGV,
-        'SIGUSR2' => SIGUSR2,
-        'SIGPIPE' => SIGPIPE,
-        'SIGALRM' => SIGALRM,
-        'SIGTERM' => SIGTERM,
-        'SIGCHLD' => SIGCHLD,
-        'SIGCONT' => SIGCONT,
-        'SIGTSTP' => SIGTSTP,
-        'SIGTTIN' => SIGTTIN,
-        'SIGTTOU' => SIGTTOU,
-        'SIGURG' => SIGURG,
-        'SIGXCPU' => SIGXCPU,
-        'SIGXFSZ' => SIGXFSZ,
+        'UNKNOWN'   => 0,
+        'SIGHUP'    => SIGHUP,
+        'SIGINT'    => SIGINT,
+        'SIGQUIT'   => SIGQUIT,
+        'SIGILL'    => SIGILL,
+        'SIGTRAP'   => SIGTRAP,
+        'SIGABRT'   => SIGABRT,
+        'SIGBUS'    => SIGBUS,
+        'SIGFPE'    => SIGFPE,
+        'SIGUSR1'   => SIGUSR1,
+        'SIGSEGV'   => SIGSEGV,
+        'SIGUSR2'   => SIGUSR2,
+        'SIGPIPE'   => SIGPIPE,
+        'SIGALRM'   => SIGALRM,
+        'SIGTERM'   => SIGTERM,
+        'SIGCHLD'   => SIGCHLD,
+        'SIGCONT'   => SIGCONT,
+        'SIGTSTP'   => SIGTSTP,
+        'SIGTTIN'   => SIGTTIN,
+        'SIGTTOU'   => SIGTTOU,
+        'SIGURG'    => SIGURG,
+        'SIGXCPU'   => SIGXCPU,
+        'SIGXFSZ'   => SIGXFSZ,
         'SIGVTALRM' => SIGVTALRM,
-        'SIGPROF' => SIGPROF,
-        'SIGWINCH' => SIGWINCH,
-        'SIGIO' => SIGIO,
-        'SIGSYS' => SIGSYS,
+        'SIGPROF'   => SIGPROF,
+        'SIGWINCH'  => SIGWINCH,
+        'SIGIO'     => SIGIO,
+        'SIGSYS'    => SIGSYS,
     );
 
 
     /**
      * Instantiate a new CliProject object
      *
-     * @param null  $request    the action request notation
+     * @param null  $request the action request notation
      * @param array $parameters parameters to pass to the action
      *
      * @throws SynergyException
@@ -115,11 +115,11 @@ class CliProject extends ProjectAbstract
         if (!is_null($request)) {
             $this->request = $request;
         } else {
-            $this->args = ArgumentParser::parseArguments();
+            $this->args    = ArgumentParser::parseArguments();
             $this->request = $this->args->getRequest();
         }
 
-        Logger::debug('CliProject started (pid='.getmypid().')');
+        Logger::debug('CliProject started (pid=' . getmypid() . ')');
 
         if (is_null($this->args->getRequest())) {
             Logger::emergency(
@@ -146,16 +146,17 @@ class CliProject extends ProjectAbstract
      * Registers a signal handler method to respond
      * to any kill signals
      */
-    protected  function registerSignalHandler() {
+    protected function registerSignalHandler()
+    {
         // ignore these signals
         pcntl_signal(SIGTSTP, SIG_IGN);
         pcntl_signal(SIGTTOU, SIG_IGN);
         pcntl_signal(SIGTTIN, SIG_IGN);
         // trap these signals
-        pcntl_signal(SIGHUP, array(&$this,"handleHupSignal"));
-        pcntl_signal(SIGTERM, array(&$this,"handleSignals"));
-        pcntl_signal(SIGINT, array(&$this,"handleSignals"));
-        pcntl_signal(SIGABRT, array(&$this,"handleSignals"));
+        pcntl_signal(SIGHUP, array(&$this, "handleHupSignal"));
+        pcntl_signal(SIGTERM, array(&$this, "handleSignals"));
+        pcntl_signal(SIGINT, array(&$this, "handleSignals"));
+        pcntl_signal(SIGABRT, array(&$this, "handleSignals"));
     }
 
 
@@ -192,11 +193,13 @@ class CliProject extends ProjectAbstract
     public function handleHupSignal($signal)
     {
         if ($this->controller instanceof ControllerEntity) {
-            Logger::notice(sprintf(
-                '%s running since %s',
-                $this->controller->getClassName().'::'.$this->controller->getMethodName().'()',
-                $this->projectLaunchTime->format('r')
-            ));
+            Logger::notice(
+                sprintf(
+                    '%s running since %s',
+                    $this->controller->getClassName() . '::' . $this->controller->getMethodName() . '()',
+                    $this->projectLaunchTime->format('r')
+                )
+            );
         }
     }
 
@@ -228,7 +231,7 @@ class CliProject extends ProjectAbstract
          */
         $this->controller = $router->getController();
         Logger::notice(
-            'Calling: '.$this->controller->getClassName().'::'.$this->controller->getMethodName()
+            'Calling: ' . $this->controller->getClassName() . '::' . $this->controller->getMethodName()
         );
         // pass the parameters
         $this->controller->setParameters($this->parameters);

@@ -56,10 +56,4 @@ class CliProjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('TestProject', $obj->__toString());
     }
 
-    public function testSimpleRoutingRequest()
-    {
-        $obj = new CliProject();
-
-    }
-
 }
