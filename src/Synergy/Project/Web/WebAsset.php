@@ -250,7 +250,7 @@ class WebAsset extends Object
         'map'     => 'application/x-navimap',
         'mar'     => 'text/plain',
         'mbd'     => 'application/mbedlet',
-        'mc'      => '	application/x-magic-cap-package-1.0',
+        'mc'      => 'application/x-magic-cap-package-1.0',
         'mcd'     => 'application/mcad',
         'mcf'     => 'image/vasa',
         'mcp'     => 'application/netmc',
@@ -578,6 +578,19 @@ class WebAsset extends Object
      * @return void
      */
     public function setContents($contents)
+    {
+        $this->contents = $contents;
+    }
+
+
+    /**
+     * Set the content of the asset
+     *
+     * @param string $contents
+     *
+     * @return void
+     */
+    public function setContent($contents)
     {
         $this->contents = $contents;
     }
