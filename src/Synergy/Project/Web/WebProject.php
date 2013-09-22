@@ -295,7 +295,8 @@ final class WebProject extends ProjectAbstract
 
         // local params to pass
         $params = array(
-            'absoluteStubUrl' => $this->absoluteStubUrl
+            'absoluteStubUrl' => $this->absoluteStubUrl,
+            'device'          => $this->request->getDevice()
         );
         return (array_merge($templateParams, $params));
     }
@@ -333,7 +334,7 @@ final class WebProject extends ProjectAbstract
     /**
      * Name of the chosen controller class
      *
-     * @return \Mobile_Detect
+     * @return string
      */
     public function getControllerName()
     {
