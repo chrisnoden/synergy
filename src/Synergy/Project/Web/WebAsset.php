@@ -128,6 +128,7 @@ class WebAsset extends Object
         'crt'     => 'application/x-x509-ca-cert',
         'csh'     => 'text/x-script.csh',
         'css'     => 'text/css',
+        'csv'     => 'text/csv',
         'cxx'     => 'text/plain',
         'dcr'     => 'application/x-director',
         'deepv'   => 'application/x-deepv',
