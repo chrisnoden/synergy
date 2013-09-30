@@ -62,6 +62,9 @@ class HtmlTemplate extends TemplateAbstract
         if (file_exists($filename) && is_readable($filename)) {
             $render = file_get_contents($filename);
             foreach ($this->parameters AS $name=>$value) {
+                if (!is_string($value)) {
+                    continue;
+                }
                 $regex = '/\{\$'.$name.'\}/';
                 $render = preg_replace($regex, $value, $render);
             }
