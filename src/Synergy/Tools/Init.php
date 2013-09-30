@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by Chris Noden using JetBrains PhpStorm.
+ * Created by Chris Noden using PhpStorm.
  *
  * PHP version 5
  *
@@ -16,32 +16,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @category  File
- * @package   Synergy
+ * @category  Class
+ * @package   Synergy Bundle
  * @author    Chris Noden <chris.noden@gmail.com>
- * @copyright 2009-2013 Chris Noden
+ * @copyright 2013 Chris Noden
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Project;
+namespace Synergy\Tools;
 
-use Eloquent\Enumeration\Enumeration;
+use Composer\Script\Event;
 
 /**
- * Class ProjectType
+ * Class Init
  *
- * @category Synergy\Project
- * @package  Synergy
+ * @category Synergy\Tools
+ * @package  Synergy Bundle
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class ProjectType extends Enumeration
+class Init
 {
 
-    const WEB = 'web';
-    const CLI = 'cli';
-    const DAEMON = 'daemon';
+    public static function postRootPackageInstall(Event $event)
+    {
+        $composer = $event->getComposer();
+    }
 
+
+    public static function postInstallCmd(Event $event)
+    {
+        $composer = $event->getComposer();
+    }
+
+
+    public static function postUpdateCmd(Event $event)
+    {
+        $composer = $event->getComposer();
+    }
 }

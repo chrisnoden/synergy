@@ -35,7 +35,7 @@
         "symfony/routing": "2.2.*",
         "symfony/config": "2.2.*",
         "symfony/yaml": "2.2.*",
-        "jlogsdon/cli": "dev-master"
+        "eloquent/enumeration": "4.0.*"
     },
     "require-dev": {
         "chrisnoden/talkback": "dev-master",

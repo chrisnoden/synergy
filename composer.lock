@@ -3,8 +3,57 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "735891f1d59e02dc6bebf8ab03e6a607",
+    "hash": "12640df95ae8506c7251ac3956b923d8",
     "packages": [
+        {
+            "name": "eloquent/enumeration",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eloquent/enumeration.git",
+                "reference": "006429cfd6736cfd56a3bc9d88e6901f3fc584c7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eloquent/enumeration/zipball/006429cfd6736cfd56a3bc9d88e6901f3fc584c7",
+                "reference": "006429cfd6736cfd56a3bc9d88e6901f3fc584c7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "icecave/archer": "1.0.0-alpha.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Eloquent\\Enumeration": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Erin Millard",
+                    "email": "ezzatron@gmail.com",
+                    "homepage": "http://ezzatron.com/"
+                }
+            ],
+            "description": "An enumeration implementation for PHP.",
+            "homepage": "https://github.com/eloquent/enumeration",
+            "keywords": [
+                "class",
+                "enum",
+                "enumeration",
+                "multiton",
+                "set",
+                "type"
+            ],
+            "time": "2013-08-13 11:13:41"
+        },
         {
             "name": "jlogsdon/cli",
             "version": "dev-master",
@@ -144,12 +193,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "4ab8ad0c0f4bb52b0e7fb12d63b81892fb7f697a"
+                "reference": "c435380fbd9d49055c16375db5d767f089a95045"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/4ab8ad0c0f4bb52b0e7fb12d63b81892fb7f697a",
-                "reference": "4ab8ad0c0f4bb52b0e7fb12d63b81892fb7f697a",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/c435380fbd9d49055c16375db5d767f089a95045",
+                "reference": "c435380fbd9d49055c16375db5d767f089a95045",
                 "shasum": ""
             },
             "require": {
@@ -182,7 +231,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2013-08-06 02:31:28"
+            "time": "2013-09-19 09:36:05"
         },
         {
             "name": "symfony/http-foundation",
@@ -191,12 +240,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "b8d1fff578f7f38212de030e7d9096dd72c0da57"
+                "reference": "b59d59ecda27f05cbb2ff80a52bca4081251c0e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/b8d1fff578f7f38212de030e7d9096dd72c0da57",
-                "reference": "b8d1fff578f7f38212de030e7d9096dd72c0da57",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/b59d59ecda27f05cbb2ff80a52bca4081251c0e4",
+                "reference": "b59d59ecda27f05cbb2ff80a52bca4081251c0e4",
                 "shasum": ""
             },
             "require": {
@@ -232,7 +281,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-08-19 10:17:50"
+            "time": "2013-09-23 08:18:01"
         },
         {
             "name": "symfony/routing",
@@ -241,12 +290,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "b5833b92276fd3ab746bfeeb478836e73b0f0e37"
+                "reference": "8d9821794f7192d43b76737edb94a817949a5579"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/b5833b92276fd3ab746bfeeb478836e73b0f0e37",
-                "reference": "b5833b92276fd3ab746bfeeb478836e73b0f0e37",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/8d9821794f7192d43b76737edb94a817949a5579",
+                "reference": "8d9821794f7192d43b76737edb94a817949a5579",
                 "shasum": ""
             },
             "require": {
@@ -290,7 +339,7 @@
             ],
             "description": "Symfony Routing Component",
             "homepage": "http://symfony.com",
-            "time": "2013-08-13 19:56:24"
+            "time": "2013-09-26 19:07:06"
         },
         {
             "name": "symfony/yaml",
@@ -299,12 +348,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "v2.2.5"
+                "reference": "bb697b6617b90c91b2a65d24ce32035afe5e3418"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.2.5",
-                "reference": "v2.2.5",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/bb697b6617b90c91b2a65d24ce32035afe5e3418",
+                "reference": "bb697b6617b90c91b2a65d24ce32035afe5e3418",
                 "shasum": ""
             },
             "require": {
@@ -337,7 +386,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-07-11 09:28:01"
+            "time": "2013-09-22 17:30:19"
         }
     ],
     "packages-dev": [
@@ -410,12 +459,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "b760f1cea0973a866b51ca391eded7b7c77a387c"
+                "reference": "68970bba09238bbe840ff0910a8a9fb54398133a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/b760f1cea0973a866b51ca391eded7b7c77a387c",
-                "reference": "b760f1cea0973a866b51ca391eded7b7c77a387c",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/68970bba09238bbe840ff0910a8a9fb54398133a",
+                "reference": "68970bba09238bbe840ff0910a8a9fb54398133a",
                 "shasum": ""
             },
             "require": {
@@ -454,20 +503,20 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2013-08-21 14:05:51"
+            "time": "2013-09-17 10:36:32"
         },
         {
             "name": "phing/phing",
-            "version": "2.6.0",
+            "version": "2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "5500c5012520203523fd4ea05dabf1f51c331267"
+                "reference": "3f7d71bf561bafea39087250f777b349438cc32e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/5500c5012520203523fd4ea05dabf1f51c331267",
-                "reference": "5500c5012520203523fd4ea05dabf1f51c331267",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/3f7d71bf561bafea39087250f777b349438cc32e",
+                "reference": "3f7d71bf561bafea39087250f777b349438cc32e",
                 "shasum": ""
             },
             "require": {
@@ -506,7 +555,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2013-08-21 08:31:44"
+            "time": "2013-08-26 21:13:03"
         },
         {
             "name": "propel/propel1",
