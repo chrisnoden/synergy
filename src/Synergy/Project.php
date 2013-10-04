@@ -191,16 +191,6 @@ final class Project extends Singleton
      */
     public static function setType($projectType)
     {
-        $t = ProjectType::getInstance();
-        $r = new \ReflectionObject($t);
-        $aConstants = $r->getConstants();
-
-        if (!in_array($projectType, $aConstants)) {
-            throw new InvalidProjectTypeException(
-                'projectType must be one of ' . implode(', ', $aConstants)
-            );
-        }
-
         self::$_projectType = $projectType;
     }
 
