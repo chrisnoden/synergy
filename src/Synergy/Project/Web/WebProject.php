@@ -181,7 +181,11 @@ final class WebProject extends ProjectAbstract
         $this->controller->setProject($this);
         $this->controller->setRequest($this->request);
         // Call the action
-        $response = $this->controller->callControllerAction();
+        try {
+            $response = $this->controller->callControllerAction();
+        } catch (\Exception $ex) {
+            $response = WebResponse::create($ex->getMessage(), 400);
+        }
         $this->response = $response;
 
         if ($this->deliverResponse === true) {
