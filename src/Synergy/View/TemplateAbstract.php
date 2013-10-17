@@ -139,12 +139,14 @@ abstract class TemplateAbstract extends Object
             throw new InvalidArgumentException(
                 sprintf("Invalid directory passed, %s", $dir)
             );
-        } else if (!is_readable($dir)) {
-            throw new InvalidArgumentException(
-                sprintf("Directory %s not readable", $dir)
-            );
         } else {
-            $this->projectTemplateDir = $dir;
+            if (!is_readable($dir)) {
+                throw new InvalidArgumentException(
+                    sprintf("Directory %s not readable", $dir)
+                );
+            } else {
+                $this->projectTemplateDir = $dir;
+            }
         }
     }
 
@@ -182,10 +184,12 @@ abstract class TemplateAbstract extends Object
             throw new SynergyException(
                 'templateFile not set'
             );
-        } else if (!isset($this->templateDir)) {
-            throw new SynergyException(
-                'templateDir not set'
-            );
+        } else {
+            if (!isset($this->templateDir)) {
+                throw new SynergyException(
+                    'templateDir not set'
+                );
+            }
         }
 
         $testFile = $this->templateDir . DIRECTORY_SEPARATOR . $this->templateFile;
@@ -193,10 +197,12 @@ abstract class TemplateAbstract extends Object
             throw new InvalidArgumentException(
                 sprintf("Template File %s not found", $testFile)
             );
-        } else if (!is_readable($testFile)) {
-            throw new InvalidArgumentException(
-                sprintf("Template File %s not readable", $testFile)
-            );
+        } else {
+            if (!is_readable($testFile)) {
+                throw new InvalidArgumentException(
+                    sprintf("Template File %s not readable", $testFile)
+                );
+            }
         }
     }
 
@@ -264,16 +270,20 @@ abstract class TemplateAbstract extends Object
             throw new InvalidArgumentException(
                 sprintf("Invalid directory, %s", $dir)
             );
-        } else if (!is_readable($dir)) {
-            throw new InvalidArgumentException(
-                sprintf("Directory %s not readable", $dir)
-            );
-        } else if (!is_writable($dir)) {
-            throw new InvalidArgumentException(
-                sprintf("Directory %s not writable", $dir)
-            );
         } else {
-            $this->cacheDir = $dir;
+            if (!is_readable($dir)) {
+                throw new InvalidArgumentException(
+                    sprintf("Directory %s not readable", $dir)
+                );
+            } else {
+                if (!is_writable($dir)) {
+                    throw new InvalidArgumentException(
+                        sprintf("Directory %s not writable", $dir)
+                    );
+                } else {
+                    $this->cacheDir = $dir;
+                }
+            }
         }
     }
 
