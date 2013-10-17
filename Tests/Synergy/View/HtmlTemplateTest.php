@@ -36,19 +36,18 @@ class HtmlTemplateTest extends \PHPUnit_Framework_TestCase
         $obj = new HtmlTemplate();
         $obj->setCacheDir('/tmp');
         $obj->setProjectTemplateDir(SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'templates');
-        $obj->setTemplateDir('twig');
-        $obj->setTemplateFile('index.html.twig');
+        $obj->setTemplateFile('index.html');
         $obj->init();
     }
 
 
-    public function testRelativeDirFails()
+    public function testAbsoluteDir()
     {
         $obj = new HtmlTemplate();
         $obj->setCacheDir('/tmp');
         $obj->setProjectTemplateDir(SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'templates');
-        $obj->setTemplateFile('index.html.tpl');
-        $this->setExpectedException('Synergy\Exception\SynergyException', 'templateDir not set');
+        $obj->setTemplateDir(SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'templates');
+        $obj->setTemplateFile('index.html');
         $obj->init();
     }
 }

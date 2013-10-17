@@ -185,9 +185,9 @@ abstract class TemplateAbstract extends Object
                 'templateFile not set'
             );
         }
-        if (!isset($this->templateDir)) {
+        if (!is_dir($this->getTemplateDir())) {
             throw new SynergyException(
-                'templateDir not set'
+                'templateDir not set or not valid'
             );
         }
 
