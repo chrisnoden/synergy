@@ -141,7 +141,3 @@ class Tools
         } while ($diff > 10000);
     }
 }
-
-
-
-

@@ -49,6 +49,10 @@ abstract class TemplateAbstract extends Object
      */
     protected $templateDir;
     /**
+     * @var string path to the default template dir set by the Project
+     */
+    protected $projectTemplateDir;
+    /**
      * @var string relative filename of the template on the filesystem
      */
     protected $templateFile;
@@ -118,6 +122,19 @@ abstract class TemplateAbstract extends Object
      */
     public function setTemplateDir($dir)
     {
+        $this->templateDir = $dir;
+    }
+
+
+    /**
+     * The default template directory
+     *
+     * @param string $dir
+     *
+     * @throws \Synergy\Exception\InvalidArgumentException
+     */
+    public function setProjectTemplateDir($dir)
+    {
         if (!is_dir($dir)) {
             throw new InvalidArgumentException(
                 sprintf("Invalid directory passed, %s", $dir)
@@ -127,19 +144,28 @@ abstract class TemplateAbstract extends Object
                 sprintf("Directory %s not readable", $dir)
             );
         } else {
-            $this->templateDir = $dir;
+            $this->projectTemplateDir = $dir;
         }
     }
 
 
     /**
-     * Location of the web templates directory
+     * Location of the templates directory used by this object
+     * A concatenation of the projectTemplateDir and templateDir
      *
      * @return string location of the web templates
      */
     public function getTemplateDir()
     {
-        return $this->templateDir;
+        if (isset($this->projectTemplateDir) && isset($this->templateDir)) {
+            $testDir = $this->projectTemplateDir . DIRECTORY_SEPARATOR . $this->templateDir;
+            if (is_dir($testDir)) {
+                return $testDir;
+            }
+        } elseif (is_dir($this->templateDir)) {
+            return $this->templateDir;
+        }
+        return $this->projectTemplateDir;
     }
 
 
@@ -234,7 +260,7 @@ abstract class TemplateAbstract extends Object
      */
     public function setCacheDir($dir)
     {
-        if (!is_dir($dir) && !$this->mkdir($dir, false)) {
+        if (!is_dir($dir) && !Tools::mkdir($dir, false)) {
             throw new InvalidArgumentException(
                 sprintf("Invalid directory, %s", $dir)
             );
@@ -249,39 +275,6 @@ abstract class TemplateAbstract extends Object
         } else {
             $this->cacheDir = $dir;
         }
-    }
-
-
-    /**
-     * Creates a folder if it doesn't exist (plus the parent folders)
-     * Optionally tests it (even if it already exists) for
-     * read & write permissions by the platform
-     *
-     * @param string $path folder we wish tested/created
-     * @param bool   $test test the folder for write permissions
-     *
-     * @return bool true if created/exists and is read/writeable
-     */
-    protected function mkdir($path, $test)
-    {
-        if (!file_exists($path) || !is_dir($path)) {
-            @mkdir($path, 0770, true);
-        }
-        // Test the folder for suitability
-        if (file_exists($path) && is_readable($path) && is_dir($path)) {
-            if ($test) {
-                // Try to save something in the path
-                @touch($path . DIRECTORY_SEPARATOR . 'testfile');
-                if (file_exists($path . DIRECTORY_SEPARATOR . 'testfile')) {
-                    unlink($path . DIRECTORY_SEPARATOR . 'testfile');
-                    return true;
-                }
-            } else {
-                return true;
-            }
-        }
-
-        return false;
     }
 
 

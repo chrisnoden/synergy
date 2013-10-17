@@ -44,31 +44,6 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * Are the right Project constants defined
-     * @throws \Exception
-     */
-    public function testProjectTypeConstants()
-    {
-        $t = ProjectType::getInstance();
-        $r = new \ReflectionObject($t);
-        $aConstants = $r->getConstants();
-
-        if (count($aConstants) != 3) {
-            throw new \Exception("Should only be 3 Project constants in Synergy\\Project");
-        }
-        if (!isset($aConstants['WEB']) || $aConstants['WEB'] != 'web') {
-            throw new \Exception("Missing WEB project (const) type in Synergy\\Project");
-        }
-        if (!isset($aConstants['CLI']) || $aConstants['CLI'] != 'cli') {
-            throw new \Exception("Missing CLI project (const) type in Synergy\\Project");
-        }
-        if (!isset($aConstants['DAEMON']) || $aConstants['DAEMON'] != 'daemon') {
-            throw new \Exception("Missing DAEMON project (const) type in Synergy\\Project");
-        }
-    }
-
-
-    /**
      * Test that Project::Init() resets the stored parameters
      */
     public function testProjectInit()

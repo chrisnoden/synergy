@@ -29,6 +29,7 @@ namespace Synergy\View;
 use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
 use Synergy\Project\ProjectAbstract;
+use Synergy\Tools\Tools;
 
 /**
  * Class SmartyTemplate
@@ -121,7 +122,7 @@ class SmartyTemplate extends TemplateAbstract
     private function _initSmartyCache()
     {
         if (!is_dir($this->cacheDir)) {
-            $this->mkdir($this->cacheDir, true);
+            Tools::mkdir($this->cacheDir, true);
         }
 
         // compiled templates dir
@@ -131,7 +132,7 @@ class SmartyTemplate extends TemplateAbstract
             'templates_c' .
             DIRECTORY_SEPARATOR;
         if (!is_dir($path)) {
-            $this->mkdir($path, false);
+            Tools::mkdir($path, false);
         }
         $this->loader->setCompileDir($path);
 
@@ -142,7 +143,7 @@ class SmartyTemplate extends TemplateAbstract
             'cache' .
             DIRECTORY_SEPARATOR;
         if (!is_dir($path)) {
-            $this->mkdir($path, false);
+            Tools::mkdir($path, false);
         }
         $this->loader->setCacheDir($path);
 
@@ -153,10 +154,9 @@ class SmartyTemplate extends TemplateAbstract
             'configs' .
             DIRECTORY_SEPARATOR;
         if (!is_dir($path)) {
-            $this->mkdir($path, false);
+            Tools::mkdir($path, false);
         }
         $this->loader->setConfigDir($path);
-
     }
 
 }

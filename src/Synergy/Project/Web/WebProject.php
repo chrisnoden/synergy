@@ -26,14 +26,11 @@
 
 namespace Synergy\Project\Web;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use Synergy\Controller\ControllerEntity;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Exception\NotFoundException;
 use Synergy\Exception\ProjectException;
-use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
 use Synergy\Project;
 use Synergy\Project\ProjectAbstract;
@@ -128,10 +125,6 @@ final class WebProject extends ProjectAbstract
                     'Unable to find or use your template directory: '.$this->getOption('synergy:webproject:template_dir')
                 );
             }
-        } else if (!$this->searchTemplateDir()) {
-            throw new ProjectException(
-                'Need to set a template_dir in the config'
-            );
         }
     }
 
@@ -221,13 +214,17 @@ final class WebProject extends ProjectAbstract
             array('suffix' => '.*')
         );
         $routeCollection = $router->getRouteCollection();
-        $routes = $routeCollection->all();
+        if ($routeCollection instanceof RouteCollection) {
+            $routes = $routeCollection->all();
+        }
 
         $newCollection = new RouteCollection();
         $newCollection->add('synergyroute', $route);
         // add the original route collection
-        foreach ($routes AS $name=>$route) {
-            $newCollection->add($name, $route);
+        if (isset($routes) && is_array($routes)) {
+            foreach ($routes AS $name=>$route) {
+                $newCollection->add($name, $route);
+            }
         }
         $router->setRouteCollection($newCollection);
         return $router;
@@ -260,7 +257,7 @@ final class WebProject extends ProjectAbstract
     {
         $template->setCacheDir($this->getTempDir() . DIRECTORY_SEPARATOR . 'cache');
         if (is_null($template->getTemplateDir()) && isset($this->templateDir)) {
-            $template->setTemplateDir($this->templateDir);
+            $template->setProjectTemplateDir($this->templateDir);
         }
         $template->setDev($this->isDev);
 

@@ -1,3 +1,0 @@
-#routeDefault:
-#    path:     /
-#    defaults: { _controller: Test\TestController }
