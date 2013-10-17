@@ -48,7 +48,7 @@ class SmartyTemplateTest extends \PHPUnit_Framework_TestCase
         $obj->setCacheDir('/tmp');
         $obj->setProjectTemplateDir(SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'templates');
         $obj->setTemplateFile('index.html.tpl');
-        $this->setExpectedException('Synergy\Exception\SynergyException', 'templateDir not set');
+        $this->setExpectedException('Synergy\Exception\SynergyException');
         $obj->init();
     }
 }
