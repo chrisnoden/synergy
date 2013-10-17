@@ -43,11 +43,11 @@ class TwigTemplate extends TemplateAbstract
     /**
      * @var \Twig_Loader_Filesystem
      */
-    private $_loader;
+    private $loader;
     /**
      * @var \Twig_Environment
      */
-    private $_twig;
+    private $twig;
 
 
     /**
@@ -57,15 +57,15 @@ class TwigTemplate extends TemplateAbstract
      */
     protected function initTemplateEngine()
     {
-        $this->_loader = new \Twig_Loader_Filesystem($this->templateDir);
-        $this->_twig   = new \Twig_Environment(
-            $this->_loader,
+        $this->loader = new \Twig_Loader_Filesystem($this->getTemplateDir());
+        $this->twig   = new \Twig_Environment(
+            $this->loader,
             array(
                 'cache' => $this->cacheDir,
             )
         );
         if ($this->isDev) {
-            $this->_twig->clearCacheFiles();
+            $this->twig->clearCacheFiles();
         }
     }
 
@@ -74,11 +74,12 @@ class TwigTemplate extends TemplateAbstract
      * template render output
      *
      * @return string template render output
+     * @throws SynergyException
      */
     protected function getRender()
     {
         if (isset($this->templateFile)) {
-            $render = $this->_twig->render($this->templateFile, $this->parameters);
+            $render = $this->twig->render($this->templateFile, $this->parameters);
             return $render;
         } else {
             throw new SynergyException(

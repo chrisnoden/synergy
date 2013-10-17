@@ -58,7 +58,7 @@ class HtmlTemplate extends TemplateAbstract
      */
     protected function getRender()
     {
-        $filename = $this->templateDir . DIRECTORY_SEPARATOR . $this->templateFile;
+        $filename = $this->getTemplateDir() . DIRECTORY_SEPARATOR . $this->templateFile;
         if (file_exists($filename) && is_readable($filename)) {
             $render = file_get_contents($filename);
             foreach ($this->parameters AS $name=>$value) {
