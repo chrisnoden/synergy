@@ -282,7 +282,7 @@ final class WebProject extends ProjectAbstract
     protected function handleWebTemplate(TemplateAbstract $template)
     {
         $template->setCacheDir($this->getTempDir() . DIRECTORY_SEPARATOR . 'cache');
-        if (is_null($template->getTemplateDir()) && isset($this->templateDir)) {
+        if (isset($this->templateDir)) {
             $template->setProjectTemplateDir($this->templateDir);
         }
         $template->setDev($this->isDev);
@@ -406,9 +406,6 @@ final class WebProject extends ProjectAbstract
         if (substr($dir, 0, 1) != DIRECTORY_SEPARATOR && defined('SYNERGY_ROOT_DIR')) {
             $dir = SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . $dir;
         }
-        Logger::debug(
-            'Trying template_dir: ' . $dir
-        );
         if (!is_dir($dir)) {
             throw new InvalidArgumentException(
                 sprintf("Invalid directory, %s", $dir)
