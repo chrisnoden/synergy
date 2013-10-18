@@ -58,9 +58,9 @@ class SmartyTemplate extends TemplateAbstract
     {
         $this->loader = new \Smarty();
         $this->loader->muteExpectedErrors();
-        $this->loader->setTemplateDir($this->templateDir);
+        $this->loader->setTemplateDir($this->getTemplateDir());
         $this->loader->addPluginsDir(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'SmartyPlugins');
-        $this->_initSmartyCache();
+        $this->initSmartyCache();
         Logger::debug("Smarty Cache: ".$this->loader->getCacheDir());
     }
 
@@ -119,7 +119,7 @@ class SmartyTemplate extends TemplateAbstract
      *
      * @return void
      */
-    private function _initSmartyCache()
+    private function initSmartyCache()
     {
         if (!is_dir($this->cacheDir)) {
             Tools::mkdir($this->cacheDir, true);
