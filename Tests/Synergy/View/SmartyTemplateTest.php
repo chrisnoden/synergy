@@ -39,6 +39,8 @@ class SmartyTemplateTest extends \PHPUnit_Framework_TestCase
         $obj->setTemplateDir('smarty');
         $obj->setTemplateFile('index.html.tpl');
         $obj->init();
+        $this->assertInstanceOf('Synergy\View\SmartyTemplate', $obj);
+        $this->assertInstanceOf('Synergy\View\TemplateAbstract', $obj);
     }
 
 

@@ -39,6 +39,8 @@ class TwigTemplateTest extends \PHPUnit_Framework_TestCase
         $obj->setTemplateDir('twig');
         $obj->setTemplateFile('index.html.twig');
         $obj->init();
+        $this->assertInstanceOf('Synergy\View\TwigTemplate', $obj);
+        $this->assertInstanceOf('Synergy\View\TemplateAbstract', $obj);
     }
 
 
