@@ -118,11 +118,12 @@ final class WebProject extends ProjectAbstract
         if (!isset($this->templateDir) && $this->getOption('synergy:webproject:template_dir')) {
             try {
                 $this->setTemplateDir($this->getOption('synergy:webproject:template_dir'));
-                Logger::debug('Template Dir: '.$this->templateDir);
-            }
-            catch (InvalidArgumentException $ex) {
+                Logger::debug('Template Dir: ' . $this->templateDir);
+            } catch (InvalidArgumentException $ex) {
                 throw new ProjectException(
-                    'Unable to find or use your template directory: '.$this->getOption('synergy:webproject:template_dir')
+                    'Unable to find or use your template directory: ' . $this->getOption(
+                        'synergy:webproject:template_dir'
+                    )
                 );
             }
         }
@@ -146,17 +147,36 @@ final class WebProject extends ProjectAbstract
         // use the best routes config
         if ($this->getOption('synergy:routes') && file_exists($this->getOption('synergy:routes'))) {
             $filename = $this->getOption('synergy:routes');
-        } else if (isset($this->configFilename) && file_exists(dirname($this->configFilename) . DIRECTORY_SEPARATOR . 'routes.yml')) {
-            $filename = dirname($this->configFilename) . DIRECTORY_SEPARATOR . 'routes.yml';
-        } else if (isset($this->app_dir) && file_exists($this->app_dir . DIRECTORY_SEPARATOR . 'config'. DIRECTORY_SEPARATOR . 'routes.yml')) {
-            $filename = $this->app_dir . DIRECTORY_SEPARATOR . 'config'. DIRECTORY_SEPARATOR . 'routes.yml';
-        } else if (isset($this->app_dir) && file_exists($this->app_dir . DIRECTORY_SEPARATOR . 'Config'. DIRECTORY_SEPARATOR . 'routes.yml')) {
-            $filename = $this->app_dir . DIRECTORY_SEPARATOR . 'Config'. DIRECTORY_SEPARATOR . 'routes.yml';
+        } else {
+            if (isset($this->configFilename) &&
+                file_exists(
+                    dirname($this->configFilename) . DIRECTORY_SEPARATOR . 'routes.yml'
+                )
+            ) {
+                $filename = dirname($this->configFilename) . DIRECTORY_SEPARATOR . 'routes.yml';
+            } else {
+                if (isset($this->app_dir) &&
+                    file_exists(
+                        $this->app_dir . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'routes.yml'
+                    )
+                ) {
+                    $filename = $this->app_dir . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'routes.yml';
+                } else {
+                    if (isset($this->app_dir) &&
+                        file_exists(
+                            $this->app_dir . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'routes.yml'
+                        )
+                    ) {
+                        $filename = $this->app_dir . DIRECTORY_SEPARATOR . 'Config' .
+                            DIRECTORY_SEPARATOR . 'routes.yml';
+                    }
+                }
+            }
         }
 
         if (isset($filename)) {
             Logger::debug(
-                'RouteCollection from file: '.$filename
+                'RouteCollection from file: ' . $filename
             );
             $router->setRouteCollectionFromFile($filename);
         }
@@ -185,15 +205,21 @@ final class WebProject extends ProjectAbstract
             // Deal with any response object that was returned
             if ($response instanceof WebResponse) {
                 $this->handleWebResponse($response);
-            } else if ($response instanceof TemplateAbstract) {
-                $this->handleWebTemplate($response);
-            } else if ($response instanceof WebAsset) {
-                $response->deliver();
-            } else if (is_string($response)) {
-                $render = WebResponse::create($response);
-                $render->send();
             } else {
-                $this->handleNotFoundException($response);
+                if ($response instanceof TemplateAbstract) {
+                    $this->handleWebTemplate($response);
+                } else {
+                    if ($response instanceof WebAsset) {
+                        $response->deliver();
+                    } else {
+                        if (is_string($response)) {
+                            $render = WebResponse::create($response);
+                            $render->send();
+                        } else {
+                            $this->handleNotFoundException($response);
+                        }
+                    }
+                }
             }
         }
     }
@@ -208,7 +234,7 @@ final class WebProject extends ProjectAbstract
      */
     protected function addSynergyRoute(WebRouter $router)
     {
-        $route  = new Route(
+        $route           = new Route(
             '/_synergy_/{suffix}',
             array('controller' => 'Synergy\\Controller\\DefaultController:default'),
             array('suffix' => '.*')
@@ -222,7 +248,7 @@ final class WebProject extends ProjectAbstract
         $newCollection->add('synergyroute', $route);
         // add the original route collection
         if (isset($routes) && is_array($routes)) {
-            foreach ($routes AS $name=>$route) {
+            foreach ($routes as $name => $route) {
                 $newCollection->add($name, $route);
             }
         }
@@ -283,7 +309,7 @@ final class WebProject extends ProjectAbstract
     protected function getTemplateParameters(TemplateAbstract $template)
     {
         // merge the controller parameters
-        $templateParams = array();
+        $templateParams   = array();
         $controllerParams = $this->controller->getControllerParameters();
         if (is_array($controllerParams)) {
             $templateParams = array_merge(
@@ -313,7 +339,9 @@ final class WebProject extends ProjectAbstract
     protected function handleNotFoundException($response = null)
     {
         $template = new HtmlTemplate();
-        $template->setTemplateDir(SYNERGY_LIBRARY_PATH . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . '_synergy_');
+        $template->setTemplateDir(
+            SYNERGY_LIBRARY_PATH . DIRECTORY_SEPARATOR . 'View' . DIRECTORY_SEPARATOR . '_synergy_'
+        );
         $template->setTemplateFile('404.html');
 
         // set the template parameters
@@ -379,19 +407,21 @@ final class WebProject extends ProjectAbstract
             $dir = SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . $dir;
         }
         Logger::debug(
-            'Trying template_dir: '.$dir
+            'Trying template_dir: ' . $dir
         );
         if (!is_dir($dir)) {
             throw new InvalidArgumentException(
                 sprintf("Invalid directory, %s", $dir)
             );
-        } else if (!is_readable($dir)) {
-            throw new InvalidArgumentException(
-                sprintf("Directory %s not readable", $dir)
-            );
         } else {
-            $this->request->setTemplateDir($dir);
-            $this->templateDir = $dir;
+            if (!is_readable($dir)) {
+                throw new InvalidArgumentException(
+                    sprintf("Directory %s not readable", $dir)
+                );
+            } else {
+                $this->request->setTemplateDir($dir);
+                $this->templateDir = $dir;
+            }
         }
     }
 
@@ -491,12 +521,14 @@ final class WebProject extends ProjectAbstract
         }
 
         // test 6 levels up
-        $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'templates';
+        $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) .
+            DIRECTORY_SEPARATOR . 'templates';
         if ($this->isValidDirectory($testfile)) {
             $this->setTemplateDir($testfile);
             return true;
         }
-        $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) . DIRECTORY_SEPARATOR . 'Templates';
+        $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) .
+            DIRECTORY_SEPARATOR . 'Templates';
         if ($this->isValidDirectory($testfile)) {
             $this->setTemplateDir($testfile);
             return true;
@@ -530,7 +562,7 @@ final class WebProject extends ProjectAbstract
         if (is_null($stub)) {
             if (isset($_SERVER['PHP_SELF'])) {
                 // find the stub (absolute part of the URL)
-                $arr = explode('.', $_SERVER['PHP_SELF'], 2);
+                $arr                   = explode('.', $_SERVER['PHP_SELF'], 2);
                 $this->absoluteStubUrl = substr($arr[0], 0, strrpos($arr[0], '/'));
             }
         } else {
