@@ -26,12 +26,11 @@
 
 namespace Synergy\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Synergy\Logger\Logger;
 use Synergy\Exception\InvalidArgumentException;
 use Synergy\Object;
 use Synergy\Project;
 use Synergy\Project\Web\WebRequest;
+use Synergy\Project\ProjectAbstract;
 
 /**
  * Class Controller
@@ -89,11 +88,11 @@ class Controller extends Object
     /**
      * Set the value of project member
      *
-     * @param \Synergy\Project\ProjectAbstract $project
+     * @param ProjectAbstract $project
      *
      * @return void
      */
-    public function setProject($project)
+    public function setProject(ProjectAbstract $project)
     {
         $this->project = $project;
     }
@@ -102,7 +101,7 @@ class Controller extends Object
     /**
      * Value of member project
      *
-     * @return \Synergy\Project\ProjectAbstract value of member
+     * @return ProjectAbstract value of member
      */
     public function getProject()
     {
