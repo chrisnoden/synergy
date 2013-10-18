@@ -361,16 +361,14 @@ abstract class ProjectAbstract extends Object
         }
 
         // test 6 levels up
-        $testdir = dirname(
-                dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))
-            ) . DIRECTORY_SEPARATOR . 'app';
+        $testdir = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) .
+            DIRECTORY_SEPARATOR . 'app';
         if ($this->isValidDirectory($testdir)) {
             $this->app_dir = $testdir;
             return true;
         }
-        $testdir = dirname(
-                dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))
-            ) . DIRECTORY_SEPARATOR . 'App';
+        $testdir = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) .
+            DIRECTORY_SEPARATOR . 'App';
         if ($this->isValidDirectory($testdir)) {
             $this->app_dir = $testdir;
             return true;
@@ -568,7 +566,7 @@ abstract class ProjectAbstract extends Object
         $arr = explode(':', $keyname);
         if (count($arr) > 1) {
             $testArr = $this->options;
-            foreach ($arr AS $testkey) {
+            foreach ($arr as $testkey) {
                 if ($this->isArrayKeyAnArray($testArr, $testkey)) {
                     $testArr = $testArr[$testkey];
                 }
@@ -625,6 +623,4 @@ abstract class ProjectAbstract extends Object
         }
         return false;
     }
-
-
 }

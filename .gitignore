@@ -4,6 +4,7 @@ app/*
 templates/*
 temp/*
 Tests/app/temp/*
+Tests/logs
 
 composer.lock
 
@@ -14,4 +15,5 @@ composer.lock
 *.cache
 
 # logs
+logs/*
 *.log

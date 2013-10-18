@@ -594,5 +594,4 @@ final class WebProject extends ProjectAbstract
             $this->deliverResponse = true;
         }
     }
-
 }
