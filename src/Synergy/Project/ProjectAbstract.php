@@ -207,11 +207,9 @@ abstract class ProjectAbstract extends Object
             );
         }
 
-//        if (!isset($this->configFilename) && !$this->searchConfigFile()) {
-//            throw new CriticalLaunchException(
-//                'Unable to init Synergy library without config file'
-//            );
-//        }
+        if (!isset($this->configFilename) && !$this->searchConfigFile()) {
+            Logger::alert('No config file found - this may cause problems');
+        }
 
         if (!isset($this->temp_dir) && $this->getOption('synergy:temp_dir')) {
             $this->setTempDir($this->getOption('synergy:temp_dir'));
