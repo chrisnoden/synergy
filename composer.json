@@ -50,8 +50,7 @@
         "mobiledetect/mobiledetectlib": "2.6.*"
     },
     "autoload": {
-        "psr-0": { "Synergy": "src/" },
-        "classmap": [ "src/UASparser" ]
+        "psr-0": { "Synergy": "src/" }
     },
     "bin": [ "bin/console","bin/daemon" ]
 
