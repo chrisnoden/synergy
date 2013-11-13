@@ -26,7 +26,7 @@
 
 namespace Synergy\Project;
 
-use Eloquent\Enumeration\Enumeration;
+use Eloquent\Enumeration\AbstractEnumeration;
 
 /**
  * Class ProjectType
@@ -37,11 +37,10 @@ use Eloquent\Enumeration\Enumeration;
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class ProjectType extends Enumeration
+final class ProjectType extends AbstractEnumeration
 {
 
     const WEB = 'web';
     const CLI = 'cli';
     const DAEMON = 'daemon';
-
 }
