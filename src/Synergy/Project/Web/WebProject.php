@@ -137,6 +137,7 @@ final class WebProject extends ProjectAbstract
      */
     protected function launch()
     {
+        $this->loadBootstrap();
         $this->setAbsoluteStubUrl();
 
         /**

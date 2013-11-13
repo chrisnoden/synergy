@@ -223,6 +223,7 @@ class CliProject extends ProjectAbstract
      */
     protected function launch()
     {
+        $this->loadBootstrap();
         $router = new CliRouter($this->request);
         $router->match();
 

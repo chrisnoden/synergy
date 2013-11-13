@@ -139,8 +139,6 @@ abstract class ProjectAbstract extends Object
     {
         $this->checkEnv();
 
-        $this->loadBootstrap();
-
         $this->launch();
     }
 
