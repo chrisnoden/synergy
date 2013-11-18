@@ -437,8 +437,10 @@ abstract class ProjectAbstract extends Object
      */
     protected function searchTempDir($baseDir = null)
     {
-        if (is_null($baseDir) && isset($this->app_dir) && is_writable($this->app_dir)) {
-            $baseDir = $this->app_dir;
+        if (defined('SYNERGY_ROOT_DIR')) {
+            $baseDir = SYNERGY_ROOT_DIR;
+        } else {
+            return false;
         }
 
         if (is_string($baseDir) && $this->isValidDirectory($baseDir) && is_writable($baseDir)) {
