@@ -601,6 +601,10 @@ abstract class ProjectAbstract extends Object
         if (isset($this->configFilename)) {
             $option_value = preg_replace('/%config_dir%/', dirname($this->configFilename), $option_value);
         }
+        if (defined('SYNERGY_ROOT_DIR')) {
+            $option_value = preg_replace('/%project_dir%/', SYNERGY_ROOT_DIR, $option_value);
+            $option_value = preg_replace('/%root_dir%/', SYNERGY_ROOT_DIR, $option_value);
+        }
 
         return $option_value;
     }
