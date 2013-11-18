@@ -104,20 +104,19 @@ class SmartController extends Controller
      */
     protected function matchTemplate($matchDir, $file)
     {
-        $testfile = $matchDir . $file;
-        if (file_exists($testfile . '.tpl') && class_exists('\Smarty')) {
+        if (file_exists($matchDir . $file . '.tpl') && class_exists('\Smarty')) {
             Logger::info('Smarty Template: ' . $file . '.tpl');
             $template = new SmartyTemplate();
-            $template->setTemplateDir(dirname($testfile));
-            $template->setTemplateFile(basename($testfile) . '.tpl');
+            $template->setTemplateDir($matchDir);
+            $template->setTemplateFile($file . '.tpl');
             return $template;
-        } else if (file_exists($testfile . '.twig') && class_exists('\Twig_Environment')) {
+        } elseif (file_exists($matchDir . $file . '.twig') && class_exists('\Twig_Environment')) {
             Logger::info('Twig Template: ' . $file . '.twig');
             $template = new TwigTemplate();
-            $template->setTemplateDir(dirname($testfile));
-            $template->setTemplateFile(basename($testfile) . '.twig');
+            $template->setTemplateDir($matchDir);
+            $template->setTemplateFile($file . '.twig');
             return $template;
-        } else if (file_exists($testfile)) {
+        } elseif (file_exists($matchDir . $file)) {
             Logger::info('HTML: ' . $file);
             $template = new HtmlTemplate();
             $template->setTemplateDir($matchDir);
