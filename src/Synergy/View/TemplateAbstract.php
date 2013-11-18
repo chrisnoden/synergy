@@ -159,11 +159,11 @@ abstract class TemplateAbstract extends Object
      */
     public function getTemplateDir()
     {
-        if (isset($this->projectTemplateDir) && isset($this->templateDir)) {
-            $testDir = $this->projectTemplateDir . DIRECTORY_SEPARATOR . $this->templateDir;
-            if (is_dir($testDir)) {
-                return $testDir;
-            }
+        if (isset($this->projectTemplateDir) &&
+            isset($this->templateDir) &&
+            is_dir($this->projectTemplateDir . DIRECTORY_SEPARATOR . $this->templateDir)
+        ) {
+            return $this->projectTemplateDir . DIRECTORY_SEPARATOR . $this->templateDir;
         } elseif (is_dir($this->templateDir)) {
             return $this->templateDir;
         }
