@@ -216,7 +216,7 @@ abstract class TemplateAbstract extends Object
      */
     public function setTemplateFile($filename)
     {
-        $this->templateFile = $filename;
+        $this->templateFile = preg_replace('/^(\/){1,}/', '', $filename);
     }
 
 

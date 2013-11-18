@@ -53,14 +53,14 @@ class SmartController extends Controller
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return TemplateAbstract|void returns a template or null
+     * @return TemplateAbstract|null returns a template or null
      */
     public function requestMatch($request = null)
     {
-        if (is_a($request, '\Synergy\Project\Web\WebRequest') || ($this->request instanceof WebRequest && $request = $this->request)) {
+        if (is_a($request, '\Synergy\Project\Web\WebRequest') ||
+            ($this->request instanceof WebRequest && $request = $this->request)
+        ) {
             return $this->matchWebFile($request->getTemplateDir(), $request->getPathInfo());
-        } else {
-            return;
         }
     }
 
@@ -72,7 +72,7 @@ class SmartController extends Controller
      * @param string $matchDir
      * @param string $file
      *
-     * @return SmartyTemplate|void
+     * @return SmartyTemplate|TwigTemplate|HtmlTemplate|void
      */
     protected function matchWebFile($matchDir, $file)
     {
@@ -100,7 +100,7 @@ class SmartController extends Controller
      * @param string $matchDir
      * @param string $file
      *
-     * @return SmartyTemplate|TwigTemplate|null
+     * @return SmartyTemplate|TwigTemplate|HtmlTemplate|null
      */
     protected function matchTemplate($matchDir, $file)
     {
