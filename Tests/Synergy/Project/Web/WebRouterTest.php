@@ -423,4 +423,40 @@ class WebRouterTest extends \PHPUnit_Framework_TestCase
         $obj->match();
     }
 
+
+    /**
+     * Tests that parameters can be passed into the route for use by the template
+     * using the options parameter of a Route
+     */
+    public function testRouteOptionParameters()
+    {
+        $params = array('home' => '/', 'suckit' => 'andsee');
+
+        // Create a route and routecollection
+        $route0  = new Route(
+            '/',
+            array('controller' => 'TestController'),
+            array(),
+            array('parameters' => $params)
+        );
+        $routes = new RouteCollection();
+        $routes->add('route0', $route0);
+
+        // Our test request
+        $request = WebRequest::create(
+            '/',
+            'GET',
+            array('name' => 'Chris Noden')
+        );
+        $request->overrideGlobals();
+        $obj = new WebRouter($request);
+
+        // Pass our route collection to our WebRouter object
+        $obj->setRouteCollection($routes);
+        // Match the request to the route
+        $obj->match();
+        $controller = $obj->getController();
+        $this->assertEquals('TestController', $controller->getClassName());
+        $this->assertEquals($params, $controller->getParameters());
+    }
 }

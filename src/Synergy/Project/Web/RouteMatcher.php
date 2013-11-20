@@ -51,7 +51,10 @@ class RouteMatcher extends UrlMatcher
      * @var WebRequestContext
      */
     protected $context;
-
+    /**
+     * @var Route
+     */
+    protected $matched_route;
 
     /**
      * Tries to match a URL with a set of routes.
@@ -149,7 +152,7 @@ class RouteMatcher extends UrlMatcher
                     } else {
                         continue;
                     }
-                } else if ($device->isTablet() && $routeType = $route->getOption('type')) {
+                } elseif ($device->isTablet() && $routeType = $route->getOption('type')) {
                     $tabletType = $this->matchTabletType($routeType, $device);
                     if ($tabletType) {
                         Logger::info("Matched RouteType: " . $tabletType);
@@ -275,4 +278,31 @@ class RouteMatcher extends UrlMatcher
         return (array_combine($aKeys, $aValues));
     }
 
+
+    /**
+     * {@inheritdoc}
+     */
+    public function match($pathinfo)
+    {
+        $this->allow = array();
+
+        if ($ret = $this->matchCollection(rawurldecode($pathinfo), $this->routes)) {
+            if (isset($ret['_route']) && $this->routes->get($ret['_route'])) {
+                $this->matched_route = $this->routes->get($ret['_route']);
+            }
+            return $ret;
+        }
+
+        throw 0 < count($this->allow)
+            ? new MethodNotAllowedException(array_unique(array_map('strtoupper', $this->allow)))
+            : new ResourceNotFoundException();
+    }
+
+
+    public function getRouteOption($key)
+    {
+        if ($this->matched_route instanceof Route) {
+            return $this->matched_route->getOption($key);
+        }
+    }
 }

@@ -60,6 +60,9 @@ class WebRouter extends RouterAbstract
     }
 
 
+    /**
+     * @return void
+     */
     protected function matchRoute()
     {
         if (isset($this->routeCollection)) {
@@ -72,6 +75,9 @@ class WebRouter extends RouterAbstract
                     'Looking for route match: '.$this->request->getPathInfo()
                 );
                 $parameters = $matcher->match($this->request->getPathInfo());
+                if (is_array($matcher->getRouteOption('parameters'))) {
+                    $this->parameters = array_merge($this->parameters, $matcher->getRouteOption('parameters'));
+                }
             } catch (ResourceNotFoundException $ex) {
                 // Use our DefaultController
                 $parameters = $this->getDefaultController();
@@ -91,4 +97,16 @@ class WebRouter extends RouterAbstract
         }
     }
 
+
+    /**
+     * controller defined in the successful route
+     *
+     * @return ControllerEntity the controller defined by the route
+     */
+    public function getController()
+    {
+        $this->controller->setParameters($this->parameters);
+
+        return $this->controller;
+    }
 }
