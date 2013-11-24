@@ -71,35 +71,6 @@ set_error_handler('Synergy\ExceptionHandler::ErrorHandler');
  */
 register_shutdown_function('Synergy\ExceptionHandler::ShutdownHandler');
 
-/**
- * Create a Talkback collection
- */
-$logger = \Talkback\Logger::getLogger('synergy');
-$logger
-    ->addChannel(
-        array(
-            \Psr\Log\LogLevel::ERROR,
-            \Psr\Log\LogLevel::CRITICAL,
-            \Psr\Log\LogLevel::ALERT,
-            \Psr\Log\LogLevel::EMERGENCY,
-            \Psr\Log\LogLevel::WARNING,
-            \Psr\Log\LogLevel::INFO,
-            \Psr\Log\LogLevel::NOTICE,
-            \Psr\Log\LogLevel::DEBUG,
-        ),
-        \Talkback\Channel\ChannelFactory::File('/tmp/synergy.log'))
-    ->addChannel(\Psr\Log\LogLevel::CRITICAL, \Talkback\Channel\ChannelFactory::Basic())
-    ->addChannel(\Psr\Log\LogLevel::INFO, \Talkback\Channel\ChannelFactory::Growl('Synergy'));
-
-/**
- * @var \Synergy\Project\Web\WebProject $project
- */
-$project =
-    \Synergy\Project\ProjectFactory::build(
-        'synergy',
-        \Synergy\Project\ProjectType::WEB,
-        $logger
-    );
+$project = new \Synergy\Project\Web\WebProject();
 $project->setDev(true);
 $project->run();
-

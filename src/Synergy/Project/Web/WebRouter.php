@@ -28,8 +28,8 @@ namespace Synergy\Project\Web;
 
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Synergy\Logger\Logger;
-use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Synergy\Router\RouterAbstract;
+use Synergy\Controller\ControllerEntity;
 
 /**
  * Class WebRouter

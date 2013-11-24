@@ -26,14 +26,9 @@
 
 namespace Synergy\Project;
 
-use Psr\Log\LogLevel;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Synergy\AutoLoader\SplClassLoader;
 use Synergy\Exception\CriticalLaunchException;
 use Synergy\Exception\InvalidArgumentException;
-use Synergy\Exception\ProjectException;
-use Synergy\Exception\SynergyException;
 use Synergy\Logger\Logger;
 use Synergy\Object;
 use Synergy\Project;

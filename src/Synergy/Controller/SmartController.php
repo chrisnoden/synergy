@@ -139,7 +139,11 @@ class SmartController extends Controller
         $testdir = $rootDir . $path;
         if (is_dir($testdir)) {
             if (substr($testdir, strlen($testdir)-1) != '/') {
-                header("Location: ".$path.'/');
+                if (isset($_SERVER['SCRIPT_NAME'])) {
+                    header("Location: ".dirname($_SERVER['SCRIPT_NAME']).$path.'/');
+                } else {
+                    header("Location: ".$path.'/');
+                }
                 exit;
             }
             return $this->matchTemplate($rootDir, $path . 'index.html');
@@ -174,6 +178,4 @@ class SmartController extends Controller
             return $asset;
         }
     }
-
-
 }

@@ -115,16 +115,25 @@ final class WebProject extends ProjectAbstract
     {
         parent::checkEnv();
 
-        if (!isset($this->templateDir) && $this->getOption('synergy:webproject:template_dir')) {
-            try {
-                $this->setTemplateDir($this->getOption('synergy:webproject:template_dir'));
-                Logger::debug('Template Dir: ' . $this->templateDir);
-            } catch (InvalidArgumentException $ex) {
-                throw new ProjectException(
-                    'Unable to find or use your template directory: ' . $this->getOption(
-                        'synergy:webproject:template_dir'
-                    )
-                );
+        if (!isset($this->templateDir)) {
+            if ($this->getOption('synergy:webproject:template_dir')) {
+                try {
+                    $this->setTemplateDir($this->getOption('synergy:webproject:template_dir'));
+                    Logger::debug('Template Dir: ' . $this->templateDir);
+                } catch (InvalidArgumentException $ex) {
+                    throw new ProjectException(
+                        'Unable to find or use your template directory: ' . $this->getOption(
+                            'synergy:webproject:template_dir'
+                        )
+                    );
+                }
+            } else {
+                // try and locate a template directory
+                if (is_dir($this->app_dir . DIRECTORY_SEPARATOR . 'templates')) {
+                    $this->setTemplateDir($this->app_dir . DIRECTORY_SEPARATOR . 'templates');
+                } elseif (defined('SYNERGY_ROOT_DIR') &&is_dir(SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'templates')) {
+                    $this->setTemplateDir(SYNERGY_ROOT_DIR . DIRECTORY_SEPARATOR . 'templates');
+                }
             }
         }
     }
@@ -148,31 +157,6 @@ final class WebProject extends ProjectAbstract
         // use the best routes config
         if ($this->getOption('synergy:routes') && file_exists($this->getOption('synergy:routes'))) {
             $filename = $this->getOption('synergy:routes');
-        } else {
-            if (isset($this->configFilename) &&
-                file_exists(
-                    dirname($this->configFilename) . DIRECTORY_SEPARATOR . 'routes.yml'
-                )
-            ) {
-                $filename = dirname($this->configFilename) . DIRECTORY_SEPARATOR . 'routes.yml';
-            } else {
-                if (isset($this->app_dir) &&
-                    file_exists(
-                        $this->app_dir . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'routes.yml'
-                    )
-                ) {
-                    $filename = $this->app_dir . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'routes.yml';
-                } else {
-                    if (isset($this->app_dir) &&
-                        file_exists(
-                            $this->app_dir . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'routes.yml'
-                        )
-                    ) {
-                        $filename = $this->app_dir . DIRECTORY_SEPARATOR . 'Config' .
-                            DIRECTORY_SEPARATOR . 'routes.yml';
-                    }
-                }
-            }
         }
 
         if (isset($filename)) {
@@ -409,12 +393,12 @@ final class WebProject extends ProjectAbstract
         }
         if (!is_dir($dir)) {
             throw new InvalidArgumentException(
-                sprintf("Invalid directory, %s", $dir)
+                sprintf("Invalid template directory, %s", $dir)
             );
         } else {
             if (!is_readable($dir)) {
                 throw new InvalidArgumentException(
-                    sprintf("Directory %s not readable", $dir)
+                    sprintf("Template directory %s not readable", $dir)
                 );
             } else {
                 $this->request->setTemplateDir($dir);
@@ -473,20 +457,10 @@ final class WebProject extends ProjectAbstract
                 $this->setTemplateDir($testfile);
                 return true;
             }
-            $testfile = $baseDir . DIRECTORY_SEPARATOR . 'Templates';
-            if ($this->isValidDirectory($testfile)) {
-                $this->setTemplateDir($testfile);
-                return true;
-            }
         }
 
         // test from 1 level up from script path
         $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'templates';
-        if ($this->isValidDirectory($testfile)) {
-            $this->setTemplateDir($testfile);
-            return true;
-        }
-        $testfile = dirname(dirname($_SERVER["SCRIPT_FILENAME"])) . DIRECTORY_SEPARATOR . 'Templates';
         if ($this->isValidDirectory($testfile)) {
             $this->setTemplateDir($testfile);
             return true;
@@ -499,20 +473,10 @@ final class WebProject extends ProjectAbstract
                 $this->setTemplateDir($testfile);
                 return true;
             }
-            $testfile = $this->app_dir . DIRECTORY_SEPARATOR . 'Templates';
-            if ($this->isValidDirectory($testfile)) {
-                $this->setTemplateDir($testfile);
-                return true;
-            }
         }
 
         // test 3 levels up
         $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'templates';
-        if ($this->isValidDirectory($testfile)) {
-            $this->setTemplateDir($testfile);
-            return true;
-        }
-        $testfile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'Templates';
         if ($this->isValidDirectory($testfile)) {
             $this->setTemplateDir($testfile);
             return true;
@@ -525,22 +489,11 @@ final class WebProject extends ProjectAbstract
             $this->setTemplateDir($testfile);
             return true;
         }
-        $testfile = dirname(dirname(dirname(dirname(dirname(dirname(dirname(__FILE__))))))) .
-            DIRECTORY_SEPARATOR . 'Templates';
-        if ($this->isValidDirectory($testfile)) {
-            $this->setTemplateDir($testfile);
-            return true;
-        }
 
         // fall through :
 
         // test from script path
         $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'templates';
-        if ($this->isValidDirectory($testfile)) {
-            $this->setTemplateDir($testfile);
-            return true;
-        }
-        $testfile = dirname($_SERVER["SCRIPT_FILENAME"]) . DIRECTORY_SEPARATOR . 'Templates';
         if ($this->isValidDirectory($testfile)) {
             $this->setTemplateDir($testfile);
             return true;

@@ -322,5 +322,4 @@ abstract class TemplateAbstract extends Object
             Tools::removeDir($this->cacheDir);
         }
     }
-
 }
