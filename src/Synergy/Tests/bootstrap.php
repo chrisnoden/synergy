@@ -40,4 +40,4 @@ define('SYNERGY_TEST_FILES_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'file
 define('SYNERGY_ROOT_DIR', __DIR__);
 
 // where are our web tests hosted (URL)
-define('SYNERGY_WEBTEST_BASEURL', 'http://127.0.0.1/ChrisNoden/synergy/Tests/WebTests');
+define('SYNERGY_WEBTEST_BASEURL', 'http://127.0.0.1/ChrisNoden/synergy/src/Synergy/Tests/webTests');

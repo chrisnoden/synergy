@@ -27,5 +27,8 @@
 if (file_exists(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php')) {
     require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php');
 
+    $sh = new \Synergy\Project\Web\SessionHandler\FileSessionHandler();
+    $_SESSION['name'] = __FILE__;
 
+    printf('%s', serialize($_SESSION));
 }

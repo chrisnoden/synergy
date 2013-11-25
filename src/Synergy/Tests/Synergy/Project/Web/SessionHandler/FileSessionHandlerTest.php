@@ -35,6 +35,21 @@ class FileSessionHandlerTest extends WebTestAbstract
     {
         $response = $this->fetchTestResponse('FileSessionHandlerTest.php');
 
+        if (!$data = unserialize($response)) {
+            $this->fail('Response from webTest: '.$response);
+        }
+
+        if (!is_array($data)) {
+            $this->fail('Expected array of session data from webTest');
+        }
+
+        if (!isset($data['name'])) {
+            $this->fail('Expected array element "name" to be set by webTest');
+        }
+
+        if (!file_exists($data['name'])) {
+            $this->fail('name element from webTest doesn\'t match a file');
+        }
 
     }
 
