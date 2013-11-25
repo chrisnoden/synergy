@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * Created by Chris Noden using PhpStorm.
+ * 
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,41 +15,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
+  *
  * @category  File
- * @package   Synergy
+ * @package   synergy
  * @author    Chris Noden <chris.noden@gmail.com>
- * @copyright 2009-2013 Chris Noden
+ * @copyright 2013 Chris Noden
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Controller;
+if (file_exists(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php')) {
+    require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php');
 
-use Synergy\Logger\Logger;
-use Synergy\Project\Web\WebResponse;
 
-/**
- * Class DefaultController
- *
- * @category Synergy\Controller
- * @package  Synergy
- * @author   Chris Noden <chris.noden@gmail.com>
- * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
- * @link     https://github.com/chrisnoden/synergy
- */
-class DefaultController extends SmartController
-{
-
-    /**
-     * Just a test action for now
-     *
-     * @todo put in some helpful Response
-     *
-     * @return \Synergy\Project\Web\WebResponse
-     */
-    public function defaultAction()
-    {
-        return $this->requestMatch();
-    }
 }

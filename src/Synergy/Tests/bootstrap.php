@@ -28,18 +28,16 @@ if (!ini_get('date.timezone')) {
     date_default_timezone_set('Europe/London');
 }
 
-$autoloadFile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'autoload.php';
-if (!is_file($autoloadFile)) {
-    $autoloadFile = __DIR__ . '/../vendor/autoload.php';
-}
+$autoloadFile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 if (is_file($autoloadFile)) {
     $loader = include_once $autoloadFile;
-    $loader->add('Synergy\Tests', __DIR__);
-    $loader->add('Test', __DIR__ . DIRECTORY_SEPARATOR . 'app');
 } else {
     throw new \LogicException('Run "composer install --dev" to create autoloader.');
 }
 
 define('SYNERGY_TEST_FILES_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files');
 define('SYNERGY_ROOT_DIR', __DIR__);
+
+// where are our web tests hosted (URL)
+define('SYNERGY_WEBTEST_BASEURL', 'http://127.0.0.1/ChrisNoden/synergy/Tests/WebTests');

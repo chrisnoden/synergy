@@ -1,7 +1,7 @@
 <?php
 /**
- * Created by Chris Noden using JetBrains PhpStorm.
- *
+ * Created by Chris Noden using PhpStorm.
+ * 
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,41 +15,51 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * @category  File
- * @package   Synergy
+  *
+ * @category  Class
+ * @package   synergy
  * @author    Chris Noden <chris.noden@gmail.com>
- * @copyright 2009-2013 Chris Noden
+ * @copyright 2013 Chris Noden
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link      https://github.com/chrisnoden
  */
 
-namespace Synergy\Controller;
-
-use Synergy\Logger\Logger;
-use Synergy\Project\Web\WebResponse;
+namespace Synergy\Project\Web\SessionHandler;
 
 /**
- * Class DefaultController
+ * Class SessionHandlerAbstract
  *
- * @category Synergy\Controller
- * @package  Synergy
+ * @category Synergy\Project\Web\SessionHandler
+ * @package  synergy
  * @author   Chris Noden <chris.noden@gmail.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link     https://github.com/chrisnoden/synergy
  */
-class DefaultController extends SmartController
+class SessionHandlerAbstract
 {
 
     /**
-     * Just a test action for now
-     *
-     * @todo put in some helpful Response
-     *
-     * @return \Synergy\Project\Web\WebResponse
+     * Auto register the session handler
      */
-    public function defaultAction()
+    public function __construct()
     {
-        return $this->requestMatch();
+        // change the ini configuration
+        ini_set('session.save_handler', 'user');
+
+        // ... set the session handler to the class methods ...
+        session_set_save_handler(
+            array($this, 'open'),
+            array($this, 'close'),
+            array($this, 'read'),
+            array($this, 'write'),
+            array($this, 'destroy'),
+            array($this, 'gc')
+        );
+
+        // ... and start a new session.
+        session_start();
+
+        // Finally ensure that the session values are stored.
+        register_shutdown_function('session_write_close');
     }
 }

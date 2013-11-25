@@ -9,12 +9,12 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="Tests/bootstrap.php"
+         bootstrap="./src/Synergy/Tests/bootstrap.php"
         >
 
     <testsuites>
-        <testsuite name="chrisnoden/synergy Test Suite">
-            <directory>./Tests/</directory>
+        <testsuite name="ChrisNoden/synergy Test Suite">
+            <directory>./src/Synergy/Tests/</directory>
         </testsuite>
     </testsuites>
 
