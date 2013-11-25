@@ -5,7 +5,7 @@
     "keywords": ["mvc", "framework", "symfony"],
     "homepage": "https://github.com/chrisnoden/synergy",
     "license": "Apache-2.0",
-    "version": "0.2.0-dev",
+    "version": "0.3.0-dev",
     "minimum-stability": "dev",
     "authors": [
         { "name": "Chris Noden", "email": "chris.noden@gmail.com", "homepage": "http://www.chrisnoden.com" }
@@ -21,7 +21,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.21",
+        "php": ">=5.4.13",
         "ext-reflection": "*",
         "ext-curl": "*",
         "ext-spl": "*",
