@@ -110,7 +110,7 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Synergy\Project\Web\WebAsset', $response);
         $filename = $response->getFilename();
         $filename = str_replace(dirname(SYNERGY_ROOT_DIR), '', $filename);
-        $this->assertSame('/src/Synergy/View/_synergy_/css/bootstrap.min.css', $filename);
+        $this->assertSame('/View/_synergy_/css/bootstrap.min.css', $filename);
     }
 
 }
