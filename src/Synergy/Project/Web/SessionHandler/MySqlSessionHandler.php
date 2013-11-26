@@ -47,20 +47,33 @@ class MySqlSessionHandler extends SessionHandlerAbstract implements \SessionHand
 
 
     /**
-     * Sets the user-level session storage functions which are used
-     * for storing and retrieving data associated with a session.
+     * Set the value of pdo member
      *
-     * @param \PDO $pdo The PDO object used to access the database
+     * @param \PDO $pdo
      *
-     * @return void
+     * @return $this
      */
-    public function __construct(\PDO $pdo, $table_name = 'sessions')
+    public function setPdo(\PDO $pdo)
     {
-        // Assign the pdo object, ...
         $this->pdo = $pdo;
+//        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+        return $this;
+    }
+
+
+    /**
+     * Set the value of table_name member
+     *
+     * @param string $table_name
+     *
+     * @return $this
+     */
+    public function setTableName($table_name)
+    {
         $this->table_name = $table_name;
 
-        parent::__construct();
+        return $this;
     }
 
 

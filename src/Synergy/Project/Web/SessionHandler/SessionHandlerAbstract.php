@@ -56,9 +56,6 @@ abstract class SessionHandlerAbstract
             array($this, 'gc')
         );
 
-        // ... and start a new session.
-        @session_start();
-
         // Finally ensure that the session values are stored.
         register_shutdown_function('session_write_close');
     }

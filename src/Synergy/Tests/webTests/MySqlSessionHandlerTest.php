@@ -34,8 +34,12 @@ if (file_exists(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php')) {
     $pdo->query($sql);
 
     // Initialist the session handler
-    $sh               = new \Synergy\Project\Web\SessionHandler\MySqlSessionHandler($pdo, $table_name);
+    $sh = new \Synergy\Project\Web\SessionHandler\MySqlSessionHandler();
+    $sh->setPdo($pdo);
+    $sh->setTableName($table_name);
     $sh->createSessionTable();
+
+    @session_start();
     $_SESSION['name'] = __FILE__;
     $_SESSION['time'] = time();
 
