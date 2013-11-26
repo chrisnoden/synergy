@@ -51,6 +51,17 @@ class FileSessionHandlerTest extends WebTestAbstract
             $this->fail('name element from webTest doesn\'t match a file');
         }
 
-    }
+        $time = time();
+        if (!isset($data['time'])) {
+            $this->fail('Expected array element "time" to be set by webTest');
+        }
 
+        if (!is_int($data['time'])) {
+            $this->fail('time element from webTest is not an integer');
+        }
+
+        if ($time - $data['time'] > 2) {
+            $this->fail('time element from webTest outside accepted range (session is stale)');
+        }
+    }
 }

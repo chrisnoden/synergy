@@ -15,6 +15,7 @@
     <testsuites>
         <testsuite name="ChrisNoden/synergy Test Suite">
             <directory>./src/Synergy/Tests/</directory>
+            <exclude>./src/Synergy/Tests/webTests</exclude>
         </testsuite>
     </testsuites>
 

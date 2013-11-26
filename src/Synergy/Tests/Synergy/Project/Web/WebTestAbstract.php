@@ -58,16 +58,19 @@ class WebTestAbstract extends \PHPUnit_Framework_TestCase
             CURLOPT_FOLLOWLOCATION => false, // follow redirects
             CURLOPT_ENCODING       => "", // handle compressed
             CURLOPT_USERAGENT      => "test", // who am i
-            CURLOPT_AUTOREFERER    => true, // set referer on redirect
             CURLOPT_CONNECTTIMEOUT => 5, // timeout on connect
             CURLOPT_TIMEOUT        => 10, // timeout on response
-        ); // stop after 10 redirects
+            CURLOPT_COOKIESESSION  => true, // ignore any previous cookies
+        );
 
         $ch = curl_init($url);
         curl_setopt_array($ch, $options);
-        $content  = curl_exec($ch);
+        $content = curl_exec($ch);
 
         curl_close($ch);
+
+        $ch = null;
+        unset($ch);
 
         return $content;
     }

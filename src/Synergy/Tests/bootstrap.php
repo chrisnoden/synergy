@@ -41,3 +41,6 @@ define('SYNERGY_ROOT_DIR', __DIR__);
 
 // where are our web tests hosted (URL)
 define('SYNERGY_WEBTEST_BASEURL', 'http://127.0.0.1/ChrisNoden/synergy/src/Synergy/Tests/webTests');
+define('SYNERGY_TEST_PDO_STRING', 'mysql:dbname=test;host=127.0.0.1');
+define('SYNERGY_TEST_DB_USERNAME', 'root');
+define('SYNERGY_TEST_DB_PASSWORD', '');

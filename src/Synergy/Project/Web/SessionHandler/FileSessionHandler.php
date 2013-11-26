@@ -40,8 +40,13 @@ class FileSessionHandler extends SessionHandlerAbstract implements \SessionHandl
 
     /** @var string */
     private $savePath;
+    /** @var string */
+    private $sess_prefix = 'synergy_sess_';
 
 
+    /**
+     * {@inheritdoc}
+     */
     public function open($savePath, $sessionName)
     {
         $this->savePath = $savePath;
@@ -53,27 +58,42 @@ class FileSessionHandler extends SessionHandlerAbstract implements \SessionHandl
     }
 
 
+    /**
+     * {@inheritdoc}
+     */
     public function close()
     {
         return true;
     }
 
 
-    public function read($id)
+    /**
+     * {@inheritdoc}
+     */
+    public function read($session_id)
     {
-        return (string)@file_get_contents("$this->savePath/sess_$id");
+        return (string)@file_get_contents(sprintf("%s/%s%s", $this->savePath, $this->sess_prefix, $session_id));
     }
 
 
-    public function write($id, $data)
+    /**
+     * {@inheritdoc}
+     */
+    public function write($session_id, $data)
     {
-        return file_put_contents("$this->savePath/sess_$id", $data) === false ? false : true;
+        return file_put_contents(
+            sprintf("%s/%s%s", $this->savePath, $this->sess_prefix, $session_id),
+            $data
+        ) === false ? false : true;
     }
 
 
-    public function destroy($id)
+    /**
+     * {@inheritdoc}
+     */
+    public function destroy($session_id)
     {
-        $file = "$this->savePath/sess_$id";
+        $file = sprintf("%s/%s%s", $this->savePath, $this->sess_prefix, $session_id);
         if (file_exists($file)) {
             unlink($file);
         }
@@ -82,9 +102,12 @@ class FileSessionHandler extends SessionHandlerAbstract implements \SessionHandl
     }
 
 
+    /**
+     * {@inheritdoc}
+     */
     public function gc($maxlifetime)
     {
-        foreach (glob("$this->savePath/sess_*") as $file) {
+        foreach (glob(sprintf("%s/%s*", $this->savePath, $this->sess_prefix)) as $file) {
             if (filemtime($file) + $maxlifetime < time() && file_exists($file)) {
                 unlink($file);
             }
