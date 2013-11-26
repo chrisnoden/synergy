@@ -33,20 +33,9 @@ if (file_exists(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php')) {
     $sql = 'DROP TABLE IF EXISTS `' . $table_name . '`';
     $pdo->query($sql);
 
-    $sql = sprintf(
-        'CREATE TABLE `%s` (
-                        `id` varchar(255) NOT NULL,
-                        `last_updated` int(10) NOT NULL,
-                        `data` mediumtext NOT NULL,
-                        `created` int(10) NOT NULL,
-                        PRIMARY KEY (`id`)
-                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8',
-        $table_name
-    );
-    $pdo->query($sql);
-
     // Initialist the session handler
     $sh               = new \Synergy\Project\Web\SessionHandler\MySqlSessionHandler($pdo, $table_name);
+    $sh->createSessionTable();
     $_SESSION['name'] = __FILE__;
     $_SESSION['time'] = time();
 

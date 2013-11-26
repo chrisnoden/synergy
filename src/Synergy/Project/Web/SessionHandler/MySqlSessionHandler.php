@@ -65,6 +65,26 @@ class MySqlSessionHandler extends SessionHandlerAbstract implements \SessionHand
 
 
     /**
+     * Create the session table if it doesn't exist
+     *
+     * @return void
+     */
+    public function createSessionTable()
+    {
+        $sql = sprintf(
+            'CREATE TABLE IF NOT EXISTS `%s` (
+                            `id` varchar(255) NOT NULL,
+                            `last_updated` int(10) NOT NULL,
+                            `data` mediumtext NOT NULL,
+                            `created` int(10) NOT NULL,
+                            PRIMARY KEY (`id`)
+                            ) ENGINE=InnoDB DEFAULT CHARSET=utf8',
+            $this->table_name
+        );
+        $this->pdo->query($sql);
+    }
+
+    /**
      * The open callback works like a constructor in classes and is executed when the session is being opened.
      * It is the first callback function executed when the session is started automatically or
      * manually with session_start()
