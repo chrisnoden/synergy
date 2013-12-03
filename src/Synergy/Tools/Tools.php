@@ -60,7 +60,7 @@ class Tools
         $size = strlen($chars);
         $str = '';
         for ($i = 0; $i < $length; $i++) {
-            $str .= $chars[ rand(0, $size - 1) ];
+            $str .= $chars[ mt_rand(0, $size - 1) ];
         }
 
         return "$str";

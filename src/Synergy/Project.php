@@ -54,23 +54,23 @@ final class Project extends Singleton
     /**
      * @var string Name of our project
      */
-    private static $_projectName;
+    private static $projectName;
     /**
      * @var bool is this a Dev project
      */
-    private static $_isDev = false;
+    private static $isDev = false;
     /**
      * @var \Synergy\Project\ProjectAbstract
      */
-    private static $_projectInstance;
+    private static $projectInstance;
     /**
      * @var string
      */
-    private static $_projectType;
+    private static $projectType;
     /**
      * @var array
      */
-    private static $_options = array();
+    private static $options = array();
 
 
     /**
@@ -84,10 +84,10 @@ final class Project extends Singleton
             define('SYNERGY_LIBRARY_PATH', dirname(__FILE__));
         }
 
-        self::$_projectName = null;
-        self::$_projectInstance = null;
-        self::$_projectType = null;
-        self::$_options = array();
+        self::$projectName = null;
+        self::$projectInstance = null;
+        self::$projectType = null;
+        self::$options = array();
     }
 
 
@@ -100,7 +100,7 @@ final class Project extends Singleton
      */
     public static function setObject(ProjectAbstract $object)
     {
-        self::$_projectInstance = $object;
+        self::$projectInstance = $object;
     }
 
 
@@ -111,18 +111,18 @@ final class Project extends Singleton
      */
     public static function getObject()
     {
-        if (!self::$_projectInstance instanceof ProjectAbstract) {
-            if (isset(self::$_projectType)) {
+        if (!self::$projectInstance instanceof ProjectAbstract) {
+            if (isset(self::$projectType)) {
                 $classname = "Synergy\\Project\\" .
-                    ucfirst(self::$_projectType) .
+                    ucfirst(self::$projectType) .
                     "\\" .
-                    ucfirst(self::$_projectType) .
+                    ucfirst(self::$projectType) .
                     'Project'; // eg Synergy\Project\Web\WebProject
-                self::$_projectInstance = new $classname();
+                self::$projectInstance = new $classname();
             }
         }
 
-        return self::$_projectInstance;
+        return self::$projectInstance;
     }
 
 
@@ -161,7 +161,7 @@ final class Project extends Singleton
     public static function setName($projectName)
     {
         if (is_string($projectName) && mb_strlen(trim($projectName), 'utf-8') < 30) {
-            self::$_projectName = trim($projectName);
+            self::$projectName = trim($projectName);
         } else {
             throw new InvalidArgumentException(
                 "projectName must a string, max 30 chars"
@@ -177,7 +177,7 @@ final class Project extends Singleton
      */
     public static function getName()
     {
-        return self::$_projectName;
+        return self::$projectName;
     }
 
 
@@ -191,7 +191,7 @@ final class Project extends Singleton
      */
     public static function setType($projectType)
     {
-        self::$_projectType = $projectType;
+        self::$projectType = $projectType;
     }
 
 
@@ -202,7 +202,7 @@ final class Project extends Singleton
      */
     public static function getType()
     {
-        return self::$_projectType;
+        return self::$projectType;
     }
 
 
@@ -217,11 +217,11 @@ final class Project extends Singleton
     public static function setDev($isDev)
     {
         if (is_bool($isDev)) {
-            self::$_isDev = $isDev;
+            self::$isDev = $isDev;
         } else if (is_int($isDev)) {
-            self::$_isDev = $isDev === 0 ? false : true;
+            self::$isDev = $isDev === 0 ? false : true;
         } else if (is_string($isDev) && strlen($isDev) == 1) {
-            self::$_isDev = strtolower($isDev) == 'y' ? true : false;
+            self::$isDev = strtolower($isDev) == 'y' ? true : false;
         } else {
             throw new InvalidArgumentException("setDev expects a boolean argument");
         }
@@ -235,7 +235,7 @@ final class Project extends Singleton
      */
     public static function isDev()
     {
-        return self::$_isDev;
+        return self::$isDev;
     }
 
 
@@ -246,7 +246,7 @@ final class Project extends Singleton
      */
     public static function getDev()
     {
-        return self::$_isDev;
+        return self::$isDev;
     }
 
 
@@ -260,7 +260,7 @@ final class Project extends Singleton
     public static function setOptions(array $options)
     {
         if (is_array($options)) {
-            self::$_options = $options;
+            self::$options = $options;
         }
     }
 
@@ -270,7 +270,7 @@ final class Project extends Singleton
      */
     public static function getOptions()
     {
-        return self::$_options;
+        return self::$options;
     }
 
 }
