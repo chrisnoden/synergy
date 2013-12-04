@@ -41,6 +41,23 @@ class SecureCookie
 {
 
     /**
+     * @var encryption token
+     */
+    private static $token;
+
+
+    /**
+     * Set an encryption token to improve the security
+     * 
+     * @param string $token
+     */
+    public static function setToken($token)
+    {
+        self::$token = $token;
+    }
+
+
+    /**
      * Store an encrypted cookie
      *
      * @param string $cookieName
@@ -65,7 +82,7 @@ class SecureCookie
 
         setcookie('synsec', $synsec, time()+60*60*24*30, '/', $_SERVER['HTTP_HOST'], $ssl);
 
-        $synsec .= 'synErgy';
+        $synsec .= 'synErgy' . self::$token;
 
         /* Open the cipher */
         $td = mcrypt_module_open('rijndael-256', '', 'ofb', '');
@@ -102,7 +119,7 @@ class SecureCookie
     public static function get($cookieName)
     {
         if (isset($_COOKIE['synsec'])) {
-            $synsec = $_COOKIE['synsec'] . 'synErgy';
+            $synsec = $_COOKIE['synsec'] . 'synErgy' . self::$token;
         } else {
             return null;
         }
