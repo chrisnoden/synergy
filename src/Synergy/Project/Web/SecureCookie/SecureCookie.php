@@ -134,7 +134,7 @@ class SecureCookie
 
         if (isset($_COOKIE[$cookieName])) {
             # Decode our string
-            list ($iv, $cipherText) = explode('|', base64_decode($_COOKIE[$cookieName]));
+            list ($iv, $cipherText) = explode('|', base64_decode($_COOKIE[$cookieName]), 2);
         } else {
             return null;
         }
