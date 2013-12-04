@@ -28,5 +28,5 @@ if (file_exists(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php')) {
     require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php');
 
 
-    \Synergy\Project\Web\SecureCookie\SecureCookie::set('SynergyTest', 'ChrisNoden '.time());
+    \Synergy\Project\Web\SecureCookie\SecureCookie::set('SynergyTest', 'ChrisNoden '.time(), time() + 120);
 }

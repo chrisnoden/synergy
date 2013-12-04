@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by Chris Noden using PhpStorm.
- * 
+ *
  * PHP version 5
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-  *
+ *
  * @category  Class
  * @package   synergy
  * @author    Chris Noden <chris.noden@gmail.com>
@@ -48,7 +48,7 @@ class SecureCookie
 
     /**
      * Set an encryption token to improve the security
-     * 
+     *
      * @param string $token
      */
     public static function setToken($token)
@@ -62,7 +62,7 @@ class SecureCookie
      *
      * @param string $cookieName
      * @param mixed  $cookieValue
-     * @param int    $expiry      default stores just for the browser session
+     * @param int    $expiry default stores just for the browser session
      */
     public static function set($cookieName, $cookieValue, $expiry = 0)
     {
@@ -80,7 +80,7 @@ class SecureCookie
             $ssl = true;
         }
 
-        setcookie('synsec', $synsec, time()+60*60*24*30, '/', $_SERVER['HTTP_HOST'], $ssl);
+        setcookie('synsec', $synsec, time() + 60 * 60 * 24 * 30, '/', $_SERVER['HTTP_HOST'], $ssl, true);
 
         $synsec .= 'synErgy' . self::$token;
 
@@ -102,7 +102,15 @@ class SecureCookie
         $encrypted = mcrypt_generic($td, serialize($cookieValue));
 
         # Store our secure cookie
-        setcookie($cookieName, trim(base64_encode($iv . '|' . $encrypted)), $expiry, '/', $_SERVER['HTTP_HOST'], $ssl);
+        setcookie(
+            $cookieName,
+            trim(base64_encode($iv . '|' . $encrypted)),
+            $expiry,
+            '/',
+            $_SERVER['HTTP_HOST'],
+            $ssl,
+            true
+        );
 
         /* Terminate encryption handler */
         mcrypt_generic_deinit($td);
