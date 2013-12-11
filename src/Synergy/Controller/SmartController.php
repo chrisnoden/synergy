@@ -138,12 +138,33 @@ class SmartController extends Controller
     {
         $testdir = $rootDir . $path;
         if (is_dir($testdir)) {
-            if (substr($testdir, strlen($testdir)-1) != '/') {
-                if (isset($_SERVER['SCRIPT_NAME'])) {
-                    header("Location: ".dirname($_SERVER['SCRIPT_NAME']).$path.'/');
-                } else {
-                    header("Location: ".$path.'/');
-                }
+            if (substr($testdir, strlen($testdir) - 1) != '/') {
+
+                $url = sprintf(
+                    '%s://%s%s',
+                    (
+                        (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ||
+                        (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
+                    )
+                        ? 'https' : 'http',
+                    $_SERVER['HTTP_HOST'],
+                    $_SERVER['REQUEST_URI']
+                );
+
+                $parts = parse_url($url);
+                header(
+                    "Location: " . sprintf(
+                        '%s://%s%s%s%s',
+                        $parts['scheme'],
+                        $parts['host'],
+                        $parts['path'] . '/',
+                        $parts['query'] ? '?'.$parts['query'] : '',
+                        $parts['fragment'] ? '#'.$parts['fragment'] : ''
+                    ),
+                    true,
+                    301
+                );
+
                 exit;
             }
             return $this->matchTemplate($rootDir, $path . 'index.html');
