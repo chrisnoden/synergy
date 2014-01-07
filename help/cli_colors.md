@@ -1,33 +1,33 @@
-    '%y' => array('color' => 'yellow'),
-    '%g' => array('color' => 'green'),
-    '%b' => array('color' => 'blue'),
-    '%r' => array('color' => 'red'),
-    '%p' => array('color' => 'magenta'),
-    '%m' => array('color' => 'magenta'),
-    '%c' => array('color' => 'cyan'),
-    '%w' => array('color' => 'grey'),
-    '%k' => array('color' => 'black'),
-    '%n' => array('color' => 'reset'),
-    '%Y' => array('color' => 'yellow', 'style' => 'bright'),
-    '%G' => array('color' => 'green', 'style' => 'bright'),
-    '%B' => array('color' => 'blue', 'style' => 'bright'),
-    '%R' => array('color' => 'red', 'style' => 'bright'),
-    '%P' => array('color' => 'magenta', 'style' => 'bright'),
-    '%M' => array('color' => 'magenta', 'style' => 'bright'),
-    '%C' => array('color' => 'cyan', 'style' => 'bright'),
-    '%W' => array('color' => 'grey', 'style' => 'bright'),
-    '%K' => array('color' => 'black', 'style' => 'bright'),
-    '%N' => array('color' => 'reset', 'style' => 'bright'),
-    '%3' => array('background' => 'yellow'),
-    '%2' => array('background' => 'green'),
-    '%4' => array('background' => 'blue'),
-    '%1' => array('background' => 'red'),
-    '%5' => array('background' => 'magenta'),
-    '%6' => array('background' => 'cyan'),
-    '%7' => array('background' => 'grey'),
-    '%0' => array('background' => 'black'),
-    '%F' => array('style' => 'blink'),
-    '%U' => array('style' => 'underline'),
-    '%8' => array('style' => 'inverse'),
-    '%9' => array('style' => 'bright'),
-    '%_' => array('style' => 'bright')
+%y : foreground = yellow
+%g : foreground = green
+%b : foreground = blue
+%r : foreground = red
+%p : foreground = magenta
+%m : foreground = magenta
+%c : foreground = cyan
+%w : foreground = grey
+%k : foreground = black
+%n : foreground = reset
+%Y : foreground = yellow, style = bright
+%G : foreground = green, style = bright
+%B : foreground = blue, style = bright
+%R : foreground = red, style = bright
+%P : foreground = magenta, style = bright
+%M : foreground = magenta, style = bright
+%C : foreground = cyan, style = bright
+%W : foreground = grey, style = bright
+%K : foreground = black, style = bright
+%N : foreground = reset, style = bright
+%3 : background = yellow
+%2 : background = green
+%4 : background = blue
+%1 : background = red
+%5 : background = magenta
+%6 : background = cyan
+%7 : background = grey
+%0 : background = black
+%F : style = blink
+%U : style = underline
+%8 : style = inverse
+%9 : style = bright
+%_ : style = bright
