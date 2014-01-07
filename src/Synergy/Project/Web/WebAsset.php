@@ -620,7 +620,7 @@ class WebAsset extends Object
 
 
     /**
-     * Set the value of multiple headers
+     * Set the value of multiple headers replacing any that are already set
      *
      * @param array $aHeaders
      */
@@ -682,14 +682,17 @@ class WebAsset extends Object
                 );
             }
             // Important headers
-            $aHeaders['Last-Modified']  = date('r', filectime($this->filename));
-            $aHeaders['ETag']           = md5(filectime($this->filename));
-            $aHeaders['Content-Length'] = filesize($this->filename);
             if (isset($this->filename) && !isset($this->contents)) {
                 $aHeaders['X-Filename'] = $this->filename;
+                $aHeaders['Last-Modified']  = date('r', filectime($this->filename));
+                $aHeaders['ETag']           = md5(filectime($this->filename));
+                $aHeaders['Content-Length'] = filesize($this->filename);
+            } else {
+                $aHeaders['Last-Modified']  = date('r');
+                $aHeaders['Content-Length'] = strlen($this->contents);
             }
 
-            $this->setHeaders($aHeaders);
+            $this->aHeaders = array_merge($aHeaders, $this->aHeaders);
             $this->sendHeaders();
 
             if (isset($this->filename) && !isset($this->contents)) {
