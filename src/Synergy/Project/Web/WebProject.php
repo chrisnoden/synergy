@@ -182,9 +182,9 @@ final class WebProject extends ProjectAbstract
         try {
             $this->response = $this->controller->callControllerAction();
         } catch (\Exception $ex) {
-            $this->response = WebResponse::create($ex->getMessage(), $ex->getCode() >= 100 ? $ex->getCode() : 500);
+            $this->response = $this->errorResponse($ex->getMessage(), $ex->getCode());
         }
-        
+
         if ($this->deliverResponse === true) {
             // Deal with any response object that was returned
             if ($this->response instanceof WebResponse) {
@@ -206,6 +206,32 @@ final class WebProject extends ProjectAbstract
                 }
             }
         }
+    }
+
+
+    /**
+     * Create an error response
+     *
+     * @param string $content
+     * @param int    $code
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|WebAsset
+     */
+    protected function errorResponse($content, $code = 500)
+    {
+        if (!is_numeric($code) || strlen($code) != 3) {
+            $code = 500;
+        }
+        if (null === json_decode($content)) {
+            $response = WebResponse::create($content, $code);
+        } else {
+            $response = new WebAsset();
+            $response->setExtension('json');
+            $response->setContents($content);
+            $response->setStatus($code);
+        }
+
+        return $response;
     }
 
 
