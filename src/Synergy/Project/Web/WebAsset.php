@@ -645,8 +645,8 @@ class WebAsset extends Object
                 'Invalid status'
             );
         }
-        
-        $statii = array (
+
+        $statii = array(
             100 => "Continue",
             101 => "Switching Protocols",
             200 => "OK",
@@ -690,7 +690,7 @@ class WebAsset extends Object
         );
 
         if (isset($statii[$status])) {
-            $this->status = sprintf("%s %s", $status, $statii[$status])
+            $this->status = sprintf("%s %s", $status, $statii[$status]);
         } else {
             $this->status = $status;
         }
@@ -744,7 +744,7 @@ class WebAsset extends Object
             } else {
                 $aHeaders = array(
                     'Expires'       => date('r', strtotime('+5 min')),
-                    'Cache-Control' => 'private, max-age=300 => " must-revalidate'"
+                    'Cache-Control' => 'private, max-age=300, must-revalidate',
                     'Pragma'        => 'private'
                 );
             }
