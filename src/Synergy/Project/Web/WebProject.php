@@ -180,28 +180,27 @@ final class WebProject extends ProjectAbstract
         $this->controller->setRequest($this->request);
         // Call the action
         try {
-            $response = $this->controller->callControllerAction();
+            $this->response = $this->controller->callControllerAction();
         } catch (\Exception $ex) {
-            $response = WebResponse::create($ex->getMessage(), 400);
+            $this->response = WebResponse::create($ex->getMessage(), $ex->getCode() >= 100 ? $ex->getCode() : 500);
         }
-        $this->response = $response;
-
+        
         if ($this->deliverResponse === true) {
             // Deal with any response object that was returned
-            if ($response instanceof WebResponse) {
-                $this->handleWebResponse($response);
+            if ($this->response instanceof WebResponse) {
+                $this->handleWebResponse($this->response);
             } else {
-                if ($response instanceof TemplateAbstract) {
-                    $this->handleWebTemplate($response);
+                if ($this->response instanceof TemplateAbstract) {
+                    $this->handleWebTemplate($this->response);
                 } else {
-                    if ($response instanceof WebAsset) {
-                        $response->deliver();
+                    if ($this->response instanceof WebAsset) {
+                        $this->response->deliver();
                     } else {
-                        if (is_string($response)) {
-                            $render = WebResponse::create($response);
+                        if (is_string($this->response)) {
+                            $render = WebResponse::create($this->response);
                             $render->send();
                         } else {
-                            $this->handleNotFoundException($response);
+                            $this->handleNotFoundException($this->response);
                         }
                     }
                 }
