@@ -34,6 +34,7 @@ use Synergy\Exception\ProjectException;
 use Synergy\Logger\Logger;
 use Synergy\Project;
 use Synergy\Project\ProjectAbstract;
+use Synergy\Tools\Tools;
 use Synergy\View\HtmlTemplate;
 use Synergy\View\TemplateAbstract;
 
@@ -70,6 +71,10 @@ final class WebProject extends ProjectAbstract
      * @var string
      */
     protected $absoluteStubUrl = '';
+    /**
+     * @var int seconds before a cache file is considered stale
+     */
+    protected $cache_expire = 900;
 
 
     /**
@@ -146,6 +151,10 @@ final class WebProject extends ProjectAbstract
      */
     protected function launch()
     {
+        if (!$this->isDev && $this->getCacheFile()) {
+            return;
+        }
+
         $this->loadBootstrap();
         $this->setAbsoluteStubUrl();
 
@@ -206,6 +215,71 @@ final class WebProject extends ProjectAbstract
                 }
             }
         }
+    }
+
+
+    protected function writeCacheFile($content)
+    {
+        $dir = $this->temp_dir . DIRECTORY_SEPARATOR . 'synergy';
+        if (!is_dir($dir)) {
+            Tools::mkdir($dir);
+        }
+        $file = $dir . DIRECTORY_SEPARATOR . md5($this->request->getUri()) . '.syn';
+
+        if (!$this->isDev && $this->useGzip()) {
+            Logger::info('Compressing response');
+
+            $zp = gzopen($file . '.gz', 'w9');
+            gzwrite($zp, $content);
+            gzclose($zp);
+        } else {
+            $fh = fopen($file, 'w');
+            fputs($fh, $content, strlen($content));
+            @fclose($fh);
+        }
+    }
+
+
+    /**
+     * Does the client support gzip compression
+     *
+     * @return bool
+     */
+    protected function useGzip()
+    {
+        if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+            $arr = explode(',', $_SERVER['HTTP_ACCEPT_ENCODING']);
+            if (in_array('gzip', $arr)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Is there a valid cache file we can use
+     *
+     * @return bool
+     */
+    protected function getCacheFile()
+    {
+        $dir = $this->temp_dir . DIRECTORY_SEPARATOR . 'synergy';
+        $file = $dir . DIRECTORY_SEPARATOR . md5($this->request->getUri()) . '.syn';
+        if ($this->useGzip() && file_exists($file.'.gz') && (date('U') - filemtime($file.'.gz') < $this->cache_expire)) {
+            header('Content-Encoding: gzip');
+            header('X-Synergy-Cache: '.basename($file.'.gz'));
+            readfile($file.'.gz');
+            return true;
+        } elseif (file_exists($file) && (date('U') - filemtime($file) < $this->cache_expire)) {
+            header('X-Synergy-Cache: '.basename($file));
+            header('X-Synergy-Cached: '.date('Y/m/d H:i:s', filemtime($file)));
+            readfile($file);
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -276,8 +350,11 @@ final class WebProject extends ProjectAbstract
      */
     protected function handleWebResponse(WebResponse $response)
     {
+        $content = $response->prepare($this->request)->getContent();
+        if (!$this->isDev) {
+            $this->writeCacheFile($content);
+        }
         $response
-            ->prepare($this->request)
             ->send();
     }
 
