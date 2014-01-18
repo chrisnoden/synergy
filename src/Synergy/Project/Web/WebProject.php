@@ -218,6 +218,11 @@ final class WebProject extends ProjectAbstract
     }
 
 
+    /**
+     * Save a cached file of the output
+     *
+     * @param $content
+     */
     protected function writeCacheFile($content)
     {
         $dir = $this->temp_dir . DIRECTORY_SEPARATOR . 'synergy';
@@ -226,16 +231,21 @@ final class WebProject extends ProjectAbstract
         }
         $file = $dir . DIRECTORY_SEPARATOR . md5($this->request->getUri()) . '.syn';
 
+        $fh = fopen($file, 'w');
+        fputs($fh, $content, strlen($content));
+        @fclose($fh);
+
         if (!$this->isDev && $this->useGzip()) {
             Logger::info('Compressing response');
 
             $zp = gzopen($file . '.gz', 'w9');
             gzwrite($zp, $content);
             gzclose($zp);
-        } else {
-            $fh = fopen($file, 'w');
-            fputs($fh, $content, strlen($content));
-            @fclose($fh);
+
+            // remove gzip file if it's bigger than the unzipped file
+            if (filesize($file . '.gz') > filesize($file)) {
+                unlink($file.'.gz');
+            }
         }
     }
 
