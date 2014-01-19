@@ -72,5 +72,5 @@ set_error_handler('Synergy\ExceptionHandler::ErrorHandler');
 register_shutdown_function('Synergy\ExceptionHandler::ShutdownHandler');
 
 $project = new \Synergy\Project\Web\WebProject();
-$project->setDev(true);
+//$project->setDev(true);
 $project->run();

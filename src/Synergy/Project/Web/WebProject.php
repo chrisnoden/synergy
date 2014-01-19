@@ -151,7 +151,7 @@ final class WebProject extends ProjectAbstract
      */
     protected function launch()
     {
-        if (!$this->isDev && $this->getCacheFile()) {
+        if ($this->deliverResponse && !$this->isDev && $this->getCacheFile() && $this->request->getMethod() == 'GET') {
             return;
         }
 
@@ -278,13 +278,17 @@ final class WebProject extends ProjectAbstract
         $dir = $this->temp_dir . DIRECTORY_SEPARATOR . 'synergy';
         $file = $dir . DIRECTORY_SEPARATOR . md5($this->request->getUri()) . '.syn';
         if ($this->useGzip() && file_exists($file.'.gz') && (date('U') - filemtime($file.'.gz') < $this->cache_expire)) {
-            header('Content-Encoding: gzip');
-            header('X-Synergy-Cache: '.basename($file.'.gz'));
+            if (!headers_sent()) {
+                header('Content-Encoding: gzip');
+                header('X-Synergy-Cache: '.basename($file.'.gz'));
+            }
             readfile($file.'.gz');
             return true;
         } elseif (file_exists($file) && (date('U') - filemtime($file) < $this->cache_expire)) {
-            header('X-Synergy-Cache: '.basename($file));
-            header('X-Synergy-Cached: '.date('Y/m/d H:i:s', filemtime($file)));
+            if (!headers_sent()) {
+                header('X-Synergy-Cache: '.basename($file));
+                header('X-Synergy-Cached: '.date('Y/m/d H:i:s', filemtime($file)));
+            }
             readfile($file);
             return true;
         }
@@ -361,7 +365,7 @@ final class WebProject extends ProjectAbstract
     protected function handleWebResponse(WebResponse $response)
     {
         $content = $response->prepare($this->request)->getContent();
-        if (!$this->isDev) {
+        if (!$this->isDev && $this->request->getMethod() == 'GET') {
             $this->writeCacheFile($content);
         }
         $response
@@ -646,7 +650,7 @@ final class WebProject extends ProjectAbstract
 
 
     /**
-     * Set the value of deliverResponse member
+     * shall we automatically deliver the response to the browser
      *
      * @param boolean $deliverResponse
      *

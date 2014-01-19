@@ -94,11 +94,36 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
     }
 
 
+    public function testSynergyCache()
+    {
+        $request = WebRequest::create(
+            SYNERGY_WEBTEST_BASEURL.'/smarty',
+            'GET'
+        );
+        $request->overrideGlobals();
+        $this->hasOutput();
+        $obj = new WebProject($request);
+        $tempDir = SYNERGY_TEST_FILES_DIR . DIRECTORY_SEPARATOR . 'testcache';
+        $cacheDir = $tempDir.DIRECTORY_SEPARATOR.'synergy';
+        $obj->setTempDir($tempDir);
+        if (is_dir($cacheDir)) {
+            rmdir($cacheDir);
+        }
+        $obj->setDeliverResponse(false);
+        $obj->run();
+
+        $cacheFile = $cacheDir . DIRECTORY_SEPARATOR . md5($request->getUri()) . '.syn';
+        if (!file_exists($cacheFile) && !file_exists($cacheFile.'.gz')) {
+            $this->fail('Failed to detect synergy cache file: '.$cacheFile);
+        }
+    }
+
+
     public function testInternalSynergyRoute()
     {
         // This GET request should fail
         $request = WebRequest::create(
-            '/_synergy_/css/bootstrap.min.css',
+            SYNERGY_WEBTEST_BASEURL.'/_synergy_/css/bootstrap.min.css',
             'GET'
         );
         $request->overrideGlobals();
