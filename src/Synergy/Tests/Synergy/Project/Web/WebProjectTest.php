@@ -70,6 +70,7 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
         $request = WebRequest::create('/');
         $obj = new WebProject($request);
         $this->hasOutput();
+        $obj->setDeliverResponse(false);
         $obj->run();
         $this->assertEquals(
             'Synergy\Controller\DefaultController',
@@ -109,7 +110,6 @@ class WebProjectTest extends \PHPUnit_Framework_TestCase
         if (is_dir($cacheDir)) {
             rmdir($cacheDir);
         }
-        $obj->setDeliverResponse(false);
         $obj->run();
 
         $cacheFile = $cacheDir . DIRECTORY_SEPARATOR . md5($request->getUri()) . '.syn';

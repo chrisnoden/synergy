@@ -201,7 +201,7 @@ abstract class ProjectAbstract extends Object
         }
 
         if (!isset($this->configFilename) && !$this->searchConfigFile()) {
-            Logger::alert('No config file found - this may cause problems');
+            Logger::notice('No config file found - this may cause problems');
         }
 
         if (!isset($this->temp_dir) && $this->getOption('synergy:temp_dir')) {

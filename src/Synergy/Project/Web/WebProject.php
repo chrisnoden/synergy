@@ -86,7 +86,6 @@ final class WebProject extends ProjectAbstract
     {
         // turn off automatic session starting (if enabled)
         ini_set('session.auto_start', '0');
-        // @todo check this actually stops the session before it's been created
 
         if (is_null($request)) {
             $request = WebRequest::createFromGlobals();
