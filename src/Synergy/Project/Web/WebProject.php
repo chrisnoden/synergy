@@ -197,21 +197,15 @@ final class WebProject extends ProjectAbstract
             // Deal with any response object that was returned
             if ($this->response instanceof WebResponse) {
                 $this->handleWebResponse($this->response);
+            } elseif ($this->response instanceof TemplateAbstract) {
+                $this->handleWebTemplate($this->response);
+            } elseif ($this->response instanceof WebAsset) {
+                $this->response->deliver();
+            } elseif (is_string($this->response)) {
+                $render = WebResponse::create($this->response);
+                $render->send();
             } else {
-                if ($this->response instanceof TemplateAbstract) {
-                    $this->handleWebTemplate($this->response);
-                } else {
-                    if ($this->response instanceof WebAsset) {
-                        $this->response->deliver();
-                    } else {
-                        if (is_string($this->response)) {
-                            $render = WebResponse::create($this->response);
-                            $render->send();
-                        } else {
-                            $this->handleNotFoundException($this->response);
-                        }
-                    }
-                }
+                $this->handleNotFoundException($this->response);
             }
         }
     }
@@ -225,6 +219,7 @@ final class WebProject extends ProjectAbstract
     protected function writeCacheFile($content)
     {
         $dir = $this->temp_dir . DIRECTORY_SEPARATOR . 'synergy';
+        Logger::debug('Synergy cache dir: '.$dir);
         if (!is_dir($dir)) {
             Tools::mkdir($dir);
         }

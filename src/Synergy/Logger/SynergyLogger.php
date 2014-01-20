@@ -41,7 +41,7 @@ class SynergyLogger extends LoggerAbstract implements LoggerInterface
     /**
      * @var array
      */
-    private $_aLoggers = array();
+    private $aLoggers = array();
 
 
     /**
@@ -51,7 +51,7 @@ class SynergyLogger extends LoggerAbstract implements LoggerInterface
      */
     public function getLoggers()
     {
-        return $this->_aLoggers;
+        return $this->aLoggers;
     }
 
 
@@ -62,7 +62,7 @@ class SynergyLogger extends LoggerAbstract implements LoggerInterface
      */
     public function addFileLogger($filename)
     {
-        $this->_aLoggers[] = new FileLogger($filename);
+        $this->aLoggers[] = new FileLogger($filename);
     }
 
 
@@ -71,7 +71,7 @@ class SynergyLogger extends LoggerAbstract implements LoggerInterface
      */
     public function addCliLogger()
     {
-        $this->_aLoggers[] = new CliLogger();
+        $this->aLoggers[] = new CliLogger();
     }
 
 
@@ -89,7 +89,7 @@ class SynergyLogger extends LoggerAbstract implements LoggerInterface
         /**
          * @var LoggerAbstract $logger
          */
-        foreach ($this->_aLoggers AS $logger)
+        foreach ($this->aLoggers AS $logger)
         {
             $logger->log($level, $message, $context);
         }
@@ -105,7 +105,7 @@ class SynergyLogger extends LoggerAbstract implements LoggerInterface
      */
     public function setSilentConsole($silentConsole)
     {
-        foreach ($this->_aLoggers AS $logger) {
+        foreach ($this->aLoggers AS $logger) {
             if ($logger instanceof CliLogger) {
                 if ($silentConsole === true) {
                     $logger->setSilentConsole(true);
