@@ -247,13 +247,7 @@ class WebRequest extends Request
                     sprintf("Directory %s not readable", $dir)
                 );
             } else {
-                if (!is_writable($dir)) {
-                    throw new InvalidArgumentException(
-                        sprintf("Directory %s not writable", $dir)
-                    );
-                } else {
-                    $this->templateDir = $dir;
-                }
+                $this->templateDir = $dir;
             }
         }
     }

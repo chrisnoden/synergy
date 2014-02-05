@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2558356f1d3e20206e2086de073bddef",
+    "hash": "8fc00533e3381e4405d84fe3883eca3b",
     "packages": [
         {
             "name": "eloquent/enumeration",
@@ -146,12 +146,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "c435380fbd9d49055c16375db5d767f089a95045"
+                "reference": "d7431c4327912d2cee2ef10619ede0583a88ad50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/c435380fbd9d49055c16375db5d767f089a95045",
-                "reference": "c435380fbd9d49055c16375db5d767f089a95045",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/d7431c4327912d2cee2ef10619ede0583a88ad50",
+                "reference": "d7431c4327912d2cee2ef10619ede0583a88ad50",
                 "shasum": ""
             },
             "require": {
@@ -184,7 +184,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2013-09-19 09:36:05"
+            "time": "2013-11-25 08:44:14"
         },
         {
             "name": "symfony/http-foundation",
@@ -193,12 +193,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "021ca4ad8a95a56f7824f1dcba48d1b50a3da910"
+                "reference": "649001b7543431a5452a57b11e568c4bafb7f6ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/021ca4ad8a95a56f7824f1dcba48d1b50a3da910",
-                "reference": "021ca4ad8a95a56f7824f1dcba48d1b50a3da910",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/649001b7543431a5452a57b11e568c4bafb7f6ba",
+                "reference": "649001b7543431a5452a57b11e568c4bafb7f6ba",
                 "shasum": ""
             },
             "require": {
@@ -234,7 +234,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-11-13 08:30:53"
+            "time": "2013-11-27 09:30:56"
         },
         {
             "name": "symfony/routing",
@@ -301,12 +301,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "a3e81e895bde9964f0956e747badf2890aed5c05"
+                "reference": "4f3569bb23953116281fb3a642c4266ce84a2f44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/a3e81e895bde9964f0956e747badf2890aed5c05",
-                "reference": "a3e81e895bde9964f0956e747badf2890aed5c05",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/4f3569bb23953116281fb3a642c4266ce84a2f44",
+                "reference": "4f3569bb23953116281fb3a642c4266ce84a2f44",
                 "shasum": ""
             },
             "require": {
@@ -339,7 +339,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-10-10 22:23:27"
+            "time": "2013-11-25 10:21:43"
         }
     ],
     "packages-dev": [
@@ -459,12 +459,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "db6b1d616184251888941c06f9ef683383a6b47f"
+                "reference": "d6943b36f45a9ee654e87cd98832890797a228fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/db6b1d616184251888941c06f9ef683383a6b47f",
-                "reference": "db6b1d616184251888941c06f9ef683383a6b47f",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/d6943b36f45a9ee654e87cd98832890797a228fb",
+                "reference": "d6943b36f45a9ee654e87cd98832890797a228fb",
                 "shasum": ""
             },
             "require": {
@@ -503,7 +503,7 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2013-11-01 20:50:59"
+            "time": "2014-01-22 07:57:47"
         },
         {
             "name": "phing/phing",
@@ -624,11 +624,11 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.15",
+            "version": "v3.1.16",
             "source": {
                 "type": "svn",
                 "url": "http://smarty-php.googlecode.com/svn",
-                "reference": "/tags/v3.1.15/@4782"
+                "reference": "/tags/v3.1.16/@4802"
             },
             "require": {
                 "php": ">=5.2"
@@ -664,7 +664,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-10-01 21:08:54"
+            "time": "2013-12-17 16:56:58"
         },
         {
             "name": "twig/twig",
@@ -728,7 +728,7 @@
         "jlogsdon/cli": 20
     },
     "platform": {
-        "php": ">=5.3.21",
+        "php": ">=5.4.13",
         "ext-reflection": "*",
         "ext-curl": "*",
         "ext-spl": "*",
