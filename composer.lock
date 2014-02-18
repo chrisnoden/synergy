@@ -3,20 +3,20 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "8fc00533e3381e4405d84fe3883eca3b",
+    "hash": "3fab7b54c46a1a0aec5c983a4ceb500d",
     "packages": [
         {
             "name": "eloquent/enumeration",
-            "version": "dev-master",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/eloquent/enumeration.git",
-                "reference": "f5a1d326221dfef3694fe960ed4bdca96ae5c900"
+                "reference": "01f345694623081da288b108881d97960dcd898a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eloquent/enumeration/zipball/f5a1d326221dfef3694fe960ed4bdca96ae5c900",
-                "reference": "f5a1d326221dfef3694fe960ed4bdca96ae5c900",
+                "url": "https://api.github.com/repos/eloquent/enumeration/zipball/01f345694623081da288b108881d97960dcd898a",
+                "reference": "01f345694623081da288b108881d97960dcd898a",
                 "shasum": ""
             },
             "require": {
@@ -27,8 +27,8 @@
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Eloquent\\Enumeration": "src"
+                "psr-4": {
+                    "Eloquent\\Enumeration\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -52,7 +52,7 @@
                 "set",
                 "type"
             ],
-            "time": "2013-11-11 02:48:55"
+            "time": "2014-01-29 09:28:17"
         },
         {
             "name": "mustangostang/spyc",
@@ -459,12 +459,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "d6943b36f45a9ee654e87cd98832890797a228fb"
+                "reference": "9ce42e3ce2fe0832ca9e3bc8a84367c016e0f89e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/d6943b36f45a9ee654e87cd98832890797a228fb",
-                "reference": "d6943b36f45a9ee654e87cd98832890797a228fb",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/9ce42e3ce2fe0832ca9e3bc8a84367c016e0f89e",
+                "reference": "9ce42e3ce2fe0832ca9e3bc8a84367c016e0f89e",
                 "shasum": ""
             },
             "require": {
@@ -490,7 +490,7 @@
                 {
                     "name": "Serban Ghita",
                     "email": "serbanghita@gmail.com",
-                    "homepage": "http://mobiledetect.net",
+                    "homepage": "http://ghita.org",
                     "role": "Developer"
                 }
             ],
@@ -503,20 +503,20 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2014-01-22 07:57:47"
+            "time": "2014-02-05 18:09:26"
         },
         {
             "name": "phing/phing",
-            "version": "2.6.1",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "3f7d71bf561bafea39087250f777b349438cc32e"
+                "reference": "bd2689790c620ac745b3ad29765c641a0dd5d007"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/3f7d71bf561bafea39087250f777b349438cc32e",
-                "reference": "3f7d71bf561bafea39087250f777b349438cc32e",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/bd2689790c620ac745b3ad29765c641a0dd5d007",
+                "reference": "bd2689790c620ac745b3ad29765c641a0dd5d007",
                 "shasum": ""
             },
             "require": {
@@ -555,7 +555,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2013-08-26 21:13:03"
+            "time": "2014-02-13 13:17:59"
         },
         {
             "name": "propel/propel1",
@@ -721,7 +721,6 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "eloquent/enumeration": 20,
         "chrisnoden/talkback": 20,
         "mobiledetect/mobiledetectlib": 20,
         "propel/propel1": 20,
