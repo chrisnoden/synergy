@@ -97,6 +97,7 @@ class MySqlSessionHandler extends SessionHandlerAbstract implements \SessionHand
         $this->pdo->query($sql);
     }
 
+
     /**
      * The open callback works like a constructor in classes and is executed when the session is being opened.
      * It is the first callback function executed when the session is started automatically or
@@ -196,7 +197,7 @@ class MySqlSessionHandler extends SessionHandlerAbstract implements \SessionHand
                 return true;
             } else {
                 // The session does not exists create a new one, ...
-                $insert = sprintf("INSERT INTO `%s` (`id`, `last_updated`, `created`, `data`) VALUES (:id, :time, :time, :data)", $this->table_name);
+                $insert = sprintf("INSERT IGNORE INTO `%s` (`id`, `last_updated`, `created`, `data`) VALUES (:id, :time, :time, :data)", $this->table_name);
 
                 // ... prepare the statement, ...
                 $insertStmt = $this->pdo->prepare($insert);
