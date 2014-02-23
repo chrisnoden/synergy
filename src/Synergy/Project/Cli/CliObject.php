@@ -176,9 +176,10 @@ class CliObject extends Object
                         $pid
                     );
                     if ($daemonize) {
-                        exit;
+//                        exit;
+                    } else {
+                        $this->pid[] = $pid;
                     }
-                    $this->pid[] = $pid;
                     return;
                 }
         }
