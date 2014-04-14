@@ -3,20 +3,20 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3fab7b54c46a1a0aec5c983a4ceb500d",
+    "hash": "14e1c7f25e4d9011bc45c1bd3b13efeb",
     "packages": [
         {
             "name": "eloquent/enumeration",
-            "version": "5.0.1",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/eloquent/enumeration.git",
-                "reference": "01f345694623081da288b108881d97960dcd898a"
+                "reference": "9c50109cf25b2008b9b8233b814e50e0cdf8b737"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eloquent/enumeration/zipball/01f345694623081da288b108881d97960dcd898a",
-                "reference": "01f345694623081da288b108881d97960dcd898a",
+                "url": "https://api.github.com/repos/eloquent/enumeration/zipball/9c50109cf25b2008b9b8233b814e50e0cdf8b737",
+                "reference": "9c50109cf25b2008b9b8233b814e50e0cdf8b737",
                 "shasum": ""
             },
             "require": {
@@ -52,7 +52,7 @@
                 "set",
                 "type"
             ],
-            "time": "2014-01-29 09:28:17"
+            "time": "2014-03-13 01:16:59"
         },
         {
             "name": "mustangostang/spyc",
@@ -459,12 +459,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "9ce42e3ce2fe0832ca9e3bc8a84367c016e0f89e"
+                "reference": "d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/9ce42e3ce2fe0832ca9e3bc8a84367c016e0f89e",
-                "reference": "9ce42e3ce2fe0832ca9e3bc8a84367c016e0f89e",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e",
+                "reference": "d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e",
                 "shasum": ""
             },
             "require": {
@@ -490,7 +490,7 @@
                 {
                     "name": "Serban Ghita",
                     "email": "serbanghita@gmail.com",
-                    "homepage": "http://ghita.org",
+                    "homepage": "http://mobiledetect.net",
                     "role": "Developer"
                 }
             ],
@@ -503,7 +503,7 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2014-02-05 18:09:26"
+            "time": "2014-03-17 13:02:05"
         },
         {
             "name": "phing/phing",
@@ -624,11 +624,11 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.16",
+            "version": "v3.1.17",
             "source": {
                 "type": "svn",
                 "url": "http://smarty-php.googlecode.com/svn",
-                "reference": "/tags/v3.1.16/@4802"
+                "reference": "/tags/v3.1.17/@4818"
             },
             "require": {
                 "php": ">=5.2"
@@ -664,7 +664,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-12-17 16:56:58"
+            "time": "2014-03-12 20:51:46"
         },
         {
             "name": "twig/twig",
