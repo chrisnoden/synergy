@@ -35,7 +35,7 @@
         "symfony/routing": "2.2.*",
         "symfony/config": "2.2.*",
         "symfony/yaml": "2.2.*",
-        "eloquent/enumeration": "5.*"
+        "eloquent/enumeration": ">=5.0.0"
     },
     "require-dev": {
         "chrisnoden/talkback": "dev-master",
