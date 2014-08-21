@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "b3fe318af6b27737b2ed58b8bf8d474c",
+    "hash": "d44de0936023860a3720aea7cc6f86a7",
     "packages": [
         {
             "name": "eloquent/enumeration",
@@ -141,26 +142,27 @@
         },
         {
             "name": "symfony/config",
-            "version": "2.2.x-dev",
+            "version": "2.4.x-dev",
             "target-dir": "Symfony/Component/Config",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "d7431c4327912d2cee2ef10619ede0583a88ad50"
+                "reference": "da86b54e8d1b2124b0ebc3c3f1a48a6df308b735"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/d7431c4327912d2cee2ef10619ede0583a88ad50",
-                "reference": "d7431c4327912d2cee2ef10619ede0583a88ad50",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/da86b54e8d1b2124b0ebc3c3f1a48a6df308b735",
+                "reference": "da86b54e8d1b2124b0ebc3c3f1a48a6df308b735",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.3",
+                "symfony/filesystem": "~2.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -174,31 +176,31 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
                     "name": "Symfony Community",
                     "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
                 }
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2013-11-25 08:44:14"
+            "time": "2014-08-04 10:16:36"
         },
         {
-            "name": "symfony/http-foundation",
-            "version": "2.2.x-dev",
-            "target-dir": "Symfony/Component/HttpFoundation",
+            "name": "symfony/filesystem",
+            "version": "dev-master",
+            "target-dir": "Symfony/Component/Filesystem",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "649001b7543431a5452a57b11e568c4bafb7f6ba"
+                "url": "https://github.com/symfony/Filesystem.git",
+                "reference": "0eb05b75932460ef615b926caac9f6086cc022f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/649001b7543431a5452a57b11e568c4bafb7f6ba",
-                "reference": "649001b7543431a5452a57b11e568c4bafb7f6ba",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/0eb05b75932460ef615b926caac9f6086cc022f5",
+                "reference": "0eb05b75932460ef615b926caac9f6086cc022f5",
                 "shasum": ""
             },
             "require": {
@@ -207,7 +209,59 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Filesystem\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Filesystem Component",
+            "homepage": "http://symfony.com",
+            "time": "2014-07-09 14:44:54"
+        },
+        {
+            "name": "symfony/http-foundation",
+            "version": "2.4.x-dev",
+            "target-dir": "Symfony/Component/HttpFoundation",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/HttpFoundation.git",
+                "reference": "a25a309e046871c0bb092124160d86e2adfd6262"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/a25a309e046871c0bb092124160d86e2adfd6262",
+                "reference": "a25a309e046871c0bb092124160d86e2adfd6262",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/expression-language": "~2.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -224,51 +278,53 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
                     "name": "Symfony Community",
                     "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
                 }
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-11-27 09:30:56"
+            "time": "2014-08-18 09:01:24"
         },
         {
             "name": "symfony/routing",
-            "version": "2.2.x-dev",
+            "version": "2.4.x-dev",
             "target-dir": "Symfony/Component/Routing",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "8d9821794f7192d43b76737edb94a817949a5579"
+                "reference": "2ed8f5629a74f65c84a2399bb7ec43847ffcd78a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/8d9821794f7192d43b76737edb94a817949a5579",
-                "reference": "8d9821794f7192d43b76737edb94a817949a5579",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/2ed8f5629a74f65c84a2399bb7ec43847ffcd78a",
+                "reference": "2ed8f5629a74f65c84a2399bb7ec43847ffcd78a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "doctrine/common": "~2.2",
+                "doctrine/annotations": "~1.0",
                 "psr/log": "~1.0",
-                "symfony/config": ">=2.2,<2.3-dev",
+                "symfony/config": "~2.2",
+                "symfony/expression-language": "~2.4",
                 "symfony/yaml": "~2.0"
             },
             "suggest": {
-                "doctrine/common": "~2.2",
-                "symfony/config": "2.2.*",
-                "symfony/yaml": "2.2.*"
+                "doctrine/annotations": "For using the annotation loader",
+                "symfony/config": "For using the all-in-one router or any loader",
+                "symfony/expression-language": "For using expression matching",
+                "symfony/yaml": "For using the YAML loader"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -282,31 +338,37 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
                     "name": "Symfony Community",
                     "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
                 }
             ],
             "description": "Symfony Routing Component",
             "homepage": "http://symfony.com",
-            "time": "2013-09-26 19:07:06"
+            "keywords": [
+                "router",
+                "routing",
+                "uri",
+                "url"
+            ],
+            "time": "2014-07-28 13:13:16"
         },
         {
             "name": "symfony/yaml",
-            "version": "2.2.x-dev",
+            "version": "2.4.x-dev",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "4f3569bb23953116281fb3a642c4266ce84a2f44"
+                "reference": "63b0d36a4752089b8ad5dab0a17f7cec9ff15e79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/4f3569bb23953116281fb3a642c4266ce84a2f44",
-                "reference": "4f3569bb23953116281fb3a642c4266ce84a2f44",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/63b0d36a4752089b8ad5dab0a17f7cec9ff15e79",
+                "reference": "63b0d36a4752089b8ad5dab0a17f7cec9ff15e79",
                 "shasum": ""
             },
             "require": {
@@ -315,7 +377,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -329,17 +391,17 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
                     "name": "Symfony Community",
                     "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
                 }
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-11-25 10:21:43"
+            "time": "2014-08-04 10:16:36"
         }
     ],
     "packages-dev": [
@@ -459,12 +521,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/serbanghita/Mobile-Detect.git",
-                "reference": "d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e"
+                "reference": "656247c42a2d4ddf1746f134ea816337aaa89523"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e",
-                "reference": "d70de7bfd0641d4d32a6f9c71e1f5d2839a5331e",
+                "url": "https://api.github.com/repos/serbanghita/Mobile-Detect/zipball/656247c42a2d4ddf1746f134ea816337aaa89523",
+                "reference": "656247c42a2d4ddf1746f134ea816337aaa89523",
                 "shasum": ""
             },
             "require": {
@@ -503,24 +565,41 @@
                 "mobile detector",
                 "php mobile detect"
             ],
-            "time": "2014-03-17 13:02:05"
+            "time": "2014-08-20 16:14:47"
         },
         {
             "name": "phing/phing",
-            "version": "2.7.0",
+            "version": "2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "bd2689790c620ac745b3ad29765c641a0dd5d007"
+                "reference": "345e8716122cf6c6b59c4894701d8b736f27fca9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/bd2689790c620ac745b3ad29765c641a0dd5d007",
-                "reference": "bd2689790c620ac745b3ad29765c641a0dd5d007",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/345e8716122cf6c6b59c4894701d8b736f27fca9",
+                "reference": "345e8716122cf6c6b59c4894701d8b736f27fca9",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.0"
+            },
+            "require-dev": {
+                "phpdocumentor/phpdocumentor": "2.x",
+                "phpunit/phpunit": ">=3.7"
+            },
+            "suggest": {
+                "pdepend/pdepend": "PHP version of JDepend",
+                "pear/archive_tar": "Tar file management class",
+                "pear/versioncontrol_git": "A library that provides OO interface to handle Git repository",
+                "pear/versioncontrol_svn": "A simple OO-style interface for Subversion, the free/open-source version control system",
+                "phpdocumentor/phpdocumentor": "Documentation Generator for PHP",
+                "phploc/phploc": "A tool for quickly measuring the size of a PHP project",
+                "phpmd/phpmd": "PHP version of PMD tool",
+                "phpunit/php-code-coverage": "Library that provides collection, processing, and rendering functionality for PHP code coverage information",
+                "phpunit/phpunit": "The PHP Unit Testing Framework",
+                "sebastian/phpcpd": "Copy/Paste Detector (CPD) for PHP code",
+                "tedivm/jshrink": "Javascript Minifier built in PHP"
             },
             "bin": [
                 "bin/phing"
@@ -536,12 +615,13 @@
                 "classes"
             ],
             "license": [
-                "LGPL3"
+                "LGPL-3.0"
             ],
             "authors": [
                 {
                     "name": "Michiel Rook",
-                    "email": "mrook@php.net"
+                    "email": "mrook@php.net",
+                    "role": "Lead"
                 },
                 {
                     "name": "Phing Community",
@@ -552,10 +632,11 @@
             "homepage": "http://www.phing.info/",
             "keywords": [
                 "build",
+                "phing",
                 "task",
                 "tool"
             ],
-            "time": "2014-02-13 13:17:59"
+            "time": "2014-07-18 10:23:54"
         },
         {
             "name": "propel/propel1",
@@ -624,11 +705,11 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.17",
+            "version": "v3.1.19",
             "source": {
                 "type": "svn",
                 "url": "http://smarty-php.googlecode.com/svn",
-                "reference": "/tags/v3.1.17/@4818"
+                "reference": "/tags/v3.1.19/@4867"
             },
             "require": {
                 "php": ">=5.2"
@@ -664,7 +745,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-03-12 20:51:46"
+            "time": "2014-08-07 20:42:11"
         },
         {
             "name": "twig/twig",
@@ -716,9 +797,7 @@
             "time": "2013-08-03 15:35:31"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
         "chrisnoden/talkback": 20,
@@ -726,6 +805,7 @@
         "propel/propel1": 20,
         "jlogsdon/cli": 20
     },
+    "prefer-stable": false,
     "platform": {
         "php": ">=5.4.13",
         "ext-reflection": "*",
@@ -736,7 +816,5 @@
         "ext-pcre": "*",
         "ext-posix": "*"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }

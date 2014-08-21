@@ -31,10 +31,10 @@
         "ext-posix": "*",
         "psr/log": "1.0.0",
         "mustangostang/spyc": "0.5.1",
-        "symfony/http-foundation": "2.2.*",
-        "symfony/routing": "2.2.*",
-        "symfony/config": "2.2.*",
-        "symfony/yaml": "2.2.*",
+        "symfony/http-foundation": "2.4.*",
+        "symfony/routing": "2.4.*",
+        "symfony/config": "2.4.*",
+        "symfony/yaml": "2.4.*",
         "eloquent/enumeration": ">=5.0.0"
     },
     "require-dev": {
