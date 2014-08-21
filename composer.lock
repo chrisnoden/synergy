@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d44de0936023860a3720aea7cc6f86a7",
+    "hash": "5a82e6e96004a4c121e5b22c639494d0",
     "packages": [
         {
             "name": "eloquent/enumeration",
@@ -402,6 +402,56 @@
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
             "time": "2014-08-04 10:16:36"
+        },
+        {
+            "name": "wp-cli/php-cli-tools",
+            "version": "v0.9.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wp-cli/php-cli-tools.git",
+                "reference": "89461455b360693da07355460a2597baa0108c1d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wp-cli/php-cli-tools/zipball/89461455b360693da07355460a2597baa0108c1d",
+                "reference": "89461455b360693da07355460a2597baa0108c1d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "cli": "lib/"
+                },
+                "files": [
+                    "lib/cli/cli.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Logsdon",
+                    "email": "jlogsdon@php.net",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Daniel Bachhuber",
+                    "email": "daniel@handbuilt.co",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Console utilities for PHP",
+            "homepage": "http://github.com/wp-cli/php-cli-tools",
+            "keywords": [
+                "cli",
+                "console"
+            ],
+            "time": "2014-06-29 20:40:27"
         }
     ],
     "packages-dev": [
@@ -467,53 +517,6 @@
                 "psr-3"
             ],
             "time": "2013-10-08 12:36:13"
-        },
-        {
-            "name": "jlogsdon/cli",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/chrisnoden/php-cli-tools.git",
-                "reference": "99fae1b9e3ea19adf07b71ccdd9f342f893b1532"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/chrisnoden/php-cli-tools/zipball/99fae1b9e3ea19adf07b71ccdd9f342f893b1532",
-                "reference": "99fae1b9e3ea19adf07b71ccdd9f342f893b1532",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">= 5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "cli": "lib/"
-                },
-                "files": [
-                    "lib/cli/cli.php"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "James Logsdon",
-                    "email": "jlogsdon@php.net",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Console utilities for PHP",
-            "homepage": "http://github.com/jlogsdon/php-cli-tools",
-            "keywords": [
-                "cli",
-                "console"
-            ],
-            "support": {
-                "source": "https://github.com/chrisnoden/php-cli-tools/tree/master"
-            },
-            "time": "2013-08-21 14:14:18"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -802,8 +805,7 @@
     "stability-flags": {
         "chrisnoden/talkback": 20,
         "mobiledetect/mobiledetectlib": 20,
-        "propel/propel1": 20,
-        "jlogsdon/cli": 20
+        "propel/propel1": 20
     },
     "prefer-stable": false,
     "platform": {
