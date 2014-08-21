@@ -30,6 +30,7 @@
         "ext-pcre": "*",
         "ext-posix": "*",
         "psr/log": "1.0.0",
+        "jlogsdon/cli": "dev-master",
         "mustangostang/spyc": "0.5.1",
         "symfony/http-foundation": "2.4.*",
         "symfony/routing": "2.4.*",
@@ -42,7 +43,6 @@
         "mobiledetect/mobiledetectlib": "dev-master",
         "smarty/smarty": "3.1.*",
         "propel/propel1": "dev-master",
-        "jlogsdon/cli": "dev-master",
         "twig/twig": "1.13.*"
     },
     "suggest": {
