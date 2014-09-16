@@ -28,7 +28,6 @@
         "ext-date": "*",
         "ext-mbstring": "*",
         "ext-pcre": "*",
-        "ext-posix": "*",
         "psr/log": "1.0.0",
         "wp-cli/php-cli-tools": "0.9.5",
         "mustangostang/spyc": "0.5.1",
